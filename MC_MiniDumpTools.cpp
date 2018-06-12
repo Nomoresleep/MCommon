@@ -14,7 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "StdAfx.h"
-#include <DbgHelp.h>
+#if IS_PC_BUILD
+#pragma warning(push)
+#pragma warning(disable : 4091) 
+#include <dbghelp.h>
+#pragma warning(pop)
+#endif
 #include "MC_MiniDumpTools.h"
 #include <time.h>
 

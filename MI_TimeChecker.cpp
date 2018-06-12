@@ -71,10 +71,10 @@ void MI_TimeChecker::EndFrame()
 
 void MI_TimeChecker::BeginCheck(unsigned int anId)
 {
-	MI_TimeCheckerIdData* id;
-	MI_TimeCheckerIdFrameData* frame;
+	MI_TimeCheckerIdData* id = nullptr;
+	MI_TimeCheckerIdFrameData* frame = nullptr;
 	MI_TimeCheckerIdFramePartData tim;
-	MI_TimeCheckerIdFramePartData* timPtr;
+	MI_TimeCheckerIdFramePartData* timPtr = nullptr;
 	int i;
 
 	if(!ourIsEnabledFlag)
@@ -124,9 +124,9 @@ void MI_TimeChecker::BeginCheck(unsigned int anId)
 
 void MI_TimeChecker::EndCheck(unsigned int anId)
 {
-	MI_TimeCheckerIdData* id;
-	MI_TimeCheckerIdFrameData* frame;
-	MI_TimeCheckerIdFramePartData* tim;
+	MI_TimeCheckerIdData* id = nullptr;
+	MI_TimeCheckerIdFrameData* frame = nullptr;
+	MI_TimeCheckerIdFramePartData* tim = nullptr;
 	int i;
 
 	if(!ourIsEnabledFlag)

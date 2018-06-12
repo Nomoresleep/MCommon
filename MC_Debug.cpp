@@ -20,7 +20,7 @@
 #include "mc_commandline.h"
 #include "MT_ThreadingTools.h"
 #include "mf_file.h" // for MF_File::ExtractFileName()
-#include <MC_DebugListenerImplementations.h>
+#include "MC_DebugListenerImplementations.h"
 #include "MC_HashMap.h"
 #include "MC_Misc.h"
 #include <io.h>

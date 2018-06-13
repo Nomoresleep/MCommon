@@ -83,6 +83,8 @@ namespace MT_ThreadingTools
 	long Decrement(long volatile* aValue);
 
     long Exchange(long volatile* aTarget, long aValue);
+	long long Exchange(long long volatile* aTarget, long long aValue);
+	void* Exchange(void* volatile* aTarget, void* aValue);
     long ExchangeAdd(long volatile* anAddend, long aValue);
     long CompareExchange(long volatile* aDestination, long anExchange, long aComparand);
     long Or(long volatile* aValue, long aMask);

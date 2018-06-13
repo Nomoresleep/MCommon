@@ -20,7 +20,7 @@
 typedef void (* MT_TASKFUNC)(void* aTaskData);
 
 #pragma warning(push)
-#pragma warning(disable:4342)
+#pragma warning(disable:4324)
 // MT_Task defines a task, ie. what to do (function pointer) and what to do it on (data buffer).
 __declspec(align(64))	// cache friendly alignment
 class MT_Task

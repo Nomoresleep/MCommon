@@ -199,10 +199,10 @@ bool MT_ThreadingTools::PrintThreadList( char *aBuffer, unsigned int aBufferSize
 				if( locDebugThreadInfo[i].myThreadId == currentThreadId )
 					marker = '*';
 
-				sprintf(tmp, " %c %03d - 0x%08x - 0x%08x -  %d  %d  %d  %d  %d - \"%s\"\n",
+				sprintf(tmp, " %c %03d - 0x%p - 0x%08x -  %d  %d  %d  %d  %d - \"%s\"\n",
 					marker,
 					(unsigned int) i,
-					(unsigned int) threadhandle,
+					threadhandle,
 					(unsigned int) locDebugThreadInfo[i].myThreadId,
 					(int) locDebugThreadInfo[i].myCriticalWaiting,
 					(int) locDebugThreadInfo[i].mySemaWaiting,
@@ -398,6 +398,20 @@ long MT_ThreadingTools::Decrement(long volatile* aValue)
 long MT_ThreadingTools::Exchange(long volatile* aTarget, long aValue)
 {
     return _InterlockedExchange(aTarget, aValue);
+}
+
+long long MT_ThreadingTools::Exchange(long long volatile* aTarget, long long aValue)
+{
+	return _InterlockedExchange64(aTarget, aValue);
+}
+
+void* MT_ThreadingTools::Exchange(void* volatile* aTarget, void* aValue)
+{
+#if _WIN64
+	return (void*)Exchange((long long volatile*)aTarget, (long long)aValue);
+#elif _WIN32
+	return  Exchange((long volatile*)aTarget, (long)aValue);
+#endif
 }
 
 long MT_ThreadingTools::ExchangeAdd(long volatile* anAddend, long aValue)

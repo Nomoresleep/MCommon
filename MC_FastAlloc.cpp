@@ -120,7 +120,7 @@ void* MC_FastAlloc(size_t aSize)
 		// Small allocation
 		int bucket;
 		size_t fragmentSize;
-		GetBucketIndexAndSize(aSize, &bucket, &fragmentSize);
+		GetBucketIndexAndSize(MC_SAFECAST(aSize), &bucket, &fragmentSize);
 
 		MC_ASSERT(bucket >= 0);
 		MC_ASSERT(bucket < NUM_BUCKETS);
@@ -143,7 +143,7 @@ void* MC_FastAlloc(size_t aSize)
 			locPages[page] = (char)(bucket+1);
 
 			// Link all but the first fragments
-			int numAllocs = (64*1024) / fragmentSize;
+			int numAllocs = MC_SAFECAST((64*1024) / fragmentSize);
 			for(int i=1; i<numAllocs-1; i++)
 				*(void**)(((intptr_t)ptr) + i*fragmentSize) = (void*)(((intptr_t)ptr) + (i+1)*fragmentSize);
 			*(void**)(((intptr_t)ptr) + (numAllocs-1)*fragmentSize) = 0;

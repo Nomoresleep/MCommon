@@ -1567,7 +1567,7 @@ void MC_StackWalker::OnOutput(LPCSTR buffer)
 	{
 		MC_StaticString<8192>& outpstr = *myOutputBuffer;
 
-		int bufflen = strlen(buffer);
+		int bufflen = MC_SAFECAST(strlen(buffer));
 		if (outpstr.GetBufferSize() - outpstr.GetLength() - bufflen > 0)
 			outpstr += buffer;
 	}

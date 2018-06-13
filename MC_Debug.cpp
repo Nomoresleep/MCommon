@@ -1409,7 +1409,14 @@ const char* MC_GetOperatingSystemCountry()
 
 static void CPUID(unsigned int func, unsigned int& a, unsigned int& b, unsigned int& c, unsigned int& d)
 {
-#if IS_PC_BUILD
+#if _WIN64
+	int cpuInfo[4];
+	__cpuid(cpuInfo, func);
+	a = cpuInfo[0];
+	b = cpuInfo[1];
+	c = cpuInfo[2];
+	d = cpuInfo[3];
+#elif IS_PC_BUILD
 	unsigned int _a, _b, _c, _d, _func;
 
 	_func = func;
@@ -1506,7 +1513,7 @@ const char* MC_Debug::GetSystemInfoString()
 	aString += temp.Format("Logical processor count:  %u\n", cpuMetric.cpuCount);
 
 #if IS_PC_BUILD
-	DWORD processAffinityMask, systemAffinityMask;
+	DWORD_PTR	 processAffinityMask, systemAffinityMask;
 	if(::GetProcessAffinityMask(::GetCurrentProcess(), &processAffinityMask, &systemAffinityMask))
 	{
 		aString += temp.Format("Process Affinity Mask:    0x%08x\n", processAffinityMask);
@@ -1618,7 +1625,7 @@ void __cdecl MC_Debug::InternalPosTracer::operator()(const char* aDebugMessage, 
 			if(myType == TRACE_DEBUG || ourEnableDebugSpamFlag)
 			{
 				strcpy(resultText, codeText);
-				int offset = strlen(codeText);
+				int offset = MC_SAFECAST(strlen(codeText));
 				va_list args;
 				va_start(args, aDebugMessage);
 				_vsnprintf(resultText + offset, sizeof(resultText)-1-offset, aDebugMessage, args);

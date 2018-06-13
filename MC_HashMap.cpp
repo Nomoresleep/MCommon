@@ -74,7 +74,7 @@ unsigned int MC_HashMap_HashData( const void* aData, int aByteCount, unsigned in
 
 unsigned int MC_HashMap_HashString( const void* aData, unsigned int aSeed )
 {
-	return SuperFastHash((const char*)aData, strlen((const char*)aData), aSeed);
+	return SuperFastHash((const char*)aData, MC_SAFECAST(strlen((const char*)aData)), aSeed);
 }
 
 static uint SuperFastHash (const char * data, int len, uint hash)

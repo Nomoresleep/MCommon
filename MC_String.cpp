@@ -64,7 +64,7 @@ MC_String MC_Strtok(const char** anInput, const char* aSeparator)
 	while (*anEnd && (find_in(aSeparator, *anEnd) == false))
 		anEnd++;
 	*anInput = anEnd;
-	return MC_String(aStart, anEnd - aStart);
+	return MC_String(aStart, MC_SAFECAST(anEnd - aStart));
 }
 
 int MC_StringToInt(const char* const aString)

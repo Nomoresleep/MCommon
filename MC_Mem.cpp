@@ -1010,8 +1010,8 @@ static void MC_TempMemRealFree(void* aPointer)
 inline static void MC_TempClearData()
 {
 #ifdef MC_TEMP_MEMORY_HANDLER_ENABLED
-	int end = __min(locTempBufferUsage+TEMP_MEM_CLEAR_SIZE, TEMP_BUFFER_SIZE);
-	for(int i=locTempBufferUsage; i<end; i++)
+	int end = MC_SAFECAST(__min(locTempBufferUsage+TEMP_MEM_CLEAR_SIZE, TEMP_BUFFER_SIZE));
+	for(int i=MC_SAFECAST(locTempBufferUsage); i<end; i++)
 		locTempBuffer[i] = TEMP_MEM_MAGIC_FREE;
 #endif
 }
@@ -1265,8 +1265,8 @@ void MC_TempMemCheckAllocations()
 #ifdef MC_HEAVY_DEBUG_TEMP_MEMORY_DEBUGGING
 	if(locTempMemInited)
 	{
-		int end = __min(locTempBufferUsage+TEMP_MEM_CLEAR_SIZE, TEMP_BUFFER_SIZE);
-		for(int i=locTempBufferUsage; i<end; i++)
+		int end = MC_SAFECAST(__min(locTempBufferUsage+TEMP_MEM_CLEAR_SIZE, TEMP_BUFFER_SIZE));
+		for(int i=MC_SAFECAST(locTempBufferUsage); i<end; i++)
 		{
 			MC_ASSERT(locTempBuffer[i] == TEMP_MEM_MAGIC_FREE);
 		}

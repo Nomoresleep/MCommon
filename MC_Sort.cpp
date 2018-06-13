@@ -30,10 +30,11 @@ void* SortLinkedList(void* aFirstPtr, void* aNextPtr, const int aListLength, voi
 	unsigned char* endList[256];
 	unsigned char* firstPtr;
 	unsigned char* ptr;
-	int a, b, c, compareDwordOffset, nextPtrOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset, nextPtrOffset;
 
-	compareDwordOffset = ((int) aCompareDword - (int) aFirstPtr);
-	nextPtrOffset = ((int) aNextPtr - (int) aFirstPtr);
+	compareDwordOffset = ((intptr_t)aCompareDword - (intptr_t)aFirstPtr);
+	nextPtrOffset = ((intptr_t)aNextPtr - (intptr_t)aFirstPtr);
 
 	firstPtr = (unsigned char*) aFirstPtr;
 	for(a = 0; a < 4; a++)
@@ -86,12 +87,13 @@ void SortPtrArray(void** anArray, const int aListLength, void* aCompareDword, vo
 	TempSortingStruct* firstPtr;
 	TempSortingStruct* ptr;
 	TempSortingStruct* tmpList;
-	int a, b, c, compareDwordOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset;
 
 	if(anResultArray == NULL)
 		anResultArray = anArray;
 
-	compareDwordOffset = ((int) aCompareDword - (int) anArray[0]);
+	compareDwordOffset = ((intptr_t)aCompareDword - (intptr_t)anArray[0]);
 
 	tmpList = new TempSortingStruct[aListLength];
 	for(a = 0; a < aListLength; a++)
@@ -159,12 +161,13 @@ void SortArray(void* anArray, const int aStructSize, const int aListLength, void
 	TempSortingStruct* firstPtr;
 	TempSortingStruct* ptr;
 	TempSortingStruct* tmpList;
-	int a, b, c, compareDwordOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset;
 
 	if(anResultArray == NULL)
 		anResultArray = anArray;
 
-	compareDwordOffset = ((int) aCompareDword - (int) anArray);
+	compareDwordOffset = ((intptr_t)aCompareDword - (intptr_t)anArray);
 
 	tmpList = new TempSortingStruct[aListLength];
 	b = 0;
@@ -235,10 +238,11 @@ void* SortDescendingLinkedList(void* aFirstPtr, void* aNextPtr, const int aListL
 	unsigned char* endList[256];
 	unsigned char* firstPtr;
 	unsigned char* ptr;
-	int a, b, c, compareDwordOffset, nextPtrOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset, nextPtrOffset;
 
-	compareDwordOffset = ((int) aCompareDword - (int) aFirstPtr);
-	nextPtrOffset = ((int) aNextPtr - (int) aFirstPtr);
+	compareDwordOffset = ((intptr_t)aCompareDword - (intptr_t)aFirstPtr);
+	nextPtrOffset = ((intptr_t)aNextPtr - (intptr_t)aFirstPtr);
 
 	firstPtr = (unsigned char*) aFirstPtr;
 	for(a = 0; a < 4; a++)
@@ -291,12 +295,13 @@ void SortDescendingPtrArray(void** anArray, const int aListLength, void* aCompar
 	TempSortingStruct* firstPtr;
 	TempSortingStruct* ptr;
 	TempSortingStruct* tmpList;
-	int a, b, c, compareDwordOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset;
 
 	if(anResultArray == NULL)
 		anResultArray = anArray;
 
-	compareDwordOffset = ((int) aCompareDword - (int) anArray[0]);
+	compareDwordOffset = ((intptr_t) aCompareDword - (intptr_t) anArray[0]);
 
 	tmpList = new TempSortingStruct[aListLength];
 	for(a = 0; a < aListLength; a++)
@@ -364,12 +369,13 @@ void SortDescendingArray(void* anArray, const int aStructSize, const int aListLe
 	TempSortingStruct* firstPtr;
 	TempSortingStruct* ptr;
 	TempSortingStruct* tmpList;
-	int a, b, c, compareDwordOffset;
+	int a, b, c;
+	ptrdiff_t compareDwordOffset;
 
 	if(anResultArray == NULL)
 		anResultArray = anArray;
 
-	compareDwordOffset = ((int) aCompareDword - (int) anArray);
+	compareDwordOffset = ((intptr_t) aCompareDword - (intptr_t) anArray);
 
 	tmpList = new TempSortingStruct[aListLength];
 	b = 0;

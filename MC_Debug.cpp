@@ -92,7 +92,7 @@ static FILE* ourAlternateFiles[NUM_ALTDBGS];
 
 static HWND locMsgBoxHwnd = 0;
 static MC_FileDebugListener* locOpenFileLogListener = NULL;
-static __declspec(thread) bool locThreadLocalIgnoreFileOpenFlag = false;
+static MC_THREADLOCAL bool locThreadLocalIgnoreFileOpenFlag = false;
 
 static MC_StaticString<MAX_PATH+1> ourDebugFileName;
 static bool ourEnableDebugSpamFlag = true;
@@ -587,9 +587,9 @@ void __cdecl MC_Debug::DebugMessage(const char* aMessage, ...)
 	if (locNumDebugListeners)
 	{
 #if IS_PC_BUILD
-		static __declspec(thread) char tempBuffer[32*1024];
+		static MC_THREADLOCAL char tempBuffer[32*1024];
 #else
-		static __declspec(thread) char tempBuffer[512];
+		static MC_THREADLOCAL char tempBuffer[512];
 #endif
 		//format the list of parameters
 		va_list paramList;
@@ -1135,7 +1135,7 @@ const char* MC_GetOperatingSystemDescription()
 
 	typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 
-	static __declspec(thread) char osDescription[256] = {0};
+	static MC_THREADLOCAL char osDescription[256] = {0};
 
 	if (osDescription[0])
 		return osDescription;
@@ -1386,7 +1386,7 @@ const char* MC_GetOperatingSystemDescription()
 const char* MC_GetOperatingSystemLanguage()
 {
 #if IS_PC_BUILD
-	static __declspec(thread) char lang[64] = "Unknown";
+	static MC_THREADLOCAL char lang[64] = "Unknown";
 	GetLocaleInfo(GetUserDefaultLCID(), LOCALE_SENGLANGUAGE, lang, sizeof(lang)-1);
 	return lang;
 #else
@@ -1397,7 +1397,7 @@ const char* MC_GetOperatingSystemLanguage()
 const char* MC_GetOperatingSystemCountry()
 {
 #if IS_PC_BUILD
-	static __declspec(thread) char country[64]="Unknown";
+	static MC_THREADLOCAL char country[64]="Unknown";
 	GetLocaleInfo(GetUserDefaultLCID(), LOCALE_SENGCOUNTRY, country, sizeof(country)-1);
 	return country;
 #else

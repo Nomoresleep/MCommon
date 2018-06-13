@@ -463,7 +463,7 @@ public:
 #pragma init_seg(lib)
 #pragma warning(default : 4073)
 
-__declspec(thread) static char locExceptionErrorString[4096+8192]; // String with \n for nicer output in booombox.
+MC_THREADLOCAL static char locExceptionErrorString[4096+8192]; // String with \n for nicer output in booombox.
 
 MC_DumpMemOnExit theMemDumper;
 
@@ -960,15 +960,15 @@ static const int TEMP_MEM_MAGIC1 = 0xfee1fee1;
 static const char TEMP_MEM_MAGIC_FREE = -1;
 static const int TEMP_MEM_CLEAR_SIZE = 20;
 
-__declspec(thread) static size_t	locTempBufferUsage = 0;
-__declspec(thread) static char*		locThreadStackTop = 0;		// Note, stack grows DOWN
-__declspec(thread) static char*		locTopAlloc = 0;
-__declspec(thread) static bool		locTempMemInited = false;
-__declspec(thread) static MC_TempMemStats locTempMemStats = {0, 0, 0, 0, TEMP_BUFFER_SIZE};
-__declspec(thread) static bool		locThreadIdDebuggingFlag = false;
+MC_THREADLOCAL static size_t	locTempBufferUsage = 0;
+MC_THREADLOCAL static char*		locThreadStackTop = 0;		// Note, stack grows DOWN
+MC_THREADLOCAL static char*		locTopAlloc = 0;
+MC_THREADLOCAL static bool		locTempMemInited = false;
+MC_THREADLOCAL static MC_TempMemStats locTempMemStats = {0, 0, 0, 0, TEMP_BUFFER_SIZE};
+MC_THREADLOCAL static bool		locThreadIdDebuggingFlag = false;
 
 __declspec(align(16))
-__declspec(thread)static char		locTempBuffer[TEMP_BUFFER_SIZE];
+MC_THREADLOCAL static char		locTempBuffer[TEMP_BUFFER_SIZE];
 
 static bool locTempMemEnableFlag = false;
 
@@ -1386,9 +1386,9 @@ void MC_WriteBoomFile(const char* aString)
 }
 
 #ifdef MC_MEMORYLEAK_STACKTRACE
-	static __declspec(thread) const int MEM_LEAK_INFO_MAX_STACK_DEPTH = 256;
-	static __declspec(thread) MC_MemLeakExtraInfo* locMemLeakInfoStack[MEM_LEAK_INFO_MAX_STACK_DEPTH];
-	static __declspec(thread) int locMemLeakStackDepth = 0;
+	static MC_THREADLOCAL const int MEM_LEAK_INFO_MAX_STACK_DEPTH = 256;
+	static MC_THREADLOCAL MC_MemLeakExtraInfo* locMemLeakInfoStack[MEM_LEAK_INFO_MAX_STACK_DEPTH];
+	static MC_THREADLOCAL int locMemLeakStackDepth = 0;
 
 	MC_MemLeakExtraInfo::MC_MemLeakExtraInfo(const char* aFormat, ...)
 	{

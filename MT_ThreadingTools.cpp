@@ -370,7 +370,7 @@ void MT_ThreadingTools::SetCurrentThreadName(const char* aName)
 }
 
 
-static __declspec(thread) long locMyThreadIndex = -1; 
+static MC_THREADLOCAL long locMyThreadIndex = -1;
 static volatile long locThreadCount = 0;
 
 int MT_ThreadingTools::GetMyThreadIndex()

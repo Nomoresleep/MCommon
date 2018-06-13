@@ -174,7 +174,7 @@ namespace MC_Algorithm
 	{
 		const int TEMP_BUFFER_SIZE = 128*1024;
 		char tempBufData[TEMP_BUFFER_SIZE];
-		T* __restrict const tempBuf = (T*)tempBufData;
+		T* MC_RESTRICT const tempBuf = (T*)tempBufData;
 
 		int maxTempElements = (sizeof(char) * TEMP_BUFFER_SIZE) / sizeof(T);
 
@@ -192,7 +192,7 @@ namespace MC_Algorithm
 	}
 
 	template <typename T, typename ITERATOR, typename COMPARER>
-	inline void SortInternal_MergeSort(ITERATOR aFirst, ITERATOR aLast, T* __restrict const tempBuf, const int maxTempElements, COMPARER& aComparer)
+	inline void SortInternal_MergeSort(ITERATOR aFirst, ITERATOR aLast, T* MC_RESTRICT const tempBuf, const int maxTempElements, COMPARER& aComparer)
 	{
 		if( aLast - aFirst > 8 )
 		{
@@ -261,7 +261,7 @@ namespace MC_Algorithm
 	}
 
 	template <typename T, typename ITERATOR, typename COMPARER>
-	inline void SortInternal_Merge(ITERATOR aFirst, ITERATOR aMid, ITERATOR aLast, T* __restrict const tempBuf, const int maxTempElements, COMPARER& aComparer)
+	inline void SortInternal_Merge(ITERATOR aFirst, ITERATOR aMid, ITERATOR aLast, T* MC_RESTRICT const tempBuf, const int maxTempElements, COMPARER& aComparer)
 	{
 		int tempHead = 0;
 		int tempTail = 0;

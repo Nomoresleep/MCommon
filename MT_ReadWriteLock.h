@@ -43,7 +43,7 @@ public:
 	};
 
 	MT_ReadWriteLock() { _InterlockedExchange(&myLock, 0); }
-	__forceinline void BeginRead()
+    MC_FORCEINLINE void BeginRead()
 	{
 		// Add a reader
 		while (_InterlockedIncrement(&myLock) & 0xffff0000)
@@ -54,12 +54,12 @@ public:
 		}
 	}
 
-	__forceinline void EndRead()
+    MC_FORCEINLINE void EndRead()
 	{
 		_InterlockedDecrement(&myLock);
 	}
 
-	__forceinline void BeginWrite()
+    MC_FORCEINLINE void BeginWrite()
 	{
 		_InterlockedOr(&myLock, 0x80000000); // Stop any incoming readers
 		while ((_InterlockedExchangeAdd(&myLock, 0x00010000) & 0x7fffffff) != 0)
@@ -70,14 +70,14 @@ public:
 		}
 	}
 
-	__forceinline void EndWrite()
+    MC_FORCEINLINE void EndWrite()
 	{
 		PrivEndTryWrite();
 		_InterlockedAnd(&myLock, 0x7fffffff); // Unlock so incoming readers can get lock
 	}
 
 private:
-	__forceinline void PrivEndTryWrite()
+    MC_FORCEINLINE void PrivEndTryWrite()
 	{
 		_InterlockedExchangeAdd(&myLock, -0x00010000); // Remove our writercounter
 	}

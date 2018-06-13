@@ -155,7 +155,7 @@ unsigned _int64 MC_Misc::MakeHash64(const void* aData, unsigned int aDataSize, _
 }
 
 static int locHoldRand = 0;
-__forceinline static int MiscRand()
+MC_FORCEINLINE static int MiscRand()
 {
 	// Duplicated implementation of the standard rand() function (to get it inlined, and 
 	// to be sure that the result is always in the range 0 .. 0x7fff even if the standard

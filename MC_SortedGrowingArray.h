@@ -88,7 +88,7 @@ public:
 	bool Init(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true) { return MC_GrowingArray<Type>::Init(aNrOfRecommendedItems, anItemIncreaseSize, aSafemodeFlag); }
 	bool ReInit(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true) { return MC_GrowingArray<Type>::ReInit(aNrOfRecommendedItems, anItemIncreaseSize, aSafemodeFlag); }
 	bool IsInited() { return MC_GrowingArray<Type>::IsInited(); }
-	__forceinline Type& operator[] (const int anIndex) const {
+    MC_FORCEINLINE Type& operator[] (const int anIndex) const {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
         MC_ASSERT(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_SortedGrowingArray BOUNDS ERROR!");
 #endif
@@ -110,7 +110,7 @@ public:
 
 	inline void DeleteAll() { MC_GrowingArray<Type>::DeleteAll(); }
 	inline void NonDeletingShutdown() {MC_GrowingArray<Type>::NonDeletingShutdown(); }
-	const __forceinline int Count()	const {return myUsedNrOfItems;} 
+	const MC_FORCEINLINE int Count()	const {return myUsedNrOfItems;}
 
 	MC_GrowingArray<Type>& operator=(const MC_GrowingArray<Type>& aArray)
 	{

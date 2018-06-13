@@ -68,7 +68,7 @@ public:
 
 	operator const C* () const								{ return GetBuffer(); }
 
-	__forceinline C& operator[](int aIndex)
+    MC_FORCEINLINE C& operator[](int aIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
         MC_ASSERT(aIndex >= 0 && "String boundscheck");
@@ -76,7 +76,7 @@ public:
 #endif
 		return GetBuffer()[aIndex];
 	}
-	__forceinline C& operator[](unsigned int aIndex)
+    MC_FORCEINLINE C& operator[](unsigned int aIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
         MC_ASSERT(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");
@@ -84,7 +84,7 @@ public:
 		return GetBuffer()[aIndex];
 	}
 
-	__forceinline const C& operator[](int aIndex)	const
+    MC_FORCEINLINE const C& operator[](int aIndex)	const
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
         MC_ASSERT(aIndex >= 0 && "String boundscheck");
@@ -93,7 +93,7 @@ public:
 		return GetBuffer()[aIndex];
 	}
 
-	__forceinline const C& operator[](unsigned int aIndex) const
+    MC_FORCEINLINE const C& operator[](unsigned int aIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
         MC_ASSERT(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");

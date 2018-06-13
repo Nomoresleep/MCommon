@@ -276,8 +276,8 @@ public:
 	}
 
 	// ACCESS
-	__forceinline const Type operator[](int index) const { return (&x)[index]; }
-	__forceinline Type& operator[](int index) { return (&x)[index]; }
+    MC_FORCEINLINE const Type operator[](int index) const { return (&x)[index]; }
+    MC_FORCEINLINE Type& operator[](int index) { return (&x)[index]; }
 
 	//MEMBERS
 	union	{Type myX; Type myR; Type x; Type r; };
@@ -362,8 +362,8 @@ public:
 	const MC_Vector3<Type>& Vec3() const { return *(const MC_Vector3<Type>*)this; }
 
 	// ACCESS
-	__forceinline Type operator[](int index) const { return (&x)[index]; }
-	__forceinline Type& operator[](int index) { return (&x)[index]; }
+    MC_FORCEINLINE Type operator[](int index) const { return (&x)[index]; }
+    MC_FORCEINLINE Type& operator[](int index) { return (&x)[index]; }
 
 	//MEMBERS
 	union {Type myX; Type myR; Type myLeft; Type x; Type r; };
@@ -373,7 +373,7 @@ public:
 };
 
 template <class Type>
-__forceinline MC_Vector3<Type> MC_Vector3<Type>::GetNormalizedSafe() const
+MC_FORCEINLINE MC_Vector3<Type> MC_Vector3<Type>::GetNormalizedSafe() const
 {
 	Type length = Length();
 
@@ -384,7 +384,7 @@ __forceinline MC_Vector3<Type> MC_Vector3<Type>::GetNormalizedSafe() const
 }
 
 template <class Type>
-__forceinline MC_Vector3<Type>& MC_Vector3<Type>::NormalizeSafe()
+MC_FORCEINLINE MC_Vector3<Type>& MC_Vector3<Type>::NormalizeSafe()
 {
 	const Type length = Length();
 
@@ -395,7 +395,7 @@ __forceinline MC_Vector3<Type>& MC_Vector3<Type>::NormalizeSafe()
 }
 
 template <class Type>
-__forceinline MC_Vector3<Type>& MC_Vector3<Type>::NormalizeFast()
+MC_FORCEINLINE MC_Vector3<Type>& MC_Vector3<Type>::NormalizeFast()
 {
 	const float invlen = MC_InvSqrtFastSafe(Length2());
 
@@ -407,7 +407,7 @@ __forceinline MC_Vector3<Type>& MC_Vector3<Type>::NormalizeFast()
 }
 
 template <class Type>
-__forceinline MC_Vector3<Type>& MC_Vector3<Type>::NormalizeFastSafe()
+MC_FORCEINLINE MC_Vector3<Type>& MC_Vector3<Type>::NormalizeFastSafe()
 {
 	const float invlen = MC_InvSqrtFastSafe(Length2());
 

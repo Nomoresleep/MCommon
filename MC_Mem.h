@@ -134,8 +134,8 @@ private:
 		}
 		#endif
 
-		__forceinline void* __cdecl operator new(size_t aSize) { return MC_MemMalloc(aSize); }
-		__forceinline void __cdecl operator delete(void* aPointer) { if(aPointer) MC_MemFree(aPointer); }
+        MC_FORCEINLINE void* __cdecl operator new(size_t aSize) { return MC_MemMalloc(aSize); }
+        MC_FORCEINLINE void __cdecl operator delete(void* aPointer) { if(aPointer) MC_MemFree(aPointer); }
 
 		void MC_MemDumpMemoryLeaks(bool aDumpToDebugWindowFlag);
 		void MC_MemDumpMemoryLeaksExtended(); // only available if MC_MEM_EXTENDED_MEM_DUMP is #defined in mc_mem.cpp

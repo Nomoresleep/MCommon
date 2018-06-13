@@ -89,7 +89,7 @@ public:
 	bool IsInited();
 
 	// gets a refeerence to the item at the selected slot
-	__forceinline Type& operator[] (const int anIndex) const
+    MC_FORCEINLINE Type& operator[] (const int anIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
         MC_ASSERT(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
@@ -224,8 +224,8 @@ public:
 	inline void NonDeletingShutdown();
 
 	// returns the number of slots in use (sicne slot usage is linear this can be used for loopign etc)
-	const __forceinline int Count()	const {return myUsedNrOfItems;} 
-	const __forceinline int GetMaxNumItems() const { return myMaxNrOfItems; }
+	const MC_FORCEINLINE int Count()	const {return myUsedNrOfItems;}
+	const MC_FORCEINLINE int GetMaxNumItems() const { return myMaxNrOfItems; }
 
 	// Needed to glue together old and new comparers
 	template <typename COMPARER, typename COMPARED>
@@ -274,7 +274,7 @@ public:
 
 
 	template <class Comparer, class Compared>
-	static __forceinline bool SortCompareLessThan(const Type& aLeft, const Compared& aRight, const bool aReverseFlag)
+	static MC_FORCEINLINE bool SortCompareLessThan(const Type& aLeft, const Compared& aRight, const bool aReverseFlag)
 	{
 		if(aReverseFlag)
 			return !(Comparer::LessThan(aLeft, aRight) || Comparer::Equals(aLeft, aRight));

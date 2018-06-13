@@ -439,7 +439,7 @@
 		bool myHasHighAddresses;
 	};
 
-	static __forceinline AllocExtraData* OffsetExtra(void* aPointer, int anOffset)
+	static MC_FORCEINLINE AllocExtraData* OffsetExtra(void* aPointer, int anOffset)
 	{
 		return ((AllocExtraData*)aPointer) + anOffset;
 	}

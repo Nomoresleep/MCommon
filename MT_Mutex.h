@@ -30,7 +30,7 @@ public:
 	void Unlock();
 
 	// For serverside use; where we can safely call TryEnterCriticalSection (not win9x portable otherwise)
-	__forceinline CRITICAL_SECTION& GetCriticalSection() { return myMutex; }
+    MC_FORCEINLINE CRITICAL_SECTION& GetCriticalSection() { return myMutex; }
 
 	unsigned int GetLockCount();		//returns the number of times this mutex has been recursivly locked
 private:
@@ -87,14 +87,14 @@ public:
 		Unlock(); 
 	}
 
-	__forceinline void Lock(MUTEX& aMutex)
+    MC_FORCEINLINE void Lock(MUTEX& aMutex)
 	{
         MC_ASSERT(myMutex == NULL);
 		myMutex = &aMutex;
 		myMutex->Lock();
 	}
 
-	__forceinline void Unlock()
+    MC_FORCEINLINE void Unlock()
 	{
 		if(myMutex)
 		{
@@ -103,7 +103,7 @@ public:
 		}
 	}
 
-	__forceinline bool IsLocked() const
+    MC_FORCEINLINE bool IsLocked() const
 	{
 		return myMutex != NULL;
 	}

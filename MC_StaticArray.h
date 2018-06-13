@@ -61,9 +61,9 @@ template <typename Type, int Size>
 class MC_StaticArray
 {
 public:
-	__forceinline MC_StaticArray() {}
+    MC_FORCEINLINE MC_StaticArray() {}
 
-	__forceinline const Type& operator[] (const int anIndex) const
+    MC_FORCEINLINE const Type& operator[] (const int anIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
         MC_ASSERT(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
@@ -71,7 +71,7 @@ public:
 		return myItemList[anIndex];
 	}
 
-	__forceinline Type& operator[] (const int anIndex)
+    MC_FORCEINLINE Type& operator[] (const int anIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
         MC_ASSERT(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
@@ -79,7 +79,7 @@ public:
 		return myItemList[anIndex];
 	}
 
-	__forceinline bool operator == (const MC_StaticArray& anArray) const
+    MC_FORCEINLINE bool operator == (const MC_StaticArray& anArray) const
 	{
 		for(int i=0; i<Size; i++)
 			if(!(myItemList[i] == anArray.myItemList[i]))
@@ -88,7 +88,7 @@ public:
 		return true;
 	}
 
-	__forceinline bool operator != (const MC_StaticArray& anArray) const
+    MC_FORCEINLINE bool operator != (const MC_StaticArray& anArray) const
 	{
 		for(int i=0; i<Size; i++)
 			if(myItemList[i] != anArray.myItemList[i])
@@ -97,8 +97,8 @@ public:
 		return false;
 	}
 
-	__forceinline Type* GetBuffer() { return myItemList; }
-	__forceinline const Type* GetBuffer() const { return myItemList; }
+    MC_FORCEINLINE Type* GetBuffer() { return myItemList; }
+    MC_FORCEINLINE const Type* GetBuffer() const { return myItemList; }
 
 	static int Count() { return Size; }
 

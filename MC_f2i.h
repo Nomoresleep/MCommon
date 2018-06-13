@@ -18,7 +18,7 @@
 #define MC_F2I_H
 
 
-/*__forceinline int TruncToInt(double aDouble) // only works for double precision, and D3D always puts FPU in single precision mode
+/*MC_FORCEINLINE int TruncToInt(double aDouble) // only works for double precision, and D3D always puts FPU in single precision mode
 {
 	static const double double2fixmagic = 68719476736.0 * 1.5;
 
@@ -27,7 +27,7 @@
 }*/
 
 
-__forceinline int TruncToInt(const float aFloat)
+MC_FORCEINLINE int TruncToInt(const float aFloat)
 {
 /*#ifdef _MSC_VER
 	int i;
@@ -44,7 +44,7 @@ __forceinline int TruncToInt(const float aFloat)
 }
 
 
-__forceinline static void TruncToInt(int* anInt, const float aFloat)
+MC_FORCEINLINE static void TruncToInt(int* anInt, const float aFloat)
 {
 /*#ifdef _MSC_VER
 	aFloat -= 0.5f;
@@ -60,7 +60,7 @@ __forceinline static void TruncToInt(int* anInt, const float aFloat)
 }
 
 
-__forceinline static void TruncToUnsignedInt(unsigned int* anInt, const float aFloat)
+MC_FORCEINLINE static void TruncToUnsignedInt(unsigned int* anInt, const float aFloat)
 {
 /*#ifdef _MSC_VER
 	aFloat -= 0.5f;
@@ -76,7 +76,7 @@ __forceinline static void TruncToUnsignedInt(unsigned int* anInt, const float aF
 }
 
 
-__forceinline static void RoundToInt(int* anInt, const float aFloat)
+MC_FORCEINLINE static void RoundToInt(int* anInt, const float aFloat)
 {
 /*#ifdef _MSC_VER
 	__asm
@@ -92,7 +92,7 @@ __forceinline static void RoundToInt(int* anInt, const float aFloat)
 }
 
 
-__forceinline static void RoundToUnsignedInt(unsigned int* anInt, const float aFloat)
+MC_FORCEINLINE static void RoundToUnsignedInt(unsigned int* anInt, const float aFloat)
 {
 /*#ifdef _MSC_VER
 	__asm
@@ -108,7 +108,7 @@ __forceinline static void RoundToUnsignedInt(unsigned int* anInt, const float aF
 }
 
 
-__forceinline static int RoundToInt(const float aFloat)
+MC_FORCEINLINE static int RoundToInt(const float aFloat)
 {
 /*#ifdef _MSC_VER
 	int i;
@@ -125,7 +125,7 @@ __forceinline static int RoundToInt(const float aFloat)
 }
 
 
-__forceinline static unsigned int RoundToUnsignedInt(const float aFloat)
+MC_FORCEINLINE static unsigned int RoundToUnsignedInt(const float aFloat)
 {
 /*#ifdef _MSC_VER
 	int i;

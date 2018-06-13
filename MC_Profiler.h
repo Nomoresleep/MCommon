@@ -159,7 +159,7 @@ public:
 	};
 
 	class Node;
-	static __forceinline MC_Profiler* GetInstance()
+	static MC_FORCEINLINE MC_Profiler* GetInstance()
 	{
 		if(ourInstance)
 			return ourInstance;

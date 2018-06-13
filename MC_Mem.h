@@ -41,18 +41,18 @@ void			MC_GetFreeMemoryDescription(char* writeHere);
 
 	#ifndef MC_NO_ASSERTS
 		
-#define assert(X) do { \
+#define MC_ASSERT(X) do { \
 			static bool ignoreAlwaysFlag = false; \
 			if(!(X) && !ignoreAlwaysFlag && MC_Assert(__FILE__, __LINE__, #X, &ignoreAlwaysFlag)) \
 				_asm { int 3 } \
 		} while(0)	
 	
 	#else
-		#define assert(X) do {} while(0)
+		#define MC_ASSERT(X) do {} while(0)
 	#endif
 
 #else // _RELEASE_
-	#define assert(X) do {} while(0)
+	#define MC_ASSERT(X) do {} while(0)
 #endif // _RELEASE_
 
 
@@ -177,24 +177,20 @@ private:
 
 #else  // MC_MEM_H
 
-	// This is to redefine our assert in case it has been defined by another library
-
-	#undef assert
-
 	#ifndef _RELEASE_
 		bool __cdecl MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnoreFlag);
 
 		#ifndef MC_NO_ASSERTS		
-			#define assert(X) do { \
+			#define MC_ASSERT(X) do { \
 				static bool ignoreAlwaysFlag = false; \
 				if(!(X) && !ignoreAlwaysFlag && MC_Assert(__FILE__, __LINE__, #X, &ignoreAlwaysFlag)) \
-				_asm { int 3 } \
+				__debugbreak(); \
 			} while(0)	
 		#else
-			#define assert(X) do {} while(0)
+			#define MC_ASSERT(X) do {} while(0)
 		#endif
 	#else // _RELEASE_
-		#define assert(X) do {} while(0)
+		#define MC_ASSERT(X) do {} while(0)
 	#endif // _RELEASE_
 
 #endif // MC_MEM_H

@@ -805,7 +805,7 @@ MC_StackWalker& MC_StackTrace::DoStackWalk(HANDLE aThread, const CONTEXT* aConte
 
 void MC_StackTrace::Realloc(size_t aSize)
 {
-	assert(aSize <= sizeof myStack / sizeof myStack[0]);
+    MC_ASSERT(aSize <= sizeof myStack / sizeof myStack[0]);
 	myStackSize = aSize;
 }
 

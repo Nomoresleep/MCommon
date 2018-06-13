@@ -110,7 +110,7 @@ void MI_TimeChecker::BeginCheck(unsigned int anId)
 	if(frame->myElapsedTimes.Count() > 0)
 	{
 		timPtr = &frame->myElapsedTimes[frame->myElapsedTimes.Count() - 1];
-		assert(timPtr->myEndTime != timPtr->myStartTime - 1); // make sure EndCheck() has been issued before new StartCheck()
+        MC_ASSERT(timPtr->myEndTime != timPtr->myStartTime - 1); // make sure EndCheck() has been issued before new StartCheck()
 	}
 
 	MI_Time::GetExactTime(&tim.myStartTime);
@@ -139,11 +139,11 @@ void MI_TimeChecker::EndCheck(unsigned int anId)
 			break;
 		}
 
-	assert(i < ourIds.Count()); // id must exist
-	assert(ourFrameCount == id->myLastFrameNum); // make sure a StartCheck() has been issued this frame
+    MC_ASSERT(i < ourIds.Count()); // id must exist
+    MC_ASSERT(ourFrameCount == id->myLastFrameNum); // make sure a StartCheck() has been issued this frame
 	frame = id->myFrames[id->myFrames.Count() - 1];
 	tim = &frame->myElapsedTimes[frame->myElapsedTimes.Count() - 1];
-	assert(tim->myEndTime == tim->myStartTime - 1); // make sure EndCheck() has been issued only once for each StartCheck()
+    MC_ASSERT(tim->myEndTime == tim->myStartTime - 1); // make sure EndCheck() has been issued only once for each StartCheck()
 
 	MI_Time::GetExactTime(&tim->myEndTime);
 }

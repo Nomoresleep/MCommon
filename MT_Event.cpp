@@ -46,7 +46,7 @@ void MT_Event::WaitForSignal()
 
 	if (WaitForSingleObject(myEvent, INFINITE) != WAIT_OBJECT_0)
 	{
-		assert(0);
+        MC_ASSERT(0);
 	}
 
 	MC_THREADPROFILER_LEAVE_WAIT();
@@ -69,7 +69,7 @@ void MT_Event::TimedWaitForSignal(const u32 aTimeoutPeriod, bool& signalled)
 	else if (result == WAIT_TIMEOUT)
 		signalled = false;
 	else
-		assert(0);
+        MC_ASSERT(0);
 
 	MC_THREADPROFILER_LEAVE_WAIT();
 }

@@ -111,7 +111,7 @@ void* MC_FastAlloc(size_t aSize)
 		if(!ptr)
 			return 0;
 
-		assert(locPages[GetPageIndexFromPointer(ptr)] == 0);
+		MC_ASSERT(locPages[GetPageIndexFromPointer(ptr)] == 0);
 
 		return ptr;
 	}
@@ -122,8 +122,8 @@ void* MC_FastAlloc(size_t aSize)
 		size_t fragmentSize;
 		GetBucketIndexAndSize(aSize, &bucket, &fragmentSize);
 
-		assert(bucket >= 0);
-		assert(bucket < NUM_BUCKETS);
+		MC_ASSERT(bucket >= 0);
+		MC_ASSERT(bucket < NUM_BUCKETS);
 
 		void* ptr = locBuckets[bucket];
 		if(ptr)
@@ -138,8 +138,8 @@ void* MC_FastAlloc(size_t aSize)
 				return 0;
 
 			int page = GetPageIndexFromPointer(ptr);
-			assert(locPages[page] == 0);
-            assert(bucket + 1 <= 127);
+			MC_ASSERT(locPages[page] == 0);
+            MC_ASSERT(bucket + 1 <= 127);
 			locPages[page] = (char)(bucket+1);
 
 			// Link all but the first fragments
@@ -166,19 +166,19 @@ void MC_FastFree(void* aPointer)
 	}
 
 	int page = GetPageIndexFromPointer(aPointer);
-	assert(page >= 0 && page < NUM_PAGES);
+	MC_ASSERT(page >= 0 && page < NUM_PAGES);
 
 	int bucket = locPages[page] - 1;
 	if(bucket < 0)
 	{
 		// Large allocation
-		assert(locPages[page] == 0);
+		MC_ASSERT(locPages[page] == 0);
 		free(aPointer);
 	}
 	else
 	{
 		// Small allocation
-		assert(bucket < NUM_BUCKETS);
+		MC_ASSERT(bucket < NUM_BUCKETS);
 
 		*(void**)aPointer = locBuckets[bucket];
 		locBuckets[bucket] = aPointer;

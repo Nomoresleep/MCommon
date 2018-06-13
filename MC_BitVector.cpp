@@ -23,7 +23,7 @@ void MC_BitVector::Init(unsigned int aNumIndices)
 {
 	TestBitVectors();
 
-	assert(aNumIndices);
+    MC_ASSERT(aNumIndices);
 	unsigned int newDataLength = (aNumIndices + 7) / 8;
 
 	if ((myData == 0) || (myData && newDataLength > myDataLength))
@@ -40,7 +40,7 @@ void MC_BitVector::Init(unsigned int aNumIndices)
 
 void MC_BitVector::Resize(unsigned int aNumIndices)
 {
-	assert(aNumIndices);
+    MC_ASSERT(aNumIndices);
 	unsigned int newDataLength = (aNumIndices + 7) / 8;
 
 	if ((myData == 0) || (myData && newDataLength > myDataLength))
@@ -80,7 +80,7 @@ void MC_BitVector::operator = (const MC_BitVector& aBitVector)
 	if(this == &aBitVector)
 		return;
 
-	assert(aBitVector.myNumIndices);
+    MC_ASSERT(aBitVector.myNumIndices);
 
 	//only do reallocation if sizes are different
 	if(myNumIndices != aBitVector.myNumIndices)
@@ -90,7 +90,7 @@ void MC_BitVector::operator = (const MC_BitVector& aBitVector)
 
 		MC_TempFree(myData);
 		myData = (unsigned char*)MC_TempAllocIfOwnerOnStack(this, myDataLength, __FILE__, __LINE__);
-		assert(myData);
+        MC_ASSERT(myData);
 	}
 
 	//copy data
@@ -135,7 +135,7 @@ void TestBitVectors()
 		{
 			for (int x = 0; x < 256; ++x)
 			{
-				assert (bv[x + y*256] == bv2[x + y*256]);
+                MC_ASSERT(bv[x + y*256] == bv2[x + y*256]);
 			}
 		}
 	}

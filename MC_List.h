@@ -126,7 +126,7 @@ public:
 	{
 		//add new value to front of list
 		myFirstLink = New(aValue, NULL, myFirstLink);
-		assert(myFirstLink);
+		MC_ASSERT(myFirstLink);
 
 		myCount++;
 		//Set last link if list was empty
@@ -143,7 +143,7 @@ public:
 	{
 		//add new value to the end of list
 		myLastLink = New(aValue, myLastLink, NULL);
-		assert(myLastLink);
+		MC_ASSERT(myLastLink);
 
 		myCount++;
 		//Set first link if list was empty
@@ -208,7 +208,7 @@ public:
 	{
 		//return first value in list
 		//make sure there is at least one element
-		assert(myFirstLink);
+		MC_ASSERT(myFirstLink);
 
 		return myFirstLink->myValue;
 	}
@@ -217,7 +217,7 @@ public:
 	Type GetLast() const
 	{
 		//return last value in list
-		assert(myLastLink);
+		MC_ASSERT(myLastLink);
 
 		return myLastLink->myValue;
 	}
@@ -230,12 +230,12 @@ public:
 		//the first link is NULL and length is 0
 		if(myCount == 0)
 		{
-			assert(myFirstLink == NULL);
+			MC_ASSERT(myFirstLink == NULL);
 			return true;
 		}
 		else
 		{
-			assert(myFirstLink != NULL);
+			MC_ASSERT(myFirstLink != NULL);
 			return false;
 		}
 	}*/

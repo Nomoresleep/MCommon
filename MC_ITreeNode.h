@@ -51,7 +51,7 @@ private:
 	//illegal constructor
 	MC_ITreeNode()
 	{
-		assert(0);
+		MC_ASSERT(0);
 	}
 };
 
@@ -81,7 +81,7 @@ MC_ITreeNode<Type>::~MC_ITreeNode()
 template <class Type>
 MC_ITreeNode<Type>::MC_ITreeNode()
 {
-	assert(0);
+	MC_ASSERT(0);
 }
 */
 

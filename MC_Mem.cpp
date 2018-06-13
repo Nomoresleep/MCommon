@@ -261,10 +261,10 @@ void MC_MemFree(void* aPointer)
 	memBlk = ((MC_MemBlockExtraData*) aPointer) - 1;
 
 #ifdef MC_MEM_CHECK_POINTERS
-	assert(memBlk->myCheckPointerValues[0] == 0x12345678); // CHANGE LATER!!! assumes MC_MEM_CHECK_NUM_CHECK_DWORDS == 2
-	assert(memBlk->myCheckPointerValues[1] == 0x87654321);
-	assert(((unsigned int*) (((unsigned char*) aPointer) + memBlk->mySize))[0] == 0xFEDCBA98);
-	assert(((unsigned int*) (((unsigned char*) aPointer) + memBlk->mySize))[1] == 0x89ABCDEF);
+	MC_ASSERT(memBlk->myCheckPointerValues[0] == 0x12345678); // CHANGE LATER!!! assumes MC_MEM_CHECK_NUM_CHECK_DWORDS == 2
+	MC_ASSERT(memBlk->myCheckPointerValues[1] == 0x87654321);
+	MC_ASSERT(((unsigned int*) (((unsigned char*) aPointer) + memBlk->mySize))[0] == 0xFEDCBA98);
+	MC_ASSERT(((unsigned int*) (((unsigned char*) aPointer) + memBlk->mySize))[1] == 0x89ABCDEF);
 
 	memBlk->myCheckPointerValues[0] = 0x01010101;
 	memBlk->myCheckPointerValues[1] = 0x02020202;
@@ -292,10 +292,10 @@ void MC_VerifyHeap()
 	while(memBlk)
 	{
 #ifdef MC_MEM_CHECK_POINTERS
-		assert(memBlk->myCheckPointerValues[0] == 0x12345678); // CHANGE LATER!!! assumes MC_MEM_CHECK_NUM_CHECK_DWORDS == 2
-		assert(memBlk->myCheckPointerValues[1] == 0x87654321);
-		assert(((unsigned int*) (((unsigned char*) (memBlk + 1)) + memBlk->mySize))[0] == 0xFEDCBA98);
-		assert(((unsigned int*) (((unsigned char*) (memBlk + 1)) + memBlk->mySize))[1] == 0x89ABCDEF);
+		MC_ASSERT(memBlk->myCheckPointerValues[0] == 0x12345678); // CHANGE LATER!!! assumes MC_MEM_CHECK_NUM_CHECK_DWORDS == 2
+		MC_ASSERT(memBlk->myCheckPointerValues[1] == 0x87654321);
+		MC_ASSERT(((unsigned int*) (((unsigned char*) (memBlk + 1)) + memBlk->mySize))[0] == 0xFEDCBA98);
+		MC_ASSERT(((unsigned int*) (((unsigned char*) (memBlk + 1)) + memBlk->mySize))[1] == 0x89ABCDEF);
 #endif // MC_MEM_CHECK_POINTERS
 
 		memBlk = memBlk->myNextMemoryBlock;
@@ -318,7 +318,7 @@ void MC_MemDumpMemoryLeaks(bool aDumpToDebugWindowFlag)
 
 	FILE* leakFile;
 	leakFile = fopen("mc_memdump.txt", "w"); // a+ ???
-	assert(leakFile);
+	MC_ASSERT(leakFile);
 
 	EnterCriticalSection(&locCriticalSection);
 
@@ -416,7 +416,7 @@ void AddExtMem(int aFileNameIndex, const char* aFileName, unsigned int aSize, bo
 		locNumExtMemDumpFiles++;
 	}
 	else
-		assert(0); // need more files for this to be correct
+		MC_ASSERT(0); // need more files for this to be correct
 };
 
 
@@ -1167,10 +1167,10 @@ void MC_TempFree(void* aPointer)
 #ifdef MC_HEAVY_DEBUG_TEMP_MEMORY_DEBUGGING
 		if(locThreadIdDebuggingFlag)
 		{
-			assert(header->myDebuggingThreadId == GetCurrentThreadId());
+			MC_ASSERT(header->myDebuggingThreadId == GetCurrentThreadId());
 		}
-		assert((char*)header >= locTempBuffer);
-		assert(header->myMagic1 == TEMP_MEM_MAGIC1);
+		MC_ASSERT((char*)header >= locTempBuffer);
+		MC_ASSERT(header->myMagic1 == TEMP_MEM_MAGIC1);
 #endif
 
 		if(charPtr == locTopAlloc)
@@ -1195,10 +1195,10 @@ void MC_TempFree(void* aPointer)
 #ifdef MC_HEAVY_DEBUG_TEMP_MEMORY_DEBUGGING
 				if(locThreadIdDebuggingFlag)
 				{
-					assert(header->myDebuggingThreadId == GetCurrentThreadId());
+					MC_ASSERT(header->myDebuggingThreadId == GetCurrentThreadId());
 				}
-				assert((char*)header >= locTempBuffer);
-				assert(header->myMagic1 == TEMP_MEM_MAGIC1);
+				MC_ASSERT((char*)header >= locTempBuffer);
+				MC_ASSERT(header->myMagic1 == TEMP_MEM_MAGIC1);
 #endif
 			}
 			while(header->mySize == INVALID_SIZE);
@@ -1260,7 +1260,7 @@ void MC_TempMemCheckAllocations()
 	if(!locTempMemEnableFlag || locTempMemDebugLevel == 0)
 		return;
 
-	assert(locTempBufferUsage <= TEMP_BUFFER_SIZE);
+	MC_ASSERT(locTempBufferUsage <= TEMP_BUFFER_SIZE);
 
 #ifdef MC_HEAVY_DEBUG_TEMP_MEMORY_DEBUGGING
 	if(locTempMemInited)
@@ -1268,7 +1268,7 @@ void MC_TempMemCheckAllocations()
 		int end = __min(locTempBufferUsage+TEMP_MEM_CLEAR_SIZE, TEMP_BUFFER_SIZE);
 		for(int i=locTempBufferUsage; i<end; i++)
 		{
-			assert(locTempBuffer[i] == TEMP_MEM_MAGIC_FREE);
+			MC_ASSERT(locTempBuffer[i] == TEMP_MEM_MAGIC_FREE);
 		}
 	}
 #endif
@@ -1285,10 +1285,10 @@ void MC_TempMemCheckAllocations()
 #ifdef MC_HEAVY_DEBUG_TEMP_MEMORY_DEBUGGING
 			if(locThreadIdDebuggingFlag)
 			{
-				assert(header->myDebuggingThreadId == GetCurrentThreadId());
+				MC_ASSERT(header->myDebuggingThreadId == GetCurrentThreadId());
 			}
-			assert((char*)header >= locTempBuffer);
-			assert(header->myMagic1 == TEMP_MEM_MAGIC1);
+			MC_ASSERT((char*)header >= locTempBuffer);
+			MC_ASSERT(header->myMagic1 == TEMP_MEM_MAGIC1);
 #endif
 
 			charPtr = header->myPrevTopAlloc;
@@ -1329,7 +1329,7 @@ void MC_TestMemory()
 	if(theMemTestFunction)
 		theMemTestFunction();
 
-	assert( _CrtCheckMemory() == TRUE );
+	MC_ASSERT( _CrtCheckMemory() == TRUE );
 }
 
 void MC_SetBoomFilename(const char* aFilename)
@@ -1407,7 +1407,7 @@ void MC_WriteBoomFile(const char* aString)
 
 	MC_MemLeakExtraInfo::~MC_MemLeakExtraInfo()
 	{
-		assert(locMemLeakStackDepth > 0);
+		MC_ASSERT(locMemLeakStackDepth > 0);
 		if(locMemLeakInfoStack[locMemLeakStackDepth-1] == this)
 		{
 			locMemLeakStackDepth--;
@@ -1421,7 +1421,7 @@ void MC_WriteBoomFile(const char* aString)
 
 	const char* MC_MemLeakExtraInfo::GetInfoAt(int aDepth)
 	{
-		assert(aDepth < locMemLeakStackDepth);
+		MC_ASSERT(aDepth < locMemLeakStackDepth);
 		return locMemLeakInfoStack[aDepth]->myInfo;
 	}
 #endif // MC_MEMORYLEAK_STACKTRACE

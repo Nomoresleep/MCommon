@@ -25,7 +25,7 @@ MT_Job::MT_Job(MT_Supervisor* pSupervisor)
 {
 	_InterlockedExchange(&myNumPendingTasks, 0);
 	mySupervisor = pSupervisor;
-	assert(mySupervisor);
+    MC_ASSERT(mySupervisor);
 }
 
 // The MT_Job destructor blocks until all it's tasks are done.

@@ -57,10 +57,10 @@ public:
 		{
 			//new node at root
 			myRoot = new MC_ITreeNode<Type>(anInstance);
-			assert(myRoot);
+			MC_ASSERT(myRoot);
 			
 			//increase count
-			assert(myCount == 0);
+			MC_ASSERT(myCount == 0);
 			myCount++;
 			
 			return (myRoot != NULL);
@@ -99,13 +99,13 @@ public:
 				}
 			}
 
-			assert(whichChild);
+			MC_ASSERT(whichChild);
 			switch(whichChild)
 			{
 			case LEFT_CHILD:
 				{
 					parent->myLeftChild = new MC_ITreeNode<Type>(anInstance);
-					assert(parent->myLeftChild);
+					MC_ASSERT(parent->myLeftChild);
 					
 					//increase count
 					myCount++;
@@ -117,7 +117,7 @@ public:
 			case RIGHT_CHILD:
 				{
 					parent->myRightChild = new MC_ITreeNode<Type>(anInstance);
-					assert(parent->myRightChild);
+					MC_ASSERT(parent->myRightChild);
 
 					//increase count
 					myCount++;
@@ -129,7 +129,7 @@ public:
 		}
 
 		//shouldn't reach this point
-		assert(0);
+		MC_ASSERT(0);
 		return false;
 	}
 
@@ -169,7 +169,7 @@ public:
 			}
 			else
 			{
-				assert(anInstance == current->myData);
+				MC_ASSERT(anInstance == current->myData);
 				found = true;
 			}
 		}

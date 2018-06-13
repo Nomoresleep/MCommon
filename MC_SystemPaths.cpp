@@ -62,14 +62,14 @@ void MC_SystemPaths::SetAppName(const char* anAppName, const char* aDocumentsPat
 	ourAppName[0] = 0;
 	ourDocumentsPathName[0] = 0;
 
-	assert(strlen(anAppName) < APPNAMESIZE);
+    MC_ASSERT(strlen(anAppName) < APPNAMESIZE);
 	
 	if (anAppName)
 		strcpy(ourAppName, anAppName);
 
 	if(aDocumentsPathName)
 	{
-		assert(strlen(aDocumentsPathName) < APPNAMESIZE);
+        MC_ASSERT(strlen(aDocumentsPathName) < APPNAMESIZE);
 		strcpy(ourDocumentsPathName, aDocumentsPathName);
 	}
 	else

@@ -71,15 +71,15 @@ public:
 	__forceinline C& operator[](int aIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
-		assert(aIndex >= 0 && "String boundscheck");
-		assert(aIndex == 0 || aIndex < GetBufferSize() && "String boundscheck");
+        MC_ASSERT(aIndex >= 0 && "String boundscheck");
+        MC_ASSERT(aIndex == 0 || aIndex < GetBufferSize() && "String boundscheck");
 #endif
 		return GetBuffer()[aIndex];
 	}
 	__forceinline C& operator[](unsigned int aIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
-		assert(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");
+        MC_ASSERT(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");
 #endif
 		return GetBuffer()[aIndex];
 	}
@@ -87,8 +87,8 @@ public:
 	__forceinline const C& operator[](int aIndex)	const
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
-		assert(aIndex >= 0 && "String boundscheck");
-		assert(aIndex == 0 || aIndex < GetBufferSize() && "String boundscheck");
+        MC_ASSERT(aIndex >= 0 && "String boundscheck");
+        MC_ASSERT(aIndex == 0 || aIndex < GetBufferSize() && "String boundscheck");
 #endif
 		return GetBuffer()[aIndex];
 	}
@@ -96,7 +96,7 @@ public:
 	__forceinline const C& operator[](unsigned int aIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_MC_STRING_BOUNDSCHECK
-		assert(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");
+        MC_ASSERT(aIndex == 0 || int(aIndex) < GetBufferSize() && "String boundscheck");
 #endif
 		return GetBuffer()[aIndex];
 	}
@@ -223,12 +223,12 @@ protected:
 	// --------- Internal helpers ---------
 
 	// Static string functions
-	template<class C, int S>	static void	InternalSetBuffer( MC_Str<C,S>& /*aStr*/, C* /*aPointer*/ )		{ assert( 0 && "not allowed on static strings!" ); }
+	template<class C, int S>	static void	InternalSetBuffer( MC_Str<C,S>& /*aStr*/, C* /*aPointer*/ )		{ MC_ASSERT( 0 && "not allowed on static strings!" ); }
 	template<class C, int S>	static C*	InternalGetBuffer( MC_Str<C,S>& aStr )					{ return aStr.myBuffer; }
 	template<class C, int S>	static const C*	InternalGetBuffer( const MC_Str<C,S>& aStr )		{ return aStr.myBuffer; }
 	template<class C, int S>	static int	InternalGetBufferSize( const MC_Str<C,S>& /*aStr*/ )		{ return S; }
-	template<class C, int S>	static void	InternalSetBufferSize( MC_Str<C,S>& /*aStr*/, int /*aSize*/ )	{ assert( 0 && "not allowed on static strings!" ); }
-	template<class C, int S>	static void	InternalReserve(MC_Str<C,S>& /*aStr*/, int aLength)			{ assert(aLength < S); }
+	template<class C, int S>	static void	InternalSetBufferSize( MC_Str<C,S>& /*aStr*/, int /*aSize*/ )	{ MC_ASSERT( 0 && "not allowed on static strings!" ); }
+	template<class C, int S>	static void	InternalReserve(MC_Str<C,S>& /*aStr*/, int aLength)			{ MC_ASSERT(aLength < S); }
 
 	// Specialization for dynamic string
 	template<class C>			static void	InternalSetBuffer( MC_Str<C,0>& aStr, C* aPointer )		{ aStr.myDynamicPointer = aPointer; }
@@ -408,7 +408,7 @@ void MC_Str<C,S>::Append(const C* aString, int aStringLen)
 		if ((len + aStringLen + 1) > GetBufferSize())
 			Reserve(len + aStringLen);
 		const int toCopy = MC_Min(aStringLen, GetBufferSize()-1-len);
-		assert (toCopy >= 0);
+        MC_ASSERT(toCopy >= 0);
 		if (toCopy)
 			memcpy(GetBuffer()+len, aString, toCopy * sizeof(C));
 		GetBuffer()[len + toCopy] = 0;
@@ -577,7 +577,7 @@ void MC_Str<C,S>::ReallocData(int aSize)
 	{
 		if( aSize >= S )
 		{
-			assert( 0 && "The static string buffer is too small" );
+            MC_ASSERT( 0 && "The static string buffer is too small" );
 			aSize = S - 1;	// safety net
 		}
 	}
@@ -611,7 +611,7 @@ void MC_Str<C,S>::AllocData(int aSize)
 	{
 		if( aSize >= S )
 		{
-			assert( 0 && "The static string buffer is too small" );
+            MC_ASSERT( 0 && "The static string buffer is too small" );
 			aSize = S - 1;	// safety net
 		}
 	}
@@ -682,7 +682,7 @@ int MC_Str<C,S>::Replace(const C* anOldString, const C* aNewString)
 		for (int i=0; i<numChanged; i++)
 		{
 			int findIndex = InternalFind( src, anOldString );
-			assert( findIndex >= 0 );
+            MC_ASSERT( findIndex >= 0 );
 
 			// Copy to dest
 			memcpy(dst, src, findIndex * sizeof(C));
@@ -943,11 +943,11 @@ MC_Str<C,S>& __cdecl MC_Str<C,S>::Format(const C* aFormatString, ...)
 #else
 		int stringLen =_vstprintf((TCHAR*)GetBuffer(), (const TCHAR*)aFormatString, paramList);
 #endif
-		assert(b == stringLen);
+        MC_ASSERT(b == stringLen);
 	}
     else
 	{
-		assert(sizeof(wchar_t) == sizeof(C));
+        MC_ASSERT(sizeof(wchar_t) == sizeof(C));
 
 		int b = _vscwprintf((const wchar_t*)aFormatString, paramList);
 		AllocData(b);
@@ -961,7 +961,7 @@ MC_Str<C,S>& __cdecl MC_Str<C,S>::Format(const C* aFormatString, ...)
 #else
 		int stringLen = vswprintf((wchar_t*)GetBuffer(), (const wchar_t*)aFormatString, paramList);
 #endif
-		assert(b == stringLen);
+        MC_ASSERT(b == stringLen);
 	}
 #pragma warning(pop)
 	va_end(paramList);

@@ -60,7 +60,7 @@ public:
 		{
 			//alloc sortvector
 			sortArray = new MC_Array<Type>(count);
-			assert(sortArray);
+			MC_ASSERT(sortArray);
 			if(sortArray)
 			{
 				//inorder traversal, extracting to the vector

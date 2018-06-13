@@ -63,20 +63,20 @@ public:
 
 	inline void Push(const T& aValue)
 	{
-		assert(Full() == false);
+        MC_ASSERT(Full() == false);
 		myTop++;
 		myStack[myTop] = aValue;
 	}
 
 	inline void Pop()
 	{
-		assert(Empty() == false);
+        MC_ASSERT(Empty() == false);
 		myTop--;
 	}
 
 	inline const T& Top() const
 	{
-		assert(Empty() == false);
+        MC_ASSERT(Empty() == false);
 		return mystack[myTop];
 	}
 	

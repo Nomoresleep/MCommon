@@ -58,10 +58,10 @@ public:
 		{
 			//new node at root
 			myRoot = new MC_KeyTreeNode<Type, Key>(anInstance, aKey);
-			assert(myRoot);
+			MC_ASSERT(myRoot);
 			
 			//increase count
-			assert(myCount == 0);
+			MC_ASSERT(myCount == 0);
 			myCount++;
 			
 			return (myRoot != NULL);
@@ -87,7 +87,7 @@ public:
 				}
 				else
 				{
-					assert(aKey == current->myKey);
+					MC_ASSERT(aKey == current->myKey);
 
 					if(myDuplicatesAllowedFlag)
 					{
@@ -104,13 +104,13 @@ public:
 				}
 			}
 
-			assert(whichChild);
+			MC_ASSERT(whichChild);
 			switch(whichChild)
 			{
 			case LEFTCHILD:
 				{
 					parent->myLeftChild = new MC_KeyTreeNode<Type, Key>(anInstance, aKey);
-					assert(parent->myLeftChild);
+					MC_ASSERT(parent->myLeftChild);
 					
 					//increase count
 					myCount++;
@@ -122,7 +122,7 @@ public:
 			case RIGHTCHILD:
 				{
 					parent->myRightChild = new MC_KeyTreeNode<Type, Key>(anInstance, aKey);
-					assert(parent->myRightChild);
+					MC_ASSERT(parent->myRightChild);
 
 					//increase count
 					myCount++;
@@ -134,7 +134,7 @@ public:
 		}
 
 		//shouldn't reach this point
-		assert(0);
+		MC_ASSERT(0);
 		return false;
 	}
 
@@ -173,7 +173,7 @@ public:
 			}
 			else
 			{
-				assert(aKey == current->myKey);
+				MC_ASSERT(aKey == current->myKey);
 
 				if(aTypePointer)
 				{
@@ -248,7 +248,7 @@ public:
 				myRoot = newRoot;
 
 				myCount--;
-				assert(myCount >= 0);
+				MC_ASSERT(myCount >= 0);
 				
 				return true;
 			}
@@ -277,7 +277,7 @@ public:
 							child = NULL;
 
 							myCount--;
-							assert(myCount >= 0);
+							MC_ASSERT(myCount >= 0);
 
 							return true;
 						}
@@ -300,7 +300,7 @@ public:
 							child = NULL;
 
 							myCount--;
-							assert(myCount >= 0);
+							MC_ASSERT(myCount >= 0);
 
 							return true;
 						}

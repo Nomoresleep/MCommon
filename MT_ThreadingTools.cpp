@@ -379,7 +379,7 @@ int MT_ThreadingTools::GetMyThreadIndex()
 	{
 		locMyThreadIndex = Increment(&locThreadCount)-1;
 
-		assert(locMyThreadIndex >= 0 && locMyThreadIndex < THREAD_TOOLS_ABSOLUTE_MAX_NUM_THREADS);
+        MC_ASSERT(locMyThreadIndex >= 0 && locMyThreadIndex < THREAD_TOOLS_ABSOLUTE_MAX_NUM_THREADS);
 	}
 
 	return locMyThreadIndex;

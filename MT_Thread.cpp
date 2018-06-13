@@ -79,7 +79,7 @@ MT_Thread::StopAndDelete()
 		{
 			MC_ERROR("Deadlock in StopAndDelete");
 			MT_ThreadingTools::PrintThreadingStatus(true);
-			assert(0 && "Stuck in MC_Thread::StopAndDelete");
+            MC_ASSERT(0 && "Stuck in MC_Thread::StopAndDelete");
 		}
 #endif
 	}
@@ -119,7 +119,7 @@ MT_Thread::Resume()
 
 MT_Thread::~MT_Thread()
 {
-	assert(myThreadHandle == 0);
+    MC_ASSERT(myThreadHandle == 0);
 }
 
 void
@@ -144,7 +144,7 @@ MT_Thread_thread_starter(void* aThread)
 
 	thr = static_cast<MT_Thread*>(aThread);
 
-	assert(MT_Thread::ourNumThreads < 256);
+    MC_ASSERT(MT_Thread::ourNumThreads < 256);
 	MT_Thread::ourThreads[MT_Thread::ourNumThreads++] = thr;
 
 	thr->myThreadId = GetCurrentThreadId();

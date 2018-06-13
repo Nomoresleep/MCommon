@@ -54,7 +54,7 @@ public:
 	bool SetTree(MC_ITree<Type>& aTree)
 	{
 		myTree = &aTree;
-		assert(myTree);
+		MC_ASSERT(myTree);
 
 		return (myTree != NULL);
 	}

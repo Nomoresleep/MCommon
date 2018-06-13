@@ -150,13 +150,13 @@ MC_GrowingArray<MC_DebugOverwriteSentinel*>* MC_Debug::ourSentinels = 0;
 
 		if(index < 0)
 		{
-			assert(0 && "Sentinel not in array. Memory corruption. Deleted same object twice?");
+			MC_ASSERT(0 && "Sentinel not in array. Memory corruption. Deleted same object twice?");
 		}
 		else
 		{
 			ourSentinels->RemoveAtIndex(index);
 
-			assert(ourSentinels->Find(this) < 0 && "Sentinel was in array twice. Memory corruption?");
+			MC_ASSERT(ourSentinels->Find(this) < 0 && "Sentinel was in array twice. Memory corruption?");
 		}
 	}
 
@@ -171,7 +171,7 @@ MC_GrowingArray<MC_DebugOverwriteSentinel*>* MC_Debug::ourSentinels = 0;
 
 		for(int i=0; i<count; i++)
 		{
-			assert((*ourSentinels)[i]->Test() && "Memory overwrite detected -- sentinel at has been overwritten!!");
+			MC_ASSERT((*ourSentinels)[i]->Test() && "Memory overwrite detected -- sentinel at has been overwritten!!");
 		}
 	}
 
@@ -212,7 +212,7 @@ bool MC_Debug::Init(const char* aDebugFileName,const char* aErrorFileName, bool 
 
 	int i;
 
-	assert( ourAmInitedFlag == false );
+	MC_ASSERT( ourAmInitedFlag == false );
 	ourAmInitedFlag = true;
 
 	if( aStatsFileName && strcmp( aStatsFileName, "" ) )
@@ -302,14 +302,14 @@ bool MC_Debug::Init(const char* aDebugFileName,const char* aErrorFileName, bool 
 
 bool MC_Debug::Init( void )
 {
-	assert(false && "DEPRECATED! Use the other Init() function instead. Talk to bjorn");
+	MC_ASSERT(false && "DEPRECATED! Use the other Init() function instead. Talk to bjorn");
 
 	//#ifndef	_RELEASE_	
 #ifndef MC_NO_DEBUG_FILE_OUTPUT
 	int i;
 
 	// Check to see if we're already inited.. if we are, things aren't well.
-	assert( ourAmInitedFlag == false );
+	MC_ASSERT( ourAmInitedFlag == false );
 	ourAmInitedFlag = true;
 
 	for( i=0; i<NUM_ALTDBGS; i++ )
@@ -356,7 +356,7 @@ bool MC_Debug::AddDebugListener(MC_DebugListener* aListener)
 
 	// No, add it
 	long newIndex = _InterlockedIncrement(&locNumDebugListeners)-1;
-	assert(newIndex < MAXLISTENERS);
+	MC_ASSERT(newIndex < MAXLISTENERS);
 	// Debugmessages can now iterate up until newIndex, but that already has an inactive listener so no problem there. 
 	_InterlockedExchange((volatile long*)&locOurDebugListeners[newIndex].listener, (long)aListener);
 	_InterlockedExchange(&locOurDebugListeners[newIndex].active, 1);
@@ -388,7 +388,7 @@ bool MC_Debug::AddErrorListener(MC_DebugListener* aListener)
 
 	// No, add it
 	long newIndex = _InterlockedIncrement(&locNumErrorListeners)-1;
-	assert(newIndex < MAXLISTENERS);
+	MC_ASSERT(newIndex < MAXLISTENERS);
 	_InterlockedExchange((volatile long*)&locOurErrorListeners[newIndex].listener, (long)aListener);
 	_InterlockedExchange(&locOurErrorListeners[newIndex].active, 1);
 #endif
@@ -423,7 +423,7 @@ bool MC_Debug::RemoveDebugListener(MC_DebugListener* aListener)
 	while (_InterlockedCompareExchange(&locNumConcurrentOutputs, 0, 0)) // while (locNumConcurrentOutputs)
 		MC_Sleep(1);
 
-	assert(found);
+	MC_ASSERT(found);
 	if (found)
 	{
 		_InterlockedExchange((volatile long*)&locOurDebugListeners[i].listener, NULL);		// locOurDebugListeners[i].listener = NULL;
@@ -459,7 +459,7 @@ bool MC_Debug::RemoveErrorListener(MC_DebugListener* aListener)
 	while (_InterlockedCompareExchange(&locNumConcurrentErrorOutputs, 0, 0))				// while (locNumConcurrentErrorOutputs)
 		MC_Sleep(1);
 
-	assert(found);
+	MC_ASSERT(found);
 	if (found)
 		locOurErrorListeners[i].listener = NULL;
 #endif
@@ -988,12 +988,12 @@ bool MC_Debug::CreateAlternateDebugFile( MC_Debug_AlternateDebugFile aFile, cons
 //#ifndef	_RELEASE_	
 #ifndef MC_NO_DEBUG_FILE_OUTPUT
 
-	assert(aFile < NUM_ALTDBGS);
+	MC_ASSERT(aFile < NUM_ALTDBGS);
 
 	// File already allocated
 	if( ourAlternateFiles[aFile] != NULL )
 	{
-		assert(false && "debugfile already allocated by someone else");
+		MC_ASSERT(false && "debugfile already allocated by someone else");
 		return false;
 	}
 
@@ -1001,7 +1001,7 @@ bool MC_Debug::CreateAlternateDebugFile( MC_Debug_AlternateDebugFile aFile, cons
 	ourAlternateFiles[aFile] = fopen(aFilename, "w");
 	if (!ourAlternateFiles[aFile])
 	{
-		assert(false && "debugfile could not be opened!");
+		MC_ASSERT(false && "debugfile could not be opened!");
 		return false;
 	}
 #endif
@@ -1629,7 +1629,7 @@ void __cdecl MC_Debug::InternalPosTracer::operator()(const char* aDebugMessage, 
 		}
 		else
 		{
-			assert(0 && "unhandled case");
+			MC_ASSERT(0 && "unhandled case");
 		}
 	}
 	else

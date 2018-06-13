@@ -89,7 +89,7 @@ public:
 
 	__forceinline void Lock(MUTEX& aMutex)
 	{
-		assert(myMutex == NULL);
+        MC_ASSERT(myMutex == NULL);
 		myMutex = &aMutex;
 		myMutex->Lock();
 	}

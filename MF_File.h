@@ -325,7 +325,7 @@ template <unsigned int StringLength>
 	{
 		unsigned short len;
 		Read(len);
-		assert(len < aMaxLength);
+        MC_ASSERT(len < aMaxLength);
 		Read(someData, len);
 		someData[len] = 0;
 	} // reads a string
@@ -352,7 +352,7 @@ template <unsigned int StringLength>
 	void ReadLocString(MC_LocString& aString) { unsigned short len; Read(len); aString.Reserve(len+1); Read((void*) (const MC_LocChar*) aString, len * sizeof(MC_LocChar)); } // reads a string
 template <unsigned int StringLength>
 	void ReadLocString(MC_StaticLocString<StringLength>& aString) { ReadLocString(aString.GetBuffer(), StringLength); } // reads a string
-	void ReadLocString(MC_LocChar* aString, unsigned int aMaxLength = 256) { unsigned short len; Read(len); assert(len < aMaxLength); Read(aString, len * sizeof(MC_LocChar)); aString[len] = 0; } // reads a string
+	void ReadLocString(MC_LocChar* aString, unsigned int aMaxLength = 256) { unsigned short len; Read(len); MC_ASSERT(len < aMaxLength); Read(aString, len * sizeof(MC_LocChar)); aString[len] = 0; } // reads a string
 
 	void ReadLine(char* someData, unsigned int aMaxLength = 256); // reads a line and removes beginning and trailing whitespaces
 template <unsigned int StringLength>

@@ -56,7 +56,7 @@ public:
 	void SetList(MC_List<Type>& aList)
 	{
 		myList = &aList;
-		assert(myList);
+		MC_ASSERT(myList);
 	}
 
 	//assignment
@@ -76,7 +76,7 @@ public:
 	//reset iterator to start of list
 	bool Start()
 	{
-		assert(myList);
+		MC_ASSERT(myList);
 
 		//set the iterator to the first element in the list
 		myCurrentLink = myList->myFirstLink;
@@ -87,14 +87,14 @@ public:
 	//check if at end of list
 	bool AtEnd()
 	{
-		assert(myList);
+		MC_ASSERT(myList);
 		return (myCurrentLink == NULL);
 	}
 
 	//access at iterator position
 	Type Get()
 	{
-		assert(myList && myCurrentLink);
+		MC_ASSERT(myList && myCurrentLink);
 
 		//return value associated with current element
 		return myCurrentLink->myValue;
@@ -103,7 +103,7 @@ public:
 	//access at iterator position
 	Type& Access()
 	{
-		assert(myList && myCurrentLink);
+		MC_ASSERT(myList && myCurrentLink);
 
 		//return value associated with current element
 		return myCurrentLink->myValue;
@@ -112,7 +112,7 @@ public:
 	//step iterator to next element in list
 	bool Next()
 	{
-		assert(myList);
+		MC_ASSERT(myList);
 
 		if(myCurrentLink == NULL)
 		{
@@ -127,7 +127,7 @@ public:
 	//set value of item at iterator position
 	void Set(const Type& aValue)
 	{
-		assert(myList && myCurrentLink);
+		MC_ASSERT(myList && myCurrentLink);
 
 		//modify value of current element
 		myCurrentLink->myValue = aValue;
@@ -138,7 +138,7 @@ public:
 	//return pointer to current element
 	Type* GetPtr()
 	{
-		assert(myList && myCurrentLink);
+		MC_ASSERT(myList && myCurrentLink);
 
 		//return value associated with current element
 		return &myCurrentLink->myValue;
@@ -150,7 +150,7 @@ public:
 	{
 		MC_Link<Type>* tempLink;
 
-		assert(myList && myCurrentLink);
+		MC_ASSERT(myList && myCurrentLink);
 
 		//if previous and next link exists, remove and relink, else remove first or last with list
 		if(myCurrentLink->myPrevLink)
@@ -183,7 +183,7 @@ public:
 	{
 		MC_Link<Type>* newLink;
 
-		assert(myList);
+		MC_ASSERT(myList);
 
 		//At end of list
 		if(myCurrentLink == NULL)
@@ -195,10 +195,10 @@ public:
 		{
 			//insert between (the link before the current link) = (previous) and (the current link) = (next)
 			newLink = myList->New(aNewValue, myCurrentLink->myPrevLink, myCurrentLink);
-			assert(newLink);
+			MC_ASSERT(newLink);
 
-			assert(!myCurrentLink->myNextLink || myCurrentLink->myNextLink->myPrevLink == myCurrentLink); // verify list integrity
-			assert(myCurrentLink->myPrevLink->myNextLink == myCurrentLink); // verify list integrity
+			MC_ASSERT(!myCurrentLink->myNextLink || myCurrentLink->myNextLink->myPrevLink == myCurrentLink); // verify list integrity
+			MC_ASSERT(myCurrentLink->myPrevLink->myNextLink == myCurrentLink); // verify list integrity
 
 			//relink the previous link to point to the new link
 			myCurrentLink->myPrevLink->myNextLink = newLink;
@@ -219,7 +219,7 @@ public:
 	{
 		MC_Link<Type>* newLink;
 
-		assert(myList);
+		MC_ASSERT(myList);
 
 		//At end of list
 		if(myCurrentLink == NULL)
@@ -230,12 +230,12 @@ public:
 		{
 			//insert between (the current link) = (previous) and (the link after the current link) = (next)
 			newLink = myList->New(aNewValue, myCurrentLink, myCurrentLink->myNextLink);
-			assert(newLink);
+			MC_ASSERT(newLink);
 
-			assert(!myCurrentLink->myPrevLink || myCurrentLink->myPrevLink->myNextLink == myCurrentLink); // verify list integrity
+			MC_ASSERT(!myCurrentLink->myPrevLink || myCurrentLink->myPrevLink->myNextLink == myCurrentLink); // verify list integrity
 			if(myCurrentLink->myNextLink)
 			{
-				assert(myCurrentLink->myNextLink->myPrevLink == myCurrentLink); // verify list integrity
+				MC_ASSERT(myCurrentLink->myNextLink->myPrevLink == myCurrentLink); // verify list integrity
 				myCurrentLink->myNextLink->myPrevLink = newLink;
 			}
 

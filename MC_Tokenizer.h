@@ -89,7 +89,7 @@ inline const char* MC_Tokenizer::operator[](int anIndex) const
 {
 	if (anIndex < 0 || anIndex >= Count())
 		return "";
-	assert(anIndex >= 0 && anIndex < Count());
+    MC_ASSERT(anIndex >= 0 && anIndex < Count());
 	return myTokens[anIndex];
 }
 

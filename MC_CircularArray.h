@@ -30,7 +30,7 @@ public:
 	//constructor
 	MC_CircularArrayT()
 	{
-		assert(MAX_NODES > 0); // must have at least one element in list
+		MC_ASSERT(MAX_NODES > 0); // must have at least one element in list
 		myNextFreeNode = 0;
 		myFirstNode = 0;
 		myCurrentNumNodes = 0;
@@ -134,7 +134,7 @@ public:
 
 	void RemoveAtIndex(unsigned int anIndex)
 	{
-		assert(anIndex < myCurrentNumNodes);
+		MC_ASSERT(anIndex < myCurrentNumNodes);
 		if (Count() > 1)
 		{
 			for (int i = ((int)myCurrentNumNodes-1); i > (int)anIndex; --i)
@@ -159,13 +159,13 @@ public:
 	//element access
 	Type& operator[](unsigned int anIndex)
 	{
-		assert(anIndex < (unsigned int)Count());
+		MC_ASSERT(anIndex < (unsigned int)Count());
 		return myNodes[(myFirstNode + anIndex) >= MAX_NODES ? myFirstNode + anIndex - MAX_NODES : myFirstNode + anIndex]; // CHANGE LATER??? (myFirstNode + anIndex) % MAX_NODES
 	}
 
 	const Type& operator[](unsigned int anIndex) const
 	{
-		assert(anIndex < (unsigned int)Count());
+		MC_ASSERT(anIndex < (unsigned int)Count());
 		return myNodes[(myFirstNode + anIndex) >= MAX_NODES ? myFirstNode + anIndex - MAX_NODES : myFirstNode + anIndex]; // CHANGE LATER??? (myFirstNode + anIndex) % MAX_NODES
 	}
 
@@ -188,11 +188,11 @@ public:
 	// YourClass::YourClass( ) : yourArray(100) {  }
 	MC_CircularArray(unsigned int aNumNodes)
 	{
-		assert(aNumNodes > 0); // must have at least one element in list
+		MC_ASSERT(aNumNodes > 0); // must have at least one element in list
 
 		myMaxNumNodes = aNumNodes;
 		myNodes = new Type[myMaxNumNodes];
-		assert(myNodes);
+		MC_ASSERT(myNodes);
 		myNextFreeNode = 0;
 		myFirstNode = 0;
 		myCurrentNumNodes = 0;
@@ -265,7 +265,7 @@ public:
 	//element access
 	Type& operator[](unsigned int anIndex) const
 	{
-		assert(anIndex < (unsigned) Count());
+		MC_ASSERT(anIndex < (unsigned) Count());
 		return myNodes[(myFirstNode + anIndex) >= myMaxNumNodes ? myFirstNode + anIndex - myMaxNumNodes : myFirstNode + anIndex]; // CHANGE LATER??? (myFirstNode + anIndex) % myMaxNumNodes
 	}
 
@@ -274,7 +274,7 @@ public:
 	//illegal constructor
 	MC_CircularArray()
 	{
-		assert(0);
+		MC_ASSERT(0);
 	}
 
 	//members

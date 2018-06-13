@@ -42,8 +42,8 @@ public:
 
 	void Reset(pointer aPtr = 0) { myData = aPtr; }
 
-	type& operator*() const { assert(myData); return *myData; }
-	pointer operator->() const { assert(myData); return myData; }
+	type& operator*() const { MC_ASSERT(myData); return *myData; }
+	pointer operator->() const { MC_ASSERT(myData); return myData; }
 
 	operator pointer () const { return myData; }
 
@@ -80,7 +80,7 @@ public:
 
 	void Reset(pointer aPtr = 0) { myData = aPtr; }
 
-	type& operator*() const { assert(myData); return *myData; }
+	type& operator*() const { MC_ASSERT(myData); return *myData; }
 
 	const type& operator[](size_t index) const { return myData[index]; }
 	type& operator[](size_t index) { return myData[index]; }

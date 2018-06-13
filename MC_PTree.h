@@ -55,10 +55,10 @@ public:
 		{
 			//new node at root
 			myRoot = new MC_PTreeNode<Type>(aPointer);
-			assert(myRoot);
+			MC_ASSERT(myRoot);
 
 			//increase count
-			assert(myCount == 0);
+			MC_ASSERT(myCount == 0);
 			myCount++;
 			
 			return (myRoot != NULL);
@@ -84,19 +84,19 @@ public:
 				}
 				else
 				{
-					assert(*aPointer == *(current->myData));
+					MC_ASSERT(*aPointer == *(current->myData));
 					//doubles are not allowed
 					return false;
 				}
 			}
 
-			assert(whichChild);
+			MC_ASSERT(whichChild);
 			switch(whichChild)
 			{
 			case LEFT_CHILD:
 				{
 					parent->myLeftChild = new MC_PTreeNode<Type>(aPointer);
-					assert(parent->myLeftChild);
+					MC_ASSERT(parent->myLeftChild);
 
 					//increase count
 					myCount++;
@@ -108,7 +108,7 @@ public:
 			case RIGHT_CHILD:
 				{
 					parent->myRightChild = new MC_PTreeNode<Type>(aPointer);
-					assert(parent->myRightChild);
+					MC_ASSERT(parent->myRightChild);
 
 					//increase count
 					myCount++;
@@ -120,7 +120,7 @@ public:
 		}
 
 		//shouldn't reach this point
-		assert(0);
+		MC_ASSERT(0);
 		return false;
 	}
 
@@ -160,7 +160,7 @@ public:
 			}
 			else
 			{
-				assert(*aPointer == *(current->myData));
+				MC_ASSERT(*aPointer == *(current->myData));
 				if(aFoundPointer)
 				{
 					*aFoundPointer = current->myData;
@@ -368,7 +368,7 @@ bool MC_PTree<Type>::Insert(Type* aPointer)
 	{
 		//new node at root
 		myRoot = new MC_PTreeNode<Type>(aPointer);
-		assert(myRoot);
+		MC_ASSERT(myRoot);
 		
 		return (myRoot != NULL);
 	}
@@ -398,18 +398,18 @@ bool MC_PTree<Type>::Insert(Type* aPointer)
 			}
 		}
 
-		assert(whichChild);
+		MC_ASSERT(whichChild);
 		if(whichChild == LEFTCHILD)
 		{
 			parent->myLeftChild = new MC_PTreeNode<Type>(aPointer);
-			assert(parent->myLeftChild);
+			MC_ASSERT(parent->myLeftChild);
 			
 			return (parent->myLeftChild != NULL);
 		}
 		else if(whichChild == RIGHTCHILD)
 		{
 			parent->myRightChild = new MC_PTreeNode<Type>(aPointer);
-			assert(parent->myRightChild);
+			MC_ASSERT(parent->myRightChild);
 
 			return (parent->myRightChild != NULL);
 		}
@@ -468,7 +468,7 @@ bool MC_PTree<Type>::Find(Type* aPointer, Type** aFoundPointer) const
 		}
 		else
 		{
-			assert(*aPointer == *(current->myData));
+			MC_ASSERT(*aPointer == *(current->myData));
 			if(aFoundPointer)
 			{
 				*aFoundPointer = current->myData;

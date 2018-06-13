@@ -156,7 +156,7 @@ public:
 	inline Type& operator[] (int anIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
+		MC_ASSERT(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
 #endif
 
 		return myData[anIndex];
@@ -165,7 +165,7 @@ public:
 	inline const Type& operator[] (int anIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
+		MC_ASSERT(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
 #endif
 
 		return myData[anIndex];
@@ -206,7 +206,7 @@ public:
 	inline void RemoveAtIndex(int anIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
+		MC_ASSERT(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
 #endif
 
 		for(int i=anIndex; i<(myCount-1); i++)
@@ -218,7 +218,7 @@ public:
 	inline void RemoveCyclicAtIndex(int anIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
+		MC_ASSERT(anIndex >= 0 && anIndex < myCount && "MC_HybridArray BOUNDS ERROR!");
 #endif
 
 		myCount --;
@@ -247,7 +247,7 @@ public:
 	inline void Truncate(int aNewSize)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(aNewSize >= 0 && aNewSize < myCount && "Can't truncate something to make it bigger.");
+		MC_ASSERT(aNewSize >= 0 && aNewSize < myCount && "Can't truncate something to make it bigger.");
 #endif
 		myCount = aNewSize;
 	}

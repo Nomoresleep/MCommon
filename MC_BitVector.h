@@ -207,13 +207,13 @@ inline void MC_BitVector2D::Init(unsigned int aWidth, unsigned int aHeight)
 
 inline MC_BitVector2D::Proxy MC_BitVector2D::operator()(unsigned int aX, unsigned int aY)
 {
-	assert ((aX < myWidth) && (aY < myHeight));
+    MC_ASSERT((aX < myWidth) && (aY < myHeight));
 	return (*this)[aY*myWidth + aX];
 }
 
 inline const bool MC_BitVector2D::operator()(unsigned int aX, unsigned int aY) const
 {
-	assert ((aX < myWidth) && (aY < myHeight));
+    MC_ASSERT((aX < myWidth) && (aY < myHeight));
 	return (*this)[aY*myWidth + aX];
 }
 

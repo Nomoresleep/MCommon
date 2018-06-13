@@ -52,7 +52,7 @@
 //	// create workspace
 //	mySections = (char**)MC_TempAlloc((sizeof(char*)*aSectionLimit)+aLineLimit);//MEM_alloc("Workspace", (sizeof(char*)*num_sections)+line_buffer_size, MEM_FROMTOP);
 ////	DEBUG_assertPrintf(m_sections, ("INIFILE_LINE_DATA -> Cannot allocate buffer"));
-//	assert(mySections);
+//	MC_ASSERT(mySections);
 //	myBuffer = (char*)&mySections[aSectionLimit];
 //}
 //
@@ -159,8 +159,8 @@
 //			myNumSections++;
 ////			DEBUG_assertPrintf(dest<m_buffer+m_line_size, ("INIFILE_LINE_DATA -> Buffer overrun copying line from source"));
 ////			DEBUG_assertPrintf(m_num_sections<=m_max_sections, ("INIFILE_LINE_DATA -> Too many items on line"));
-//			assert(dest<myBuffer+myLineSize);
-//			assert(myNumSections<=myMaxSections);
+//			MC_ASSERT(dest<myBuffer+myLineSize);
+//			MC_ASSERT(myNumSections<=myMaxSections);
 //
 //			// move to next data
 //			aLineStart = SkipSpaces(aLineStart, aLineEnd);
@@ -208,7 +208,7 @@
 //			strcat(buffer, " ");
 //		}
 ////		DEBUG_abortPrintf(("INIFILE_LINE_DATA -> Getting float past end of line\n     line=%s", buffer));
-//		assert(0);
+//		MC_ASSERT(0);
 //	}
 //#endif
 //
@@ -277,7 +277,7 @@
 //			strcat(buffer, " ");
 //		}
 ////		DEBUG_abortPrintf(("INIFILE_LINE_DATA -> Getting int past end of line\n     line=%s", buffer));
-//		assert(0);
+//		MC_ASSERT(0);
 //	}
 //#endif
 //
@@ -326,7 +326,7 @@
 //			strcat(buffer, " ");
 //		}
 ////		DEBUG_abortPrintf(("INIFILE_LINE_DATA -> Getting string past end of line\n     line=%s", buffer));
-//		assert(0);
+//		MC_ASSERT(0);
 //	}
 //#endif
 //
@@ -436,7 +436,7 @@ MC_IniFile::MC_IniFile(
 	if (mySize)
 	{
 		myFileBuffer = (u8*)MC_TempAlloc(mySize);
-		assert(myFileBuffer);
+        MC_ASSERT(myFileBuffer);
 		file.Read(myFileBuffer, mySize);
 		file.Close();
 	}

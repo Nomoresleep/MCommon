@@ -111,10 +111,10 @@
 		}
 		void Test()
 		{
-			assert(myTailData[0] == MC_MAGIC_MEM_TAIL_GUARD[0] && "memory tail overwrite detected (1)");
-			assert(myTailData[1] == MC_MAGIC_MEM_TAIL_GUARD[1] && "memory tail overwrite detected (2)");
-			assert(myTailData[2] == MC_MAGIC_MEM_TAIL_GUARD[2] && "memory tail overwrite detected (3)");
-			assert(myTailData[3] == MC_MAGIC_MEM_TAIL_GUARD[3] && "memory tail overwrite detected (4)");
+			MC_ASSERT(myTailData[0] == MC_MAGIC_MEM_TAIL_GUARD[0] && "memory tail overwrite detected (1)");
+			MC_ASSERT(myTailData[1] == MC_MAGIC_MEM_TAIL_GUARD[1] && "memory tail overwrite detected (2)");
+			MC_ASSERT(myTailData[2] == MC_MAGIC_MEM_TAIL_GUARD[2] && "memory tail overwrite detected (3)");
+			MC_ASSERT(myTailData[3] == MC_MAGIC_MEM_TAIL_GUARD[3] && "memory tail overwrite detected (4)");
 		}
 	};
 
@@ -291,22 +291,22 @@
 
 			for(AllocExtraData* p = myFirstAlloc; p; p = p->myNext)
 			{
-				assert(p->myGuard1 == MC_MAGIC_MEM_GUARD_1 && "memory overwrite detected (1)");
-				assert((p->myGuard2 == MC_MAGIC_MEM_GUARD_2 || p->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY) && "memory overwrite detected (2)");
+				MC_ASSERT(p->myGuard1 == MC_MAGIC_MEM_GUARD_1 && "memory overwrite detected (1)");
+				MC_ASSERT((p->myGuard2 == MC_MAGIC_MEM_GUARD_2 || p->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY) && "memory overwrite detected (2)");
 	 
-				assert((p->mySize & 0xC0000000) == 0 && "memory overwrite detected (3)");
+				MC_ASSERT((p->mySize & 0xC0000000) == 0 && "memory overwrite detected (3)");
 
 				if(p->myNext)
 				{
-					assert( p->myNext->myPrev == p && "memory overwrite detected (4)" );
+					MC_ASSERT( p->myNext->myPrev == p && "memory overwrite detected (4)" );
 				}
 
 				if(p->myPrev)
 				{
-					assert( p->myPrev->myNext == p && "memory overwrite detected (5)" );
+					MC_ASSERT( p->myPrev->myNext == p && "memory overwrite detected (5)" );
 				}
 
-				assert((p->myLine >= 0 && p->myLine < 1000000) && "memory overwrite detected (6)");
+				MC_ASSERT((p->myLine >= 0 && p->myLine < 1000000) && "memory overwrite detected (6)");
 
 				AllocExtraTailData* tailData = (AllocExtraTailData*)(((char*)(p+1)) + p->mySize);
 				tailData->Test();
@@ -476,7 +476,7 @@
 		}
 #endif //_RELEASE_
 
-		assert(p && "--- OUT OF MEMORY ---");
+		MC_ASSERT(p && "--- OUT OF MEMORY ---");
 		if(p == 0)
 		{
 			OutOfMemory();
@@ -594,8 +594,8 @@
 
 	void MC_Free(void* aPointer, bool anArrayFlag)
 	{
-		assert(aPointer != (void*)(intptr_t)0xfeeefeee && "Delete on bad pointer (owner deleted twice?)!");
-		assert(aPointer == 0 || aPointer > (void*)0x00001000 && "Delete on bad pointer (owner is NULL?)!");
+		MC_ASSERT(aPointer != (void*)(intptr_t)0xfeeefeee && "Delete on bad pointer (owner deleted twice?)!");
+		MC_ASSERT(aPointer == 0 || aPointer > (void*)0x00001000 && "Delete on bad pointer (owner is NULL?)!");
 
 		if (aPointer)
 		{
@@ -609,45 +609,45 @@
 
 			AllocExtraData* extraData = OffsetExtra(aPointer,-1);
 
-			assert(extraData->myGuard1 != 0xfeeefeee && "Deleting memory that was already deleted!");
+			MC_ASSERT(extraData->myGuard1 != 0xfeeefeee && "Deleting memory that was already deleted!");
 
 #ifdef MC_HEAVY_DEBUG_MEMORY_SYSTEM_NAN_INIT
-			assert(extraData->myGuard1 != 0xffffffff && "Deleting memory that was already deleted!");
+			MC_ASSERT(extraData->myGuard1 != 0xffffffff && "Deleting memory that was already deleted!");
 #else
-			assert(extraData->myGuard1 != 0xdddddddd && "Deleting memory that was already deleted!");
+			MC_ASSERT(extraData->myGuard1 != 0xdddddddd && "Deleting memory that was already deleted!");
 #endif
 
-			assert(extraData->myGuard1 == MC_MAGIC_MEM_GUARD_1 && "memory overwrite detected (1)");
-			assert((extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2 || extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY) && "memory overwrite detected (2)");
+			MC_ASSERT(extraData->myGuard1 == MC_MAGIC_MEM_GUARD_1 && "memory overwrite detected (1)");
+			MC_ASSERT((extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2 || extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY) && "memory overwrite detected (2)");
 
-			assert((extraData->mySize & 0xC0000000) == 0 && "memory overwrite detected (3)");
+			MC_ASSERT((extraData->mySize & 0xC0000000) == 0 && "memory overwrite detected (3)");
 
 #ifdef MC_CHECK_NEW_DELETE_ARRAY_MATCHING
 			if(anArrayFlag)
 			{
-				assert(extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY && "memory allocated with new and freed with delete[]");
+				MC_ASSERT(extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2_ARRAY && "memory allocated with new and freed with delete[]");
 			}
 			else
 			{
-				assert(extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2 && "memory allocated with new[] and freed with delete");
+				MC_ASSERT(extraData->myGuard2 == MC_MAGIC_MEM_GUARD_2 && "memory allocated with new[] and freed with delete");
 			}
 #endif //MC_CHECK_NEW_DELETE_ARRAY_MATCHING
 
 			if(extraData->myNext)
 			{
-				assert( extraData->myNext->myPrev == extraData && "memory overwrite detected (4)" );
+				MC_ASSERT( extraData->myNext->myPrev == extraData && "memory overwrite detected (4)" );
 				extraData->myNext->myPrev = extraData->myPrev;
 			}
 
 			if(extraData->myPrev)
 			{
-				assert( extraData->myPrev->myNext == extraData && "memory overwrite detected (5)" );
+				MC_ASSERT( extraData->myPrev->myNext == extraData && "memory overwrite detected (5)" );
 				extraData->myPrev->myNext = extraData->myNext;
 			}
 			else
 				MemoryLeakFinder::GetInstance()->myFirstAlloc = extraData->myNext;
 
-			assert((extraData->myLine >= 0 && extraData->myLine < 1000000) && "memory overwrite detected (6)");
+			MC_ASSERT((extraData->myLine >= 0 && extraData->myLine < 1000000) && "memory overwrite detected (6)");
 
 			AllocExtraTailData* tailData = (AllocExtraTailData*)(((char*)(aPointer)) + extraData->mySize);
 			tailData->Test();

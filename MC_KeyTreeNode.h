@@ -53,7 +53,7 @@ private:
 	//illegal constructor
 	MC_KeyTreeNode()
 	{
-		assert(0);
+        MC_ASSERT(0);
 	}
 };
 
@@ -84,7 +84,7 @@ MC_KeyTreeNode<Type, Key>::~MC_KeyTreeNode()
 template <class Type, class Key>
 MC_KeyTreeNode<Type, Key>::MC_KeyTreeNode()
 {
-	assert(0);
+	MC_ASSERT(0);
 }
 */
 

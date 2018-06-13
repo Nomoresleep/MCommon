@@ -92,7 +92,7 @@ public:
 	__forceinline Type& operator[] (const int anIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+        MC_ASSERT(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 		return(myItemList[anIndex]);
 	}
@@ -108,8 +108,8 @@ public:
 	inline int Find2(const Compared& anItem, const unsigned int aLookFromIndex = 0) const
 	{
 		// Call Init() before using the array
-		// assert(myMaxNrOfItems > 0);
-		assert( myItemIncreaseSize > 0 );
+		// MC_ASSERT(myMaxNrOfItems > 0);
+        MC_ASSERT( myItemIncreaseSize > 0 );
 
 		for (int i = (int)aLookFromIndex; i < myUsedNrOfItems; i++)
 			if(Comparer::Equals(myItemList[i], anItem))
@@ -133,12 +133,12 @@ public:
 	inline int ReverseFind2(const Compared& anItem, const unsigned int aLookFromReverseIndex = 0) const
 	{
 		// Call Init() before using the array
-		//assert(myMaxNrOfItems > 0);
-		assert( myItemIncreaseSize > 0 );
+		//MC_ASSERT(myMaxNrOfItems > 0);
+		MC_ASSERT( myItemIncreaseSize > 0 );
 		if (myUsedNrOfItems == 0)
 			return -1;
 
-		assert(aLookFromReverseIndex < (unsigned int)myUsedNrOfItems);
+		MC_ASSERT(aLookFromReverseIndex < (unsigned int)myUsedNrOfItems);
 
 		for (int i = (myUsedNrOfItems-aLookFromReverseIndex-1); i >= 0; --i)
 			if(Comparer::Equals(myItemList[i], anItem))
@@ -348,8 +348,8 @@ template <class Type>
 inline void MC_GrowingArray<Type>::MoveToIndex(const int anItemNumber,const int aNewItemNumber)
 {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
-		assert(aNewItemNumber >= 0 && aNewItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+		MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+		MC_ASSERT(aNewItemNumber >= 0 && aNewItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	Type temp;
@@ -362,7 +362,7 @@ template <class Type>
 inline void MC_GrowingArray<Type>::MoveToEndCyclic(const int anItemNumber)
 {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-	assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+	MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	Type temp = myItemList[anItemNumber];
@@ -374,7 +374,7 @@ template <class Type>
 inline void MC_GrowingArray<Type>::MoveToEndConserveOrder(const int anItemNumber)
 {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-	assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+	MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	Type temp = myItemList[anItemNumber];
@@ -442,7 +442,7 @@ void MC_GrowingArray<Type>::NonDeletingShutdown()
 template <class Type>
 bool MC_GrowingArray<Type>::Init(int aNrOfRecommendedItems,int anItemIncreaseSize, bool aSafemodeFlag)
 {	
-	assert(myItemList == NULL); // make sure Init() isn't called multiple times
+	MC_ASSERT(myItemList == NULL); // make sure Init() isn't called multiple times
 
 	mySafemodeFlag = aSafemodeFlag ? 1 : 0;
 	myMaxNrOfItems = aNrOfRecommendedItems;
@@ -497,8 +497,8 @@ template <class Type>
 bool MC_GrowingArray<Type>::Add(const Type& anItem)
 {
 	// Call Init() before using the array
-	//assert( myMaxNrOfItems > 0);
-	assert( myItemIncreaseSize > 0 );
+	//MC_ASSERT( myMaxNrOfItems > 0);
+    MC_ASSERT( myItemIncreaseSize > 0 );
 
 	if(myUsedNrOfItems==myMaxNrOfItems)
 		if( SetSize( myMaxNrOfItems+myItemIncreaseSize ) < int(myUsedNrOfItems+myItemIncreaseSize) )
@@ -532,8 +532,8 @@ inline bool MC_GrowingArray<Type>::ReplaceUnique(const Type& aItemToReplace,cons
 template <class Type>
 bool MC_GrowingArray<Type>::Add(const Type* someItems, unsigned int aNumberOfItemsToAdd)
 {
-	assert(someItems);
-	assert(aNumberOfItemsToAdd > 0);
+	MC_ASSERT(someItems);
+	MC_ASSERT(aNumberOfItemsToAdd > 0);
 
 	int newSize = myUsedNrOfItems + aNumberOfItemsToAdd;
 	int growthsize = ((newSize/myItemIncreaseSize)+1)*myItemIncreaseSize;
@@ -555,8 +555,8 @@ template <class Type>
 inline bool MC_GrowingArray<Type>::AddN(const Type& anItem, unsigned int aNumberOfItemsToAdd)
 {
 	// Call Init() before using the array
-	//assert(myMaxNrOfItems > 0);
-	assert( myItemIncreaseSize > 0 );
+	//MC_ASSERT(myMaxNrOfItems > 0);
+	MC_ASSERT( myItemIncreaseSize > 0 );
 
 	// Creates enough space.
 	int newSize = myUsedNrOfItems + aNumberOfItemsToAdd;
@@ -575,8 +575,8 @@ void MC_GrowingArray<Type>::AddUnique(const Type& anItem)
 	unsigned int i;
 
 	// Call Init() before using the array
-	//assert(myMaxNrOfItems > 0);
-	assert( myItemIncreaseSize > 0 );
+	//MC_ASSERT(myMaxNrOfItems > 0);
+	MC_ASSERT( myItemIncreaseSize > 0 );
 
 	for(i = 0; i < (unsigned int) myUsedNrOfItems; i++)
 		if(myItemList[i] == anItem)
@@ -608,7 +608,7 @@ void MC_GrowingArray<Type>::RemoveNAtEnd(int aCount)
 template <class Type>
 void MC_GrowingArray<Type>::RemoveFirstN(const unsigned int aNumToRemove)
 {
-	assert((int)aNumToRemove <= myUsedNrOfItems);
+	MC_ASSERT((int)aNumToRemove <= myUsedNrOfItems);
 	
 	for (int i = 0;i < myUsedNrOfItems - (int)aNumToRemove; i++)
 	{
@@ -641,14 +641,14 @@ bool MC_GrowingArray<Type>::RemoveCyclic(const Type& anItem)
 	}
 	
 	//failed to find instance
-	//assert(0);
+	//MC_ASSERT(0);
 	return false;
 }
 
 template <class Type>
 void MC_GrowingArray<Type>::RemoveCyclicAtIndex(int anItemNumber)
 {
-	assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems);
+	MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems);
 	myItemList[anItemNumber]=myItemList[myUsedNrOfItems-1];
 	myUsedNrOfItems--;
 }
@@ -687,7 +687,7 @@ inline bool MC_GrowingArray<Type>::Remove(const Type& anItem, bool bReverseSearc
 	}
 
 	//failed to find instance
-//	assert(0);
+//	MC_ASSERT(0);
 	return false;
 }
 
@@ -696,7 +696,7 @@ template <class Type>
 inline void MC_GrowingArray<Type>::RemoveAtIndex(const int anItemNumber)
 {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+		MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	for(int i=anItemNumber;i<(myUsedNrOfItems-1);i++)
@@ -726,7 +726,7 @@ bool MC_GrowingArray<Type>::DeleteCyclic(const Type& anItem)
 	}
 
 	//failed to find instance
-//	assert(0);
+//	MC_ASSERT(0);
 	return false;
 }
 
@@ -735,7 +735,7 @@ template <class Type>
 void MC_GrowingArray<Type>::DeleteCyclicAtIndex(const int anItemNumber)
 {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+    MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	delete myItemList[anItemNumber];
@@ -797,7 +797,7 @@ inline void MC_GrowingArray<Type>::PreAllocSize(const int aSize)
 		return;
 
 	Type* tempList = New(aSize);
-	assert( tempList != NULL );
+	MC_ASSERT( tempList != NULL );
 
 	if (myItemList != 0)
 	{
@@ -827,11 +827,11 @@ bool MC_GrowingArray<Type>::InsertItem(const int anIndex, const Type& anItem)
 	int i;
 
 	// Call Init() before using the array
-	//assert( myMaxNrOfItems > 0);
-	assert( myItemIncreaseSize > 0 );
+	//MC_ASSERT( myMaxNrOfItems > 0);
+	MC_ASSERT( myItemIncreaseSize > 0 );
 
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex <= myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+		MC_ASSERT(anIndex >= 0 && anIndex <= myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	if(myUsedNrOfItems==myMaxNrOfItems)
@@ -854,7 +854,7 @@ bool MC_GrowingArray<Type>::RemoveItemConserveOrder(const int anItemNumber)
 	int i;
 
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
+		MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	// Check bounds

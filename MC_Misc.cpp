@@ -118,7 +118,7 @@ MC_String MC_Misc::Format(const char* aFormatString, ...)
 	MC_String str;
 	str.Reserve(b);
 	int stringLen =_vstprintf((TCHAR*)str.GetBuffer(), aFormatString, paramList);
-	assert(b == stringLen);
+    MC_ASSERT(b == stringLen);
 
 	va_end(paramList);
 

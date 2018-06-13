@@ -37,7 +37,7 @@ MT_Supervisor::MT_Supervisor(const char* aThreadNameBase, int aNumWorkerThreads,
 	{
 		MC_DEBUG("Error: %u", GetLastError());
 	}
-	assert(myCompletionPort);
+    MC_ASSERT(myCompletionPort);
 
 #if IS_PC_BUILD		// SWFM:SWR - PC specific section
 #ifndef _DEBUG
@@ -90,7 +90,7 @@ void MT_Supervisor::AddTask(MT_TASKFUNC aFunc, const void* aTaskData, int aDataS
 
 	// Create a "completion packet", i.e. a MT_Task object with a task to run
 	MT_Task* task = new MT_Task;
-	assert(aDataSize <= sizeof(task->myData));
+    MC_ASSERT(aDataSize <= sizeof(task->myData));
 	memcpy(task->myData, aTaskData, aDataSize);
 	task->myFunctionPointer = aFunc;
 	task->myJob = aJob;
@@ -103,7 +103,7 @@ void MT_Supervisor::AddTask(MT_TASKFUNC aFunc, const void* aTaskData, int aDataS
 
 void MT_Supervisor::CreateDefaultInstance()
 {
-	assert(ourDefaultInstance == 0);
+    MC_ASSERT(ourDefaultInstance == 0);
 	ourDefaultInstance = new MT_Supervisor();
 }
 

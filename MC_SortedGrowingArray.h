@@ -80,7 +80,7 @@ public:
 
 		if (myItemList[__max(0,a-1)] == anItem)
 			return true;
-		assert(a>=0 && a<=myUsedNrOfItems);
+        MC_ASSERT(a>=0 && a<=myUsedNrOfItems);
 		return InsertItem(a, anItem);
 	}
 
@@ -90,13 +90,13 @@ public:
 	bool IsInited() { return MC_GrowingArray<Type>::IsInited(); }
 	__forceinline Type& operator[] (const int anIndex) const {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_SortedGrowingArray BOUNDS ERROR!");
+        MC_ASSERT(anIndex >= 0 && anIndex < myUsedNrOfItems && "MC_SortedGrowingArray BOUNDS ERROR!");
 #endif
 		return(myItemList[anIndex]);
 	}
 	inline bool RemoveItemConserveOrder(const int anItemNumber) {
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_SortedGrowingArray BOUNDS ERROR!");
+        MC_ASSERT(anItemNumber >= 0 && anItemNumber < myUsedNrOfItems && "MC_SortedGrowingArray BOUNDS ERROR!");
 #endif
 		return MC_GrowingArray<Type>::RemoveItemConserveOrder(anItemNumber); }
 	inline void RemoveNAtEnd(int aCount) { MC_GrowingArray<Type>::RemoveNAtEnd(aCount); }

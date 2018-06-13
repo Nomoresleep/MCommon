@@ -125,8 +125,8 @@ public:
 	void Free(void* aPointer)
 	{
 #ifdef _DEBUG
-		assert(myNumAllocs >= 0);
-		assert(WasAllocatedHere(aPointer) && "Delete on bad pointer, go debug");
+        MC_ASSERT(myNumAllocs >= 0);
+        MC_ASSERT(WasAllocatedHere(aPointer) && "Delete on bad pointer, go debug");
 #endif
 
 		((Item*)aPointer)->myNext = myFirstFree;

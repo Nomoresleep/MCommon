@@ -67,8 +67,10 @@ MC_FORCEINLINE float MC_InvSqrtFastSafe_Estimate(float x)
 #endif
 }
 
+extern "C"
 MC_FORCEINLINE void __fastcall MC_SinCos(float angle, float* s, float* c)
 {
+#if !_WIN64
 	__asm
 	{
 		mov      ecx, c
@@ -79,12 +81,15 @@ MC_FORCEINLINE void __fastcall MC_SinCos(float angle, float* s, float* c)
 		fstp     dword ptr [ecx]
 		fstp     dword ptr [edx]
 	}
+#else
 	*s = (float)sin(angle);
 	*c = (float)cos(angle);
+#endif
 }
 
 MC_FORCEINLINE void __fastcall MC_SinCosVec(float angleA, float angleB, float angleC, float* sinvals, float* cosvals)
 {
+#if !_WIN64
 	__asm
 	{
 		mov      ecx, cosvals
@@ -105,6 +110,15 @@ MC_FORCEINLINE void __fastcall MC_SinCosVec(float angleA, float angleB, float an
 		fstp     dword ptr [ecx+8]
 		fstp     dword ptr [edx+8]
 	}
+#else
+    sinvals[0] = (float)sin(angleA);
+    cosvals[0] = (float)cos(angleA);
+    sinvals[1] = (float)sin(angleB);
+    cosvals[1] = (float)cos(angleB);
+    sinvals[2] = (float)sin(angleC);
+    cosvals[2] = (float)cos(angleC);
+
+#endif
 }
 
 #endif//INCGUARD_MC_MATH_H

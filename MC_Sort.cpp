@@ -59,14 +59,14 @@ void* SortLinkedList(void* aFirstPtr, void* aNextPtr, const int aListLength, voi
 		c = 0;
 		while(c < 255 && !startList[c])
 			c++;
-		assert(c < 256);
+        MC_ASSERT(c < 256);
 
 		firstPtr = startList[c];
 		while(c < 255)
 		{
 			b = c;
 			c++;
-			assert(endList[b]);
+			MC_ASSERT(endList[b]);
 			while(c < 255 && !startList[c])
 				c++;
 			*((unsigned char**) (endList[b] + nextPtrOffset)) = (c < 256 ? startList[c] : NULL);
@@ -125,14 +125,14 @@ void SortPtrArray(void** anArray, const int aListLength, void* aCompareDword, vo
 		c = 0;
 		while(c < 255 && !startList[c])
 			c++;
-		assert(c < 256);
+        MC_ASSERT(c < 256);
 
 		firstPtr = startList[c];
 		while(c < 255)
 		{
 			b = c;
 			c++;
-			assert(endList[b]);
+			MC_ASSERT(endList[b]);
 			while(c < 255 && !startList[c])
 				c++;
 			endList[b]->myNextPtr = (c < 256 ? startList[c] : NULL);
@@ -200,14 +200,14 @@ void SortArray(void* anArray, const int aStructSize, const int aListLength, void
 		c = 0;
 		while(c < 255 && !startList[c])
 			c++;
-		assert(c < 256);
+        MC_ASSERT(c < 256);
 
 		firstPtr = startList[c];
 		while(c < 255)
 		{
 			b = c;
 			c++;
-			assert(endList[b]);
+			MC_ASSERT(endList[b]);
 			while(c < 255 && !startList[c])
 				c++;
 			endList[b]->myNextPtr = (c < 256 ? startList[c] : NULL);
@@ -264,14 +264,14 @@ void* SortDescendingLinkedList(void* aFirstPtr, void* aNextPtr, const int aListL
 		c = 255;
 		while(c > 0 && !startList[c])
 			c--;
-		assert(c >= 0);
+        MC_ASSERT(c >= 0);
 
 		firstPtr = startList[c];
 		while(c > 0)
 		{
 			b = c;
 			c--;
-			assert(endList[b]);
+			MC_ASSERT(endList[b]);
 			while(c > 0 && !startList[c])
 				c--;
 			*((unsigned char**) (endList[b] + nextPtrOffset)) = (c >= 0 ? startList[c] : NULL);
@@ -330,14 +330,14 @@ void SortDescendingPtrArray(void** anArray, const int aListLength, void* aCompar
 		c = 255;
 		while(c > 0 && !startList[c])
 			c--;
-		assert(c >= 0);
+        MC_ASSERT(c >= 0);
 
 		firstPtr = startList[c];
 		while(c > 0)
 		{
 			b = c;
 			c--;
-			assert(endList[b]);
+			MC_ASSERT(endList[b]);
 			while(c > 0 && !startList[c])
 				c--;
 			endList[b]->myNextPtr = (c >= 0 ? startList[c] : NULL);
@@ -405,14 +405,14 @@ void SortDescendingArray(void* anArray, const int aStructSize, const int aListLe
 		c = 255;
 		while(c > 0 && !startList[c])
 			c--;
-		assert(c >= 0);
+		MC_ASSERT(c >= 0);
 
 		firstPtr = startList[c];
 		while(c > 0)
 		{
 			b = c;
 			c--;
-			assert(endList[b]);
+            MC_ASSERT(endList[b]);
 			while(c > 0 && !startList[c])
 				c--;
 			endList[b]->myNextPtr = (c >= 0 ? startList[c] : NULL);

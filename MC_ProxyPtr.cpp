@@ -47,7 +47,7 @@ MC_ProxyHandle MC_ProxyManager::Insert(void* aPointer)
 	if(myFree.Count())
 	{
 		handle = myFree.GetLast();
-		assert(handle >= 0 && handle < myProxies.Count());
+        MC_ASSERT(handle >= 0 && handle < myProxies.Count());
 		myFree.RemoveLast();
 		myProxies[handle] = proxy;
 	}

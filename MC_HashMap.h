@@ -384,7 +384,7 @@ private:
 	void RemoveAtIndex(unsigned int anIndex, bool aReallocOnShrink)
 	{
 		myNumEntries--;
-		assert(myEntries[anIndex].myValidFlag);
+        MC_ASSERT(myEntries[anIndex].myValidFlag);
 		myEntries[anIndex].myValidFlag = false;
 		MC_HashMap_Destroy(myEntries[anIndex].myKey);
 

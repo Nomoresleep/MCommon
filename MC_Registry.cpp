@@ -109,7 +109,7 @@ bool MC_Registry::DeleteKey(MC_String aKey)
 
 bool MC_Registry::DeleteValue(MC_String aName)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -139,7 +139,7 @@ bool MC_Registry::DeleteValue(MC_String aName)
 
 int MC_Registry::GetDataSize(MC_String aValueName)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return -1;
@@ -177,7 +177,7 @@ int MC_Registry::GetDataSize(MC_String aValueName)
 
 DWORD MC_Registry::GetDataType(MC_String aValueName)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return 0;
@@ -214,7 +214,7 @@ DWORD MC_Registry::GetDataType(MC_String aValueName)
 
 int MC_Registry::GetSubKeyCount()
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return -1;
@@ -262,7 +262,7 @@ int MC_Registry::GetSubKeyCount()
 
 int MC_Registry::GetValueCount()
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return -1;
@@ -393,7 +393,7 @@ bool MC_Registry::SetKey(MC_String aKey, bool aCanCreateFlag)
 
 bool MC_Registry::ValueExists(MC_String aName)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 	// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -457,7 +457,7 @@ void MC_Registry::GetLocalComputerName(MC_String& aName)
 
 bool MC_Registry::EnumValueAsString(MC_String& aName, MC_String& aValue, int anIndex)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -505,7 +505,7 @@ bool MC_Registry::EnumValueAsString(MC_String& aName, MC_String& aValue, int anI
 
 bool MC_Registry::EnumSubKey(MC_String& aName, int anIndex)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -544,7 +544,7 @@ bool MC_Registry::EnumSubKey(MC_String& aName, int anIndex)
 
 double MC_Registry::ReadFloat(MC_String aName, double aDefaultVal)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return aDefaultVal;
@@ -582,7 +582,7 @@ double MC_Registry::ReadFloat(MC_String aName, double aDefaultVal)
 
 MC_String MC_Registry::ReadString(MC_String aName, MC_String aDefaultVal)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return aDefaultVal;
@@ -630,7 +630,7 @@ MC_String MC_Registry::ReadString(MC_String aName, MC_String aDefaultVal)
 
 int MC_Registry::ReadInt(MC_String aName, int aDefaultVal)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return aDefaultVal;
@@ -668,7 +668,7 @@ int MC_Registry::ReadInt(MC_String aName, int aDefaultVal)
 
 bool MC_Registry::ReadBool(MC_String aName, bool aDefaultVal)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -706,7 +706,7 @@ bool MC_Registry::ReadBool(MC_String aName, bool aDefaultVal)
 
 bool MC_Registry::WriteBool(MC_String aName, bool aValue)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD	 	// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -744,7 +744,7 @@ bool MC_Registry::WriteBool(MC_String aName, bool aValue)
 
 bool MC_Registry::WriteString(MC_String aName, MC_String aValue)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -787,7 +787,7 @@ bool MC_Registry::WriteString(MC_String aName, MC_String aValue)
 
 bool MC_Registry::WriteFloat(MC_String aName, double aValue)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return false;
@@ -824,7 +824,7 @@ bool MC_Registry::WriteFloat(MC_String aName, double aValue)
 
 bool MC_Registry::WriteInt(MC_String aName, int aValue)
 {
-	assert(myCurrentPath.GetLength() > 0);
+    MC_ASSERT(myCurrentPath.GetLength() > 0);
 
 #if !IS_PC_BUILD 		// SWFM:AW - To get the xb360 to compile
 	return false;

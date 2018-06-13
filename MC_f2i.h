@@ -85,7 +85,7 @@ __forceinline static void RoundToInt(int* anInt, const float aFloat)
 		mov eax, anInt
 		fistp dword ptr [eax]
 	}
-	assert(*anInt == (int) (aFloat + 0.5f));
+	MC_ASSERT(*anInt == (int) (aFloat + 0.5f));
 #else // not _MSC_VER*/
 	*anInt = (int) (aFloat + 0.5f);
 //#endif // not _MSC_VER
@@ -101,7 +101,7 @@ __forceinline static void RoundToUnsignedInt(unsigned int* anInt, const float aF
 		mov eax, anInt
 		fistp dword ptr [eax]
 	}
-	assert(*anInt == (unsigned int) (aFloat + 0.5f));
+	MC_ASSERT(*anInt == (unsigned int) (aFloat + 0.5f));
 #else // not _MSC_VER*/
 	*anInt = (unsigned int) (aFloat + 0.5f);
 //#endif // not _MSC_VER
@@ -117,7 +117,7 @@ __forceinline static int RoundToInt(const float aFloat)
 		fld aFloat
 		fistp i
 	}
-	assert(i == (int) (aFloat + 0.5f));
+	MC_ASSERT(i == (int) (aFloat + 0.5f));
 	return i;
 #else // not _MSC_VER*/
 	return (int) (aFloat + 0.5f);
@@ -134,7 +134,7 @@ __forceinline static unsigned int RoundToUnsignedInt(const float aFloat)
 		fld aFloat
 		fistp i
 	}
-	assert(i == (unsigned int) (aFloat + 0.5f));
+	MC_ASSERT(i == (unsigned int) (aFloat + 0.5f));
 	return i;
 #else // not _MSC_VER*/
 	return (unsigned int) (aFloat + 0.5f);

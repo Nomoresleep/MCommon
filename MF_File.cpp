@@ -200,7 +200,7 @@ bool MF_File::Open(const char* aFileName, unsigned int aMode)
 
 	myName=aFileName;
 
-	assert(!(aMode & OPEN_COMPRESSED) || !(aMode & OPEN_STREAMING)); // can't both stream and compress the data
+    MC_ASSERT(!(aMode & OPEN_COMPRESSED) || !(aMode & OPEN_STREAMING)); // can't both stream and compress the data
 
 	Close();
 
@@ -218,8 +218,8 @@ bool MF_File::Open(const char* aFileName, unsigned int aMode)
 
 	if(aMode & OPEN_WRITE)
 	{
-		assert(!(aMode & OPEN_STREAMING)); // can't stream right now
-		assert(!(aMode & OPEN_COMPRESSED)); // can't compress right now
+        MC_ASSERT(!(aMode & OPEN_STREAMING)); // can't stream right now
+        MC_ASSERT(!(aMode & OPEN_COMPRESSED)); // can't compress right now
 
 		CreatePath(aFileName);
 
@@ -302,7 +302,7 @@ bool MF_File::Open(const char* aFileName, unsigned int aMode)
 		}
 		if(aMode & OPEN_STREAMING)
 		{
-			assert(!myStreamBuffer);
+            MC_ASSERT(!myStreamBuffer);
 			myStreamBufferStart = 0;
 			myStreamBufferEnd = 0;
 		}
@@ -395,7 +395,7 @@ bool MF_File::SetFilePos(int aPosition, MF_Position aReference)
 {
 	int oldPos = (int) myFilePos;
 
-	assert(myFlags != MFILE_NOT_OPEN);
+    MC_ASSERT(myFlags != MFILE_NOT_OPEN);
 
 	switch(aReference)
 	{
@@ -415,7 +415,7 @@ bool MF_File::SetFilePos(int aPosition, MF_Position aReference)
 		return false;
 	}
 
-	assert(myFilePos <= myFileSize);
+    MC_ASSERT(myFilePos <= myFileSize);
 
 	if(myFlags & OPEN_STREAMING)
 	{
@@ -430,7 +430,7 @@ bool MF_File::SetFilePos(int aPosition, MF_Position aReference)
 
 unsigned int MF_File::GetPos() const
 {
-	assert(myFlags != MFILE_NOT_OPEN);
+    MC_ASSERT(myFlags != MFILE_NOT_OPEN);
 
 	return myFilePos;
 }
@@ -438,7 +438,7 @@ unsigned int MF_File::GetPos() const
 
 bool MF_File::Read(void* someData, unsigned int* aLength)
 {
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	if(*aLength == 0)
 		return false;
@@ -458,7 +458,7 @@ bool MF_File::Read(void* someData, unsigned int aLength)
 {
 	DWORD dw;
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	if(aLength == 0)
 		return false;
@@ -473,12 +473,12 @@ bool MF_File::Read(void* someData, unsigned int aLength)
 	bool retval = true;
 	if(myFlags & OPEN_STREAMING)
 	{
-		assert(myFileHand != INVALID_HANDLE_VALUE);
+        MC_ASSERT(myFileHand != INVALID_HANDLE_VALUE);
 
 		unsigned int buflen = myStreamBufferEnd - myStreamBufferStart;
 		if(buflen >= aLength)
 		{
-			assert(myStreamBuffer);
+            MC_ASSERT(myStreamBuffer);
 			memcpy(someData, myStreamBuffer + myStreamBufferStart, aLength);
 			myStreamBufferStart += aLength;
 		}
@@ -486,7 +486,7 @@ bool MF_File::Read(void* someData, unsigned int aLength)
 		{
 			if(buflen)
 			{
-				assert(myStreamBuffer);
+                MC_ASSERT(myStreamBuffer);
 				memcpy(someData, myStreamBuffer + myStreamBufferStart, buflen);
 				someData = (char*)someData + buflen;
 				myFilePos += buflen;
@@ -506,7 +506,7 @@ bool MF_File::Read(void* someData, unsigned int aLength)
 				if(!myStreamBuffer)
 					myStreamBuffer = new unsigned char[STREAM_BUFFER_SIZE];
 
-				assert(myStreamBuffer);
+                MC_ASSERT(myStreamBuffer);
 
 				unsigned int bytesToRead = STREAM_BUFFER_SIZE;
 				if(bytesToRead > myFileSize - myFilePos)
@@ -538,7 +538,7 @@ void MF_File::ReadWord(char* someData, unsigned int aMaxLength)
 	unsigned int i = 0;
 	unsigned char ch;
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	while(i < aMaxLength - 1 && myFilePos < myFileSize)
 	{
@@ -563,8 +563,8 @@ void MF_File::ReadASCIIZ(char* someData, unsigned int aMaxLength)
 {
 	unsigned int i = 0;
 
-	assert(myFlags & OPEN_READ);
-	assert(myFilePos < myFileSize);
+    MC_ASSERT(myFlags & OPEN_READ);
+    MC_ASSERT(myFilePos < myFileSize);
 
 	while(i < aMaxLength - 1 && myFilePos < myFileSize)
 	{
@@ -589,7 +589,7 @@ void MF_File::ReadLine(char* someData, unsigned int aMaxLength)
 	bool comments = false;
 
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	while(myFilePos < myFileSize && i < aMaxLength - 1)
 	{
@@ -653,7 +653,7 @@ void MF_File::ReadLineTrue(char* someData, unsigned int aMaxLength)
 	unsigned int i = 0;
 	unsigned char ch = 0, och;
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	while(myFilePos < myFileSize && i < aMaxLength - 1)
 	{
@@ -680,7 +680,7 @@ void MF_File::ReadLineLocalized(MC_LocChar* someData, unsigned int aMaxLength)
 	bool startOfLine = true;
 	bool endOfLine = false;
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	while(myFilePos < myFileSize && i < aMaxLength - 1)
 	{
@@ -733,7 +733,7 @@ void MF_File::ReadLineTrueLocalized(MC_LocChar* someData, unsigned int aMaxLengt
 	unsigned int i = 0;
 	MC_LocChar ch = 0, och;
 
-	assert(myFlags & OPEN_READ);
+    MC_ASSERT(myFlags & OPEN_READ);
 
 	while(myFilePos < myFileSize && i < aMaxLength - 1)
 	{
@@ -769,12 +769,12 @@ void MF_File::ReadASCIIZ(MC_String& aString)
 
 bool MF_File::Write(const void* someData, unsigned int aLength)
 {
-	assert(myFlags & OPEN_WRITE);
+    MC_ASSERT(myFlags & OPEN_WRITE);
 
 	if(aLength == 0)
 		return true;
 
-	assert(someData != 0);
+    MC_ASSERT(someData != 0);
 
 	// check if buffer needs to increase size
 	if(myFilePos + aLength > myBufferSize)
@@ -1058,7 +1058,7 @@ const char* MF_File::ExtractExtension(const char* aPath)
 
 	if (aPath == NULL)
 	{
-		assert(false);
+        MC_ASSERT(false);
 		return "";
 	}
 
@@ -1092,7 +1092,7 @@ const char* MF_File::ExtractFileName(const char* aPath)
 
 	if (aPath == NULL)
 	{
-		assert(false);
+        MC_ASSERT(false);
 		return "";
 	}
 
@@ -1127,7 +1127,7 @@ char* MF_File::RemoveExtensionFromPath(char* aDest, const char* aFullPath)
 
 	if (aFullPath == NULL)
 	{
-		assert(false);
+        MC_ASSERT(false);
 		aDest[0] = '\0';
 		return aDest;
 	}
@@ -1178,7 +1178,7 @@ char* MF_File::ExtractDirectory(char* aDirectoryDest, const char* aFullPath)
 
 	if (aFullPath == NULL)
 	{
-		assert(false);
+        MC_ASSERT(false);
 		return "";
 	}
 
@@ -1264,7 +1264,7 @@ bool MF_File::CompareStrings(const char* aString1, const char* aString2)
 
 	if (aString1 == NULL || aString2 == NULL)
 	{
-		assert(false);
+        MC_ASSERT(false);
 		return (aString1 == aString2);
 	}
 

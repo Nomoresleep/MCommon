@@ -32,7 +32,7 @@ MT_WorkerThread::~MT_WorkerThread()
 // The worker threads just try to grab tasks from it's supervisor, and executes them.
 void MT_WorkerThread::Run()
 {
-	assert(mySupervisor);
+    MC_ASSERT(mySupervisor);
 	MT_ThreadingTools::SetCurrentThreadName(myName);
 	SetThreadPriorityBoost(GetCurrentThread(), TRUE);	// Disable boost!
 
@@ -56,7 +56,7 @@ void MT_WorkerThread::Run()
 				MC_THREADPROFILER_LEAVE_WAIT();
 
 				task = (MT_Task*)taskptr;
-				assert(task);
+                MC_ASSERT(task);
 				task->Execute();
 				delete task;
 

@@ -55,7 +55,7 @@ bool MC_CircularGrowingArray<Type>::InsertItems(const int anIndex, const Type so
 	int circularIndex = CircularIndex(anIndex);
 
 	//Call Init() before using the array
-	assert( myMaxNrOfItems > 0);
+    MC_ASSERT( myMaxNrOfItems > 0);
 
 	//Grows the array if needed.
 	if(myUsedNrOfItems + aNumberOfObjects >= myMaxNrOfItems + 1)

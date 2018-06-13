@@ -204,9 +204,9 @@ bool CheckLargeTables(bool create)
 bool CheckInverses(bool create)
 	{
 	// we'll brute force the inverse table
-	assert(GF2_8_mult(0x57,0x13) == 0xFE); // test these first
-	assert(GF2_8_mult(0x01,0x01) == 0x01);
-	assert(GF2_8_mult(0xFF,0x55) == 0xF8);
+    MC_ASSERT(GF2_8_mult(0x57,0x13) == 0xFE); // test these first
+    MC_ASSERT(GF2_8_mult(0x01,0x01) == 0x01);
+    MC_ASSERT(GF2_8_mult(0xFF,0x55) == 0xF8);
 
 
 	unsigned int a,b; // need int here to prevent wraps in loop
@@ -594,7 +594,7 @@ template<class T> void swap(T& t1, T& t2)//plain vanilla swap (written here so w
 // Key expansion code - makes local copy
 void AES::KeyExpansion(const unsigned char * key)
 	{
-	assert(Nk > 0);
+    MC_ASSERT(Nk > 0);
 	int i;
 	unsigned long temp, * Wb = reinterpret_cast<unsigned long*>(W); // todo not portable - Endian problems
 	if (Nk <= 6)
@@ -775,7 +775,7 @@ void AES::Encrypt(const unsigned char * datain, unsigned char * dataout, unsigne
 			}
 			break;
 		default :
-			assert(!"Unknown mode!");
+            MC_ASSERT(!"Unknown mode!");
 			break;
 		}
 	} // Encrypt
@@ -938,7 +938,7 @@ void AES::Decrypt(const unsigned char * datain, unsigned char * dataout, unsigne
 			}
 			break;
 		default :
-			assert(!"Unknown mode!");
+            MC_ASSERT(!"Unknown mode!");
 		}
 	} // Decrypt
 

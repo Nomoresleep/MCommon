@@ -26,7 +26,7 @@ namespace MC_Platform
 bool GetCDKeyFromRegistry( const char* aCdKeyLocation, MC_String& aCdKey)
 {
 	// Read the key from machine settings, and if not there, then from user settings
-	assert( aCdKeyLocation && aCdKeyLocation[0] );
+	MC_ASSERT( aCdKeyLocation && aCdKeyLocation[0] );
 
 	MC_Registry reg;
 	if (reg.SetRootKey(HKEY_CURRENT_USER))
@@ -44,8 +44,8 @@ bool GetCDKeyFromRegistry( const char* aCdKeyLocation, MC_String& aCdKey)
 
 bool WriteCdKeyToRegistry( const char* aCdKeyLocation, const char* aCdKey)
 {
-	assert( aCdKey && aCdKey[0] );
-	assert( aCdKeyLocation && aCdKeyLocation[0] );
+	MC_ASSERT( aCdKey && aCdKey[0] );
+	MC_ASSERT( aCdKeyLocation && aCdKeyLocation[0] );
 	MC_Registry reg;
 
 	if (reg.SetRootKey(HKEY_CURRENT_USER))

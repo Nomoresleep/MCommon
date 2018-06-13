@@ -78,7 +78,7 @@ void MT_ThreadPool::AcquireAndRunThread(MT_POOLED_THREAD_FUNCTION aFunction, voi
 
 void MT_ThreadPool::CreateDefaultInstance()
 {
-	assert(ourDefaultInstance == 0);
+    MC_ASSERT(ourDefaultInstance == 0);
 	ourDefaultInstance = new MT_ThreadPool;
 }
 

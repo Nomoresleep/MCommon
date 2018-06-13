@@ -51,13 +51,13 @@ public:
 
 	void AddRef(MC_ProxyHandle aHandle)
 	{
-		assert(aHandle >= 0 && aHandle < myProxies.Count());
+		MC_ASSERT(aHandle >= 0 && aHandle < myProxies.Count());
 		++myProxies[aHandle].myRefCount;
 	}
 
 	void RemoveRef(MC_ProxyHandle aHandle)
 	{
-		assert(aHandle >= 0 && aHandle < myProxies.Count());
+		MC_ASSERT(aHandle >= 0 && aHandle < myProxies.Count());
 		if(--myProxies[aHandle].myRefCount == 0)
 		{
 			myProxies[aHandle].myPointer = 0;
@@ -67,13 +67,13 @@ public:
 
 	void* Translate(MC_ProxyHandle aHandle)
 	{
-		assert(aHandle >= 0 && aHandle < myProxies.Count());
+		MC_ASSERT(aHandle >= 0 && aHandle < myProxies.Count());
 		return myProxies[aHandle].myPointer;
 	}
 
 	void SetPointer(MC_ProxyHandle aHandle, void* aPointer)
 	{
-		assert(aHandle >= 0 && aHandle < myProxies.Count());
+		MC_ASSERT(aHandle >= 0 && aHandle < myProxies.Count());
 		myProxies[aHandle].myPointer = aPointer;
 	}
 

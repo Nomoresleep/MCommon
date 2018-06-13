@@ -66,7 +66,7 @@ public:
 	__forceinline const Type& operator[] (const int anIndex) const
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
+        MC_ASSERT(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
 #endif
 		return myItemList[anIndex];
 	}
@@ -74,7 +74,7 @@ public:
 	__forceinline Type& operator[] (const int anIndex)
 	{
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
-		assert(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
+        MC_ASSERT(anIndex >= 0 && anIndex < Size && "MC_StaticArray BOUNDS ERROR!");
 #endif
 		return myItemList[anIndex];
 	}

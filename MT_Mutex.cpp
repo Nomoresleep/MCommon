@@ -60,7 +60,7 @@ MT_Mutex::TryLock()
 void 
 MT_Mutex::Unlock()
 {
-	assert(myNumLocks > 0);
+    MC_ASSERT(myNumLocks > 0);
 	--myNumLocks;
 	LeaveCriticalSection(&myMutex);
 }
@@ -128,7 +128,7 @@ MT_SkipLock::MT_SkipLock()
 
 MT_SkipLock::~MT_SkipLock()
 {
-	assert(myLock == 0);
+    MC_ASSERT(myLock == 0);
 }
 
 bool

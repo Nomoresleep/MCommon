@@ -246,9 +246,9 @@ public:
 		{
 			if(!MC_Profiler::ourForceDisableFlag && myNode)
 			{
-				assert(myOverwriteCheck1 == 0x61616161 && "Stack was corrupted near this profiler tag");
-				assert(myOverwriteCheck2 == 0x62626262 && "Stack was corrupted near this profiler tag");
-				assert(myNode_Check == myNode && "Stack was corrupted near this profiler tag");
+                MC_ASSERT(myOverwriteCheck1 == 0x61616161 && "Stack was corrupted near this profiler tag");
+                MC_ASSERT(myOverwriteCheck2 == 0x62626262 && "Stack was corrupted near this profiler tag");
+                MC_ASSERT(myNode_Check == myNode && "Stack was corrupted near this profiler tag");
 
 				MC_Profiler::GetInstance()->End( myNode );
 				myNode = 0;	// Mark as ended

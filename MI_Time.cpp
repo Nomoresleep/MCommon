@@ -146,7 +146,7 @@ MI_Time::MI_Time()
 	}
 	else
 	{
-		assert(0);
+        MC_ASSERT(0);
 	}
 
 	Calibrate();
@@ -233,7 +233,7 @@ void MI_Time::GetExactTime(MI_TimeUnit* aReturnTime)
 	else if (ourTimerMethod == MI_TIMEGETTIME)
 		*aReturnTime = MI_Time::GetSystemTime() - locWinBeginTime;
 	else
-		assert(0);
+        MC_ASSERT(0);
 }
 
 bool MI_Time::GetQPC(MI_TimeUnit* aReturnTime)
@@ -251,7 +251,7 @@ bool MI_Time::GetQPC(MI_TimeUnit* aReturnTime)
 	if(locOurQPC == 0)
 	{
 		if(!QueryPerformanceCounter((LARGE_INTEGER*)&prevQpc))
-			assert(0);
+            MC_ASSERT(0);
 
 		prevTime = MI_Time::GetSystemTime();
 
@@ -260,7 +260,7 @@ bool MI_Time::GetQPC(MI_TimeUnit* aReturnTime)
 
 	// Read current times
 	if(!QueryPerformanceCounter((LARGE_INTEGER*)&currQpc))
-		assert(0);
+        MC_ASSERT(0);
 
 	currTime = MI_Time::GetSystemTime();
 
@@ -272,7 +272,7 @@ bool MI_Time::GetQPC(MI_TimeUnit* aReturnTime)
 	{
 		// Re-init timers
 		if(!QueryPerformanceCounter((LARGE_INTEGER*)&prevQpc))
-			assert(0);
+            MC_ASSERT(0);
 		prevTime = MI_Time::GetSystemTime();
 
 		// Step our counter and return
@@ -439,7 +439,7 @@ void MI_Time::Update()
 			}
 		}
 		else
-			assert(0);
+            MC_ASSERT(0);
 
 		ourInternalElapsedTimes[myCurrentTimeIndex] = ((double) iDeltaTim) * locInvFrequency;
 		myCurrentTimeIndex = (myCurrentTimeIndex + 1) % NUM_TIME_AVERAGEFRAMES;
@@ -459,7 +459,7 @@ void MI_Time::Update()
 	ourRealElapsedTime = tim;
 	ourRealCurrentTime += tim;
 
-	assert(ourRealElapsedTime >= 0.0);
+    MC_ASSERT(ourRealElapsedTime >= 0.0);
 
 	if(myMinElapsedTime >= 0 && tim < myMinElapsedTime)
 		tim = myMinElapsedTime;
@@ -477,7 +477,7 @@ void MI_Time::Update()
 
 	ourInternalCurrentTime += tim;
 
-	assert(ourInternalCurrentTime >= 0.0);
+    MC_ASSERT(ourInternalCurrentTime >= 0.0);
 
 	ourElapsedTime = (float) tim;
 
@@ -485,7 +485,7 @@ void MI_Time::Update()
 		ourElapsedTime = 0.00001f;
 	ourCurrentTime = (float) ourInternalCurrentTime;
 
-	assert(ourCurrentTime >= 0.0f);
+    MC_ASSERT(ourCurrentTime >= 0.0f);
 
 	ourFrameCounter++;
 

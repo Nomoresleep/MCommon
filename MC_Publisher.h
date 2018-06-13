@@ -71,7 +71,7 @@ public:
 			if (subscribers[i]->Receive(aKey, aType) == 0)
 			{
 #ifndef XED
-				assert(0 && "MC_Publisher::Post(): subscriber indicated that a Receive() failed");
+                MC_ASSERT(0 && "MC_Publisher::Post(): subscriber indicated that a Receive() failed");
 #endif
 			}
 		}

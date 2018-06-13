@@ -20,7 +20,7 @@
 MT_Semaphore::MT_Semaphore(long anInitialCount, long aMaximumCount)
 {
 	mySemaphore = CreateSemaphore(NULL, anInitialCount, aMaximumCount, NULL);
-	assert(mySemaphore != NULL);
+    MC_ASSERT(mySemaphore != NULL);
 }
 
 MT_Semaphore::~MT_Semaphore()

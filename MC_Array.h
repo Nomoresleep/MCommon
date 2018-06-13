@@ -33,7 +33,7 @@ public:
 	{
 		myNumNodes = aNumNodes;
 		myNodes = new Type[myNumNodes];
-		assert(myNodes);
+		MC_ASSERT(myNodes);
 		myNextFreeNode = 0;
 	}
 
@@ -113,7 +113,7 @@ public:
 			}
 			else
 			{
-				assert(myNodes[mid] == aType);
+				MC_ASSERT(myNodes[mid] == aType);
 				found = true;
 			}
 		}
@@ -152,7 +152,7 @@ public:
 	//element access
 	Type& operator[](unsigned int anIndex) const
 	{
-		assert(anIndex < myNumNodes);
+		MC_ASSERT(anIndex < myNumNodes);
 		return myNodes[anIndex];
 	}
 
@@ -167,7 +167,7 @@ public:
 
 	void SetMaxNumUsedItems(unsigned int aCount)
 	{
-		assert(aCount <= myNumNodes);
+		MC_ASSERT(aCount <= myNumNodes);
 
 		myNextFreeNode = aCount;
 	}
@@ -187,7 +187,7 @@ private:
 	//illegal constructor
 	MC_Array()
 	{
-		assert(0);
+		MC_ASSERT(0);
 	}
 	
 	//quick sort function, low is the low end index, and high is the high end index to sort between

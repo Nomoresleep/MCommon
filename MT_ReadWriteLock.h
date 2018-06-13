@@ -42,11 +42,11 @@ public:
 		MT_ReadWriteLock& myLock;
 	};
 
-	MT_ReadWriteLock() { _InterlockedExchange(&myLock, 0); }
+	MT_ReadWriteLock() { MT_ThreadingTools::Exchange(&myLock, 0); }
     MC_FORCEINLINE void BeginRead()
 	{
 		// Add a reader
-		while (_InterlockedIncrement(&myLock) & 0xffff0000)
+		while (MT_ThreadingTools::Increment(&myLock) & 0xffff0000)
 		{
 			// There is a writer active
 			EndRead();
@@ -56,13 +56,13 @@ public:
 
     MC_FORCEINLINE void EndRead()
 	{
-		_InterlockedDecrement(&myLock);
+		MT_ThreadingTools::Decrement(&myLock);
 	}
 
     MC_FORCEINLINE void BeginWrite()
 	{
-		_InterlockedOr(&myLock, 0x80000000); // Stop any incoming readers
-		while ((_InterlockedExchangeAdd(&myLock, 0x00010000) & 0x7fffffff) != 0)
+		MT_ThreadingTools::Or(&myLock, 0x80000000); // Stop any incoming readers
+		while ((MT_ThreadingTools::ExchangeAdd(&myLock, 0x00010000) & 0x7fffffff) != 0)
 		{
 			// There is a reader or writer active
 			PrivEndTryWrite();
@@ -73,13 +73,13 @@ public:
     MC_FORCEINLINE void EndWrite()
 	{
 		PrivEndTryWrite();
-		_InterlockedAnd(&myLock, 0x7fffffff); // Unlock so incoming readers can get lock
+		MT_ThreadingTools::And(&myLock, 0x7fffffff); // Unlock so incoming readers can get lock
 	}
 
 private:
     MC_FORCEINLINE void PrivEndTryWrite()
 	{
-		_InterlockedExchangeAdd(&myLock, -0x00010000); // Remove our writercounter
+		MT_ThreadingTools::ExchangeAdd(&myLock, -0x00010000); // Remove our writercounter
 	}
 
 	__declspec(align(64)) volatile long myLock; // upper half: there is a writer active, lower half: there is a reader active

@@ -31,7 +31,7 @@ void MT_Task::Execute()
 	myFunctionPointer(&myData);
 
 	if (myJob)
-		_InterlockedDecrement(&myJob->myNumPendingTasks);
+        MT_ThreadingTools::Decrement(&myJob->myNumPendingTasks);
 }
 
 void MT_TaskRunnerCallback(void* aData)
@@ -55,10 +55,10 @@ void* MT_Task::operator new(size_t /*aSize*/)
 {
 	for(int i=0; i<400; i++)
 	{
-		if(0 == _InterlockedCompareExchange(&locQuickMutex, 1, 0))
+		if(0 == MT_ThreadingTools::CompareExchange(&locQuickMutex, 1, 0))
 		{
 			void* p = locTaskAllocator.Allocate();
-			_InterlockedDecrement(&locQuickMutex);
+            MT_ThreadingTools::Decrement(&locQuickMutex);
 			return p;
 		}
 #if IS_PC_BUILD
@@ -70,10 +70,10 @@ void* MT_Task::operator new(size_t /*aSize*/)
 
 	while(true)
 	{
-		if(0 == _InterlockedCompareExchange(&locQuickMutex, 1, 0))
+		if(0 == MT_ThreadingTools::CompareExchange(&locQuickMutex, 1, 0))
 		{
 			void* p = locTaskAllocator.Allocate();
-			_InterlockedDecrement(&locQuickMutex);
+            MT_ThreadingTools::Decrement(&locQuickMutex);
 			return p;
 		}
 
@@ -85,10 +85,10 @@ void MT_Task::operator delete(void* aPointer)
 {
 	for(int i=0; i<400; i++)
 	{
-		if(0 == _InterlockedCompareExchange(&locQuickMutex, 1, 0))
+		if(0 == MT_ThreadingTools::CompareExchange(&locQuickMutex, 1, 0))
 		{
 			locTaskAllocator.Free(aPointer);
-			_InterlockedDecrement(&locQuickMutex);
+            MT_ThreadingTools::Decrement(&locQuickMutex);
 			return;
 		}
 
@@ -101,10 +101,10 @@ void MT_Task::operator delete(void* aPointer)
 
 	while(true)
 	{
-		if(0 == _InterlockedCompareExchange(&locQuickMutex, 1, 0))
+		if(0 == MT_ThreadingTools::CompareExchange(&locQuickMutex, 1, 0))
 		{
 			locTaskAllocator.Free(aPointer);
-			_InterlockedDecrement(&locQuickMutex);
+            MT_ThreadingTools::Decrement(&locQuickMutex);
 			return;
 		}
 

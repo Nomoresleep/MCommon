@@ -395,3 +395,27 @@ long MT_ThreadingTools::Decrement(long volatile* aValue)
 	return _InterlockedDecrement(aValue);
 }
 
+long MT_ThreadingTools::Exchange(long volatile* aTarget, long aValue)
+{
+    return _InterlockedExchange(aTarget, aValue);
+}
+
+long MT_ThreadingTools::ExchangeAdd(long volatile* anAddend, long aValue)
+{
+    return _InterlockedExchangeAdd(anAddend, aValue);
+}
+
+long MT_ThreadingTools::CompareExchange(long volatile* aDestination, long anExchange, long aComparand)
+{
+    return _InterlockedCompareExchange(aDestination, anExchange, aComparand);
+}
+
+long MT_ThreadingTools::Or(long volatile* aValue, long aMask)
+{
+    return _InterlockedOr(aValue, aMask);
+}
+
+long MT_ThreadingTools::And(long volatile* aValue, long aMask)
+{
+    return _InterlockedAnd(aValue, aMask);
+}

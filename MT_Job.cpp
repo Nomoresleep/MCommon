@@ -23,7 +23,7 @@
 
 MT_Job::MT_Job(MT_Supervisor* pSupervisor)
 {
-	_InterlockedExchange(&myNumPendingTasks, 0);
+    MT_ThreadingTools::Exchange(&myNumPendingTasks, 0);
 	mySupervisor = pSupervisor;
     MC_ASSERT(mySupervisor);
 }
@@ -43,7 +43,7 @@ void MT_Job::AddTask(MT_TASKFUNC aFunction, const void* aTaskData, int aDataSize
 
 void MT_Job::Finish()
 {
-	while(_InterlockedCompareExchange(&myNumPendingTasks, 0, 0) != 0)
+	while(MT_ThreadingTools::CompareExchange(&myNumPendingTasks, 0, 0) != 0)
 		::Sleep(0);
 }
 

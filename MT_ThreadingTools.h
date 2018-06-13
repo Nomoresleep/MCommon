@@ -82,6 +82,12 @@ namespace MT_ThreadingTools
 	long Increment(long volatile* aValue);
 	long Decrement(long volatile* aValue);
 
+    long Exchange(long volatile* aTarget, long aValue);
+    long ExchangeAdd(long volatile* anAddend, long aValue);
+    long CompareExchange(long volatile* aDestination, long anExchange, long aComparand);
+    long Or(long volatile* aValue, long aMask);
+    long And(long volatile* aValue, long aMask);
+
 
 #ifdef THREAD_TOOLS_DEBUG
 	void SetSemaphoreStatus( bool aWaiting);

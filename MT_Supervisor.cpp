@@ -86,7 +86,7 @@ MT_Supervisor::~MT_Supervisor()
 void MT_Supervisor::AddTask(MT_TASKFUNC aFunc, const void* aTaskData, int aDataSize, MT_Job* aJob)
 {
 	if (aJob)
-		_InterlockedIncrement(&aJob->myNumPendingTasks);
+        MT_ThreadingTools::Increment(&aJob->myNumPendingTasks);
 
 	// Create a "completion packet", i.e. a MT_Task object with a task to run
 	MT_Task* task = new MT_Task;

@@ -348,18 +348,18 @@ bool MC_Debug::AddDebugListener(MC_DebugListener* aListener)
 		volatile ListenerHandle& handle = locOurDebugListeners[i];
 		if ((handle.listener == aListener) || (handle.listener == NULL))
 		{
-			_InterlockedExchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
-			_InterlockedExchange(&handle.active, 1);									//handle.active = 1;
+			MT_ThreadingTools::Exchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
+			MT_ThreadingTools::Exchange(&handle.active, 1);									//handle.active = 1;
 			return true;
 		}
 	}
 
 	// No, add it
-	long newIndex = _InterlockedIncrement(&locNumDebugListeners)-1;
+	long newIndex = MT_ThreadingTools::Increment(&locNumDebugListeners)-1;
 	MC_ASSERT(newIndex < MAXLISTENERS);
 	// Debugmessages can now iterate up until newIndex, but that already has an inactive listener so no problem there. 
-	_InterlockedExchange((volatile long*)&locOurDebugListeners[newIndex].listener, (long)aListener);
-	_InterlockedExchange(&locOurDebugListeners[newIndex].active, 1);
+	MT_ThreadingTools::Exchange((volatile long*)&locOurDebugListeners[newIndex].listener, (long)aListener);
+	MT_ThreadingTools::Exchange(&locOurDebugListeners[newIndex].active, 1);
 #endif
 	return true;
 }
@@ -380,17 +380,17 @@ bool MC_Debug::AddErrorListener(MC_DebugListener* aListener)
 		volatile ListenerHandle& handle = locOurErrorListeners[i];
 		if ((handle.listener == aListener) || (handle.listener == NULL))
 		{
-			_InterlockedExchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
-			_InterlockedExchange(&handle.active, 1);									//handle.active = 1;
+			MT_ThreadingTools::Exchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
+			MT_ThreadingTools::Exchange(&handle.active, 1);									//handle.active = 1;
 			return true;
 		}
 	}
 
 	// No, add it
-	long newIndex = _InterlockedIncrement(&locNumErrorListeners)-1;
+	long newIndex = MT_ThreadingTools::Increment(&locNumErrorListeners)-1;
 	MC_ASSERT(newIndex < MAXLISTENERS);
-	_InterlockedExchange((volatile long*)&locOurErrorListeners[newIndex].listener, (long)aListener);
-	_InterlockedExchange(&locOurErrorListeners[newIndex].active, 1);
+	MT_ThreadingTools::Exchange((volatile long*)&locOurErrorListeners[newIndex].listener, (long)aListener);
+	MT_ThreadingTools::Exchange(&locOurErrorListeners[newIndex].active, 1);
 #endif
 	return true;
 }
@@ -413,20 +413,20 @@ bool MC_Debug::RemoveDebugListener(MC_DebugListener* aListener)
 	{
 		if (locOurDebugListeners[i].listener == aListener)
 		{
-			_InterlockedExchange((volatile long*)&locOurDebugListeners[i].active, 0);		// locOurDebugListeners[i].active = false;
+			MT_ThreadingTools::Exchange((volatile long*)&locOurDebugListeners[i].active, 0);		// locOurDebugListeners[i].active = false;
 			found = true;
 			break;
 		}
 	}
 
 	// Don't return until when noone is outputting messages (the listener may be deleted asap after we return)
-	while (_InterlockedCompareExchange(&locNumConcurrentOutputs, 0, 0)) // while (locNumConcurrentOutputs)
+	while (MT_ThreadingTools::CompareExchange(&locNumConcurrentOutputs, 0, 0)) // while (locNumConcurrentOutputs)
 		MC_Sleep(1);
 
 	MC_ASSERT(found);
 	if (found)
 	{
-		_InterlockedExchange((volatile long*)&locOurDebugListeners[i].listener, NULL);		// locOurDebugListeners[i].listener = NULL;
+		MT_ThreadingTools::Exchange((volatile long*)&locOurDebugListeners[i].listener, NULL);		// locOurDebugListeners[i].listener = NULL;
 	}
 
 #endif
@@ -456,7 +456,7 @@ bool MC_Debug::RemoveErrorListener(MC_DebugListener* aListener)
 	}
 
 	// Don't return until when noone is outputting messages (the listener may be deleted asap after we return)
-	while (_InterlockedCompareExchange(&locNumConcurrentErrorOutputs, 0, 0))				// while (locNumConcurrentErrorOutputs)
+	while (MT_ThreadingTools::CompareExchange(&locNumConcurrentErrorOutputs, 0, 0))				// while (locNumConcurrentErrorOutputs)
 		MC_Sleep(1);
 
 	MC_ASSERT(found);
@@ -476,11 +476,11 @@ void MC_Debug::Cleanup()
 	MT_MutexLock locker(GetDebugMutex());
 
 	// Wait until pending debugmessages are done
-	while (_InterlockedCompareExchange(&locNumConcurrentOutputs, 0, 0)) // while (locNumConcurrentOutputs)
+	while (MT_ThreadingTools::CompareExchange(&locNumConcurrentOutputs, 0, 0)) // while (locNumConcurrentOutputs)
 		MC_Sleep(1);
 
 	// Wait until pending errormessages are done
-	while (_InterlockedCompareExchange(&locNumConcurrentErrorOutputs, 0, 0))				// while (locNumConcurrentErrorOutputs)
+	while (MT_ThreadingTools::CompareExchange(&locNumConcurrentErrorOutputs, 0, 0))				// while (locNumConcurrentErrorOutputs)
 		MC_Sleep(1);
 
 	// Delete any debuglisteners that are left
@@ -571,11 +571,11 @@ void MC_Debug::Cleanup()
 void MC_Debug::DebugMessageNoFormat(const char* aMessage)
 {
 #ifndef MC_NO_DEBUG_FILE_OUTPUT
-	_InterlockedIncrement(&locNumConcurrentOutputs);
+    MT_ThreadingTools::Increment(&locNumConcurrentOutputs);
 	for( int i=0; i<locNumDebugListeners; i++ )
 		if (locOurDebugListeners[i].active)
 			locOurDebugListeners[i].listener->DebugMessage( aMessage );
-	_InterlockedDecrement(&locNumConcurrentOutputs);
+    MT_ThreadingTools::Decrement(&locNumConcurrentOutputs);
 
 #endif
 }
@@ -792,18 +792,18 @@ void MC_Debug::DebugMessage2( MC_Debug_AlternateDebugFile aFile, const char* aMe
 void MC_Debug::CommitAllPendingIo()
 {
 	// Commit all errorlisteners
-	_InterlockedIncrement(&locNumConcurrentErrorOutputs);
+    MT_ThreadingTools::Increment(&locNumConcurrentErrorOutputs);
 	for( int i=0; i<locNumErrorListeners; i++ )
 		if (locOurErrorListeners[i].active)
 			locOurErrorListeners[i].listener->Commit();
-	_InterlockedDecrement(&locNumConcurrentErrorOutputs);
+    MT_ThreadingTools::Decrement(&locNumConcurrentErrorOutputs);
 
 	// Commit all debuglisteners
-	_InterlockedIncrement(&locNumConcurrentOutputs);
+    MT_ThreadingTools::Increment(&locNumConcurrentOutputs);
 	for( int i=0; i<locNumDebugListeners; i++ )
 		if (locOurDebugListeners[i].active)
 			locOurDebugListeners[i].listener->Commit();
-	_InterlockedDecrement(&locNumConcurrentOutputs);
+    MT_ThreadingTools::Decrement(&locNumConcurrentOutputs);
 
 	// Flush alternative files
 	for (int i = 0; i < NUM_ALTDBGS; i++)
@@ -832,7 +832,7 @@ void MC_Debug::ErrorMessageNoFormat( const char* aMessage, const char* aCodeLine
 
 	// DO NOT RETURN IN THE MIDDLE OF THIS FUNCTION WITHOUT DECREMENTING locNumConcurrentErrorOutputs!!!
 
-	_InterlockedIncrement(&locNumConcurrentErrorOutputs);
+    MT_ThreadingTools::Increment(&locNumConcurrentErrorOutputs);
 	char tempBuffer[32*1024];
 
 	// Hack for directing art issues that belong to the cinematics team
@@ -1041,7 +1041,7 @@ void MC_Debug::SetIceGetMember(const char* aMember)
 		MC_StaticString<512> str;
 		str.Format("%.511s", aMember);
 
-		const long index = _InterlockedIncrement(&indexRecentIceAccess) & (NUMRECENTFILES-1);
+		const long index = MT_ThreadingTools::Increment(&indexRecentIceAccess) & (NUMRECENTFILES-1);
 		myRecentIceAccesses[index] = str;
 	}
 }
@@ -1064,7 +1064,7 @@ void MC_Debug::SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, 
 		MC_StaticString<1024> str;
 		str.Format("%.1023s", aFile);
 
-		const long index = _InterlockedIncrement(&indexRecentFile) & (NUMRECENTFILES-1);
+		const long index = MT_ThreadingTools::Increment(&indexRecentFile) & (NUMRECENTFILES-1);
 		myRecentFiles[index] = str;
 
 		if(locOpenFileLogListener && !aWriteFlag && !locThreadLocalIgnoreFileOpenFlag)

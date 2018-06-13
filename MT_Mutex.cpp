@@ -88,14 +88,14 @@ MT_SpinLockMutex::Lock()
 {
 	myNumLocks++; 
 	MT_ThreadingTools::SetCriticalSectionStatus(true);
-	while(_InterlockedExchange(&myLock, 1)); 
+	while(MT_ThreadingTools::Exchange(&myLock, 1));
 	MT_ThreadingTools::SetCriticalSectionStatus(false);
 }
 
 bool 
 MT_SpinLockMutex::TryLock()
 {
-	if(!_InterlockedExchange(&myLock, 1))
+	if(!MT_ThreadingTools::Exchange(&myLock, 1))
 	{
 		myNumLocks++; 
 		return true; 
@@ -109,7 +109,7 @@ MT_SpinLockMutex::TryLock()
 void 
 MT_SpinLockMutex::Unlock()
 {
-	_InterlockedExchange(&myLock, 0);
+    MT_ThreadingTools::Exchange(&myLock, 0);
 	myNumLocks--; 
 }
 
@@ -134,11 +134,11 @@ MT_SkipLock::~MT_SkipLock()
 bool
 MT_SkipLock::TryLock()
 {
-	return _InterlockedCompareExchange(&myLock, 1, 0) == 0;
+	return MT_ThreadingTools::CompareExchange(&myLock, 1, 0) == 0;
 }
 
 void
 MT_SkipLock::Unlock()
 {
-	_InterlockedExchange(&myLock, 0);
+    MT_ThreadingTools::Exchange(&myLock, 0);
 }

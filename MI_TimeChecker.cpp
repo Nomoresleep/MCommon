@@ -91,7 +91,7 @@ void MI_TimeChecker::BeginCheck(unsigned int anId)
 	{
 		id = new MI_TimeCheckerIdData;
 		id->myId = anId;
-		id->myLastFrameNum = -1;
+		id->myLastFrameNum = 0xFFFFFFFF;
 		id->myFrames.Init(4096, 4096, false);
 		ourIds.Add(id);
 	}

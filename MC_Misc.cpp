@@ -65,13 +65,13 @@ void MC_Misc::ToggleFpExceptions(bool anEnableFlag)
 	{
 		#ifdef MC_ENABLE_FLOAT_EXCEPTIONS
 		_clearfp();
-		_controlfp(~(_EM_OVERFLOW | _EM_ZERODIVIDE | _EM_INVALID), MCW_EM);
+		_controlfp((unsigned int)~(_EM_OVERFLOW | _EM_ZERODIVIDE | _EM_INVALID), (unsigned int)MCW_EM);
 		#endif // MC_ENABLE_FLOAT_EXCEPTIONS
 	}
 	else
 	{
 		#ifdef MC_ENABLE_FLOAT_EXCEPTIONS
-		_controlfp(~0, MCW_EM);		// Disable all fp
+		_controlfp(0xFFFFFFFF, (unsigned int)MCW_EM);		// Disable all fp
 		#endif // MC_ENABLE_FLOAT_EXCEPTIONS
 	}
 }
@@ -356,8 +356,7 @@ bool MC_Misc::DropAdministratorRights()
 bool MC_Misc::IsSingleCore()
 {
 #if IS_PC_BUILD
-
-	static bool firstRun = true;
+    static bool firstRun = true;
 	static bool isSingle = false;
 
 	if(firstRun)
@@ -376,11 +375,9 @@ bool MC_Misc::IsSingleCore()
 				isSingle = true;
 		}
 	}
-
 	return isSingle;
-
-#endif
-
+#else
     return false;
+#endif
 }
 

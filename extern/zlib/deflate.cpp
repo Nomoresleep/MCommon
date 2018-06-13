@@ -60,6 +60,10 @@ const char deflate_copyright[] =
   copyright string in the executable of your product.
  */
 
+#pragma warning(push)
+#pragma warning(disable:4244)
+#pragma warning(disable:4127)
+
 /* ===========================================================================
  *  Function prototypes.
  */
@@ -1675,3 +1679,5 @@ local block_state deflate_rle(deflate_state *s, int flush)
     return flush == Z_FINISH ? finish_done : block_done;
 }
 #endif
+
+#pragma warning(pop)

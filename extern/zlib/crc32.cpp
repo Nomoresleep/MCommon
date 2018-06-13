@@ -28,6 +28,9 @@
 
 #include "zutil.h"      /* for STDC and FAR definitions */
 
+#pragma warning(push)
+#pragma warning(disable:4127)
+
 #define local static
 
 /* Find a four-byte integer type for crc32_little() and crc32_big(). */
@@ -405,3 +408,5 @@ uLong ZEXPORT crc32_combine(uLong crc1, uLong crc2, z_off_t len2)
     crc1 ^= crc2;
     return crc1;
 }
+
+#pragma warning(pop)

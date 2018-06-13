@@ -191,11 +191,11 @@ MC_FORCEINLINE T MC_Max(const T& aA, const T& aB, const T& aC, const T& aD)
 		_mm_prefetch(((char*)Pointer) + Offset, _MM_HINT_T1);
 	}
 
-	inline void MC_CacheFlush(const void *Pointer, const int Offset)
+	inline void MC_CacheFlush(const void* /*Pointer*/, const int /*Offset*/)
 	{
 	}
 
-	inline void MC_CacheLineZeroInit128(const void *Pointer, const int Offset)
+	inline void MC_CacheLineZeroInit128(const void* /*Pointer*/, const int /*Offset*/)
 	{
 	}
 /// SWFM:TH End

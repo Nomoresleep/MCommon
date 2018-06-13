@@ -364,10 +364,8 @@ public:
 private:
 	bool GetIndex( const KEY& aKey, unsigned int& i, unsigned int maxEntries, Entry* pEntries ) const
 	{
-		bool bExists = false;
-
 		i = ((DERIVED*)this)->GetHash(aKey) % maxEntries;
-		int starti = i;
+		unsigned int starti = i;
 		
 		while( pEntries[i].myValidFlag )
 		{

@@ -133,13 +133,14 @@ void* MC_FastAlloc(size_t aSize)
 		}
 		else
 		{
-			void* ptr = SystemAlloc64kAligned(64*1024);
+			ptr = SystemAlloc64kAligned(64*1024);
 			if(!ptr)
 				return 0;
 
 			int page = GetPageIndexFromPointer(ptr);
 			assert(locPages[page] == 0);
-			locPages[page] = (bucket+1);
+            assert(bucket + 1 <= 127);
+			locPages[page] = (char)(bucket+1);
 
 			// Link all but the first fragments
 			int numAllocs = (64*1024) / fragmentSize;

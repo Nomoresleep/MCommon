@@ -25,7 +25,7 @@ unsigned int MP_Pack::PackZip(const void* aSource, void* aDestination, unsigned 
 
 	destLen = (unsigned long) (aSourceLength * 1.05f + 16);
 	if(compress2((unsigned char*) aDestination, &destLen, (const unsigned char*) aSource, aSourceLength, Z_BEST_COMPRESSION) != Z_OK)
-		return -1;
+		return (unsigned int)-1;
 
 	return destLen;
 }

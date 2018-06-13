@@ -301,7 +301,7 @@ voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
 	return memset(locMemCache[--locNumMemCachedItems], 0, 65536);
 }
 
-void  zcfree (voidpf opaque, voidpf ptr)
+void  zcfree (voidpf /*opaque*/, voidpf ptr)
 {
 	if (locNumMemCachedItems < NUMCACHES)
 		locMemCache[locNumMemCachedItems++] = ptr;

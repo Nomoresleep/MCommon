@@ -326,7 +326,7 @@ bool MF_File::Open(const char* aFileName, unsigned int aMode)
 		millis = int(0.5f + seconds*1000.0f);
 #endif
 
-	MC_Debug::SetLastOpenedFile(myName, myFileSize, (myFlags & OPEN_WRITE) != 0, (myFlags & OPEN_STREAMING) != 0, millis);
+	MC_Debug::SetLastOpenedFile(myName, myFileSize, (myFlags & OPEN_WRITE) != 0, millis);
 
 	return true;
 }

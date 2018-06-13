@@ -51,7 +51,7 @@ volatile long locQuickMutex = 0;
 __declspec(align(64))	// cache friendly alignment
 static MC_SmallObjectAllocator<sizeof(MT_Task), 512> locTaskAllocator;
 
-void* MT_Task::operator new(size_t aSize)
+void* MT_Task::operator new(size_t /*aSize*/)
 {
 	for(int i=0; i<400; i++)
 	{

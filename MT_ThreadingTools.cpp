@@ -349,7 +349,7 @@ void MT_ThreadingTools::SetCurrentThreadName(const char* aName)
 	THREADNAME_INFO info;
 	info.dwType = 0x1000;
 	info.szName = aName;
-	info.dwThreadID = -1;
+	info.dwThreadID = (DWORD)-1;
 	info.dwFlags = 0;
 
 	__try{

@@ -49,6 +49,8 @@ struct DebugStat
 // our listeners
 static const unsigned int MAXLISTENERS=32;
 
+#pragma warning(push)
+#pragma warning(disable:4324)
 __declspec(align(64))
 struct ListenerHandle
 {
@@ -56,6 +58,7 @@ struct ListenerHandle
 	MC_DebugListener* volatile listener;
 	volatile long active;
 };
+#pragma warning(pop)
 
 static ListenerHandle volatile locOurDebugListeners[MAXLISTENERS];
 static ListenerHandle volatile locOurErrorListeners[MAXLISTENERS];
@@ -469,8 +472,6 @@ void MC_Debug::Cleanup()
 #ifndef MC_NO_DEBUG_FILE_OUTPUT
 
 	FILE* fp = NULL;
-	int i;
-
 	// Stop any new listeners from registering
 	MT_MutexLock locker(GetDebugMutex());
 
@@ -518,7 +519,7 @@ void MC_Debug::Cleanup()
 	delete locOpenFileLogListener;
 	locOpenFileLogListener = NULL;
 
-	for( i=0; i<NUM_ALTDBGS; i++ )
+	for(int i=0; i<NUM_ALTDBGS; i++ )
 	{
 		if( ourAlternateFiles[i] != NULL )
 		{
@@ -1054,14 +1055,14 @@ void MC_Debug::SetLastOpenedIce(const char* aFile)
 	}
 }
 
-void MC_Debug::SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, bool aStreamingFlag, int aOpenTimeMillis)
+void MC_Debug::SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, int aOpenTimeMillis)
 {
 	if(ourAmInitedFlag)
 	{
 		myLastOpenedFile=aFile;
 
-		MC_StaticString<512> str;
-		str.Format("%.511s", aFile);
+		MC_StaticString<1024> str;
+		str.Format("%.1023s", aFile);
 
 		const long index = _InterlockedIncrement(&indexRecentFile) & (NUMRECENTFILES-1);
 		myRecentFiles[index] = str;
@@ -1106,7 +1107,6 @@ void MC_Debug::SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, 
 			if(openCount == 1)
 				uniqueBytes += aSize;
 
-			MC_StaticString<1024> str;
 			str.Format("FileOpen(%3d)(%4dM,%5dM): %s bytes in %4d millis - %s", openCount, int(uniqueBytes/(1024*1024)), int(totalBytes/(1024*1024)), niceNumber.GetBuffer(), aOpenTimeMillis, fixedName.GetBuffer());
 
 			locOpenFileLogListener->DebugMessage(str);

@@ -69,7 +69,7 @@ bool MC_CommandLine::Create( const char* aCommandLine )
 	bool insideQuotes = false;
 	const char* cmdLine;
 	unsigned int i;
-	int begin;
+	int begin = 0;
 	
 	ArgumentStruct* newArgument = NULL;
 

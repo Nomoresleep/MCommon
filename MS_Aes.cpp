@@ -88,7 +88,7 @@ bool tablesInitialized = false;
 #define xmult(a) ((a)<<1) ^ (((a)&128) ? 0x01B : 0)
 
 // make 4 bytes (LSB first) into a 4 byte vector
-#define VEC4(a,b,c,d) (((long)(a)) | (((long)(b))<<8) | (((long)(c))<<16) | (((long)(d))<<24))
+#define VEC4(a,b,c,d) (((unsigned long)(a)) | (((unsigned long)(b))<<8) | (((unsigned long)(c))<<16) | (((unsigned long)(d))<<24))
 
 // get byte 0 to 3 from word a
 #define GetByte(a,n) ((unsigned char)((a) >> (n<<3)))
@@ -217,11 +217,11 @@ bool CheckInverses(bool create)
 	for (a = 1; a <= 255; a++)
 		{
 		b = 1;
-		while (GF2_8_mult(a,b) != 1)
+		while (GF2_8_mult((unsigned char)a,(unsigned char)b) != 1)
 			b++;
 
 		if (create == true)
-			gf2_8_inv[a] = b;
+			gf2_8_inv[a] = (unsigned char)b;
 		else if (gf2_8_inv[a] != b)
 			return false;
 		}
@@ -250,7 +250,7 @@ bool CheckByteSub(bool create)
 			(BitSum(y&0x1F)<<4) | (BitSum(y&0x3E)<<5) | (BitSum(y&0x7C)<<6) | (BitSum(y&0xF8)<<7);
 		y = y ^ 0x63;
 		if (create == true)
-			byte_sub[x] = y;
+			byte_sub[x] = (unsigned char)y;
 		else if (byte_sub[x] != y)
 			return false;
 		}
@@ -272,7 +272,7 @@ bool CheckInvByteSub(bool create)
 		while (byte_sub[y] != x)
 			y++;
 		if (create == true)
-			inv_byte_sub[x] = y;
+			inv_byte_sub[x] = (unsigned char)y;
 		else if (inv_byte_sub[x] != y)
 			return false;
 		}

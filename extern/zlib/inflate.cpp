@@ -91,6 +91,9 @@
 #  endif
 #endif
 
+#pragma warning(push)
+#pragma warning(disable:4244)
+
 /* function prototypes */
 local void fixedtables OF((struct inflate_state FAR *state));
 local int updatewindow OF((z_streamp strm, unsigned out));
@@ -1337,3 +1340,5 @@ int ZEXPORT inflateCopy(z_streamp dest, z_streamp source)
     dest->state = (struct internal_state FAR *)copy;
     return Z_OK;
 }
+
+#pragma warning(pop)

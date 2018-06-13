@@ -168,7 +168,7 @@ private:
 #else // MC_MEMORYLEAK_STACKTRACE
 	struct MC_MemLeakExtraInfo
 	{
-		inline MC_MemLeakExtraInfo(const char* aFormat, ...)
+		inline MC_MemLeakExtraInfo(const char* /*aFormat*/, ...)
 		{
 		}
 	};

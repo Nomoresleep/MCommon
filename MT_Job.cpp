@@ -43,8 +43,6 @@ void MT_Job::AddTask(MT_TASKFUNC aFunction, const void* aTaskData, int aDataSize
 
 void MT_Job::Finish()
 {
-	int spinCount = 0;
-
 	while(_InterlockedCompareExchange(&myNumPendingTasks, 0, 0) != 0)
 		::Sleep(0);
 }

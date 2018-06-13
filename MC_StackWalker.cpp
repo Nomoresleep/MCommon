@@ -192,16 +192,16 @@ class MC_StackWalkerInternal
 public:
 	inline void* operator new(size_t size){ return malloc(size);}
 	inline void* operator new[](size_t size){ return malloc(size);}
-	inline void* operator new(size_t size, void *p){ return p;}
-	inline void* operator new[](size_t size, void *p){ return p;}
+	inline void* operator new(size_t /*size*/, void *p){ return p;}
+	inline void* operator new[](size_t /*size*/, void *p){ return p;}
 	inline void operator delete(void* ptr) { free(ptr);}
 	inline void operator delete[](void* ptr){ free(ptr);}
-	inline void operator delete(void* ptr, void* p) {  }
-	inline void operator delete[](void* ptr, void* p) {  }
-	inline void* operator new(size_t size, char const * file, int line){ return malloc(size);}
-	inline void* operator new[](size_t size, char const * file, int line){ return malloc(size);}
-	inline void operator delete(void * p, char const * file, int line){free(p);}
-	inline void operator delete[](void * p, char const * file, int line){free(p);}	
+	inline void operator delete(void* /*ptr*/, void* /*p*/) {  }
+	inline void operator delete[](void* /*ptr*/, void* /*p*/) {  }
+	inline void* operator new(size_t size, char const * /*file*/, int /*line*/){ return malloc(size);}
+	inline void* operator new[](size_t size, char const * /*file*/, int /*line*/){ return malloc(size);}
+	inline void operator delete(void * p, char const * /*file*/, int /*line*/){free(p);}
+	inline void operator delete[](void * p, char const * /*file*/, int /*line*/){free(p);}	
 
 	MC_StackWalkerInternal(MC_StackWalker *parent, HANDLE hProcess)
 	{
@@ -325,8 +325,8 @@ public:
 				this->m_parent->OnDbgHelpErr("SymGetSearchPath", GetLastError(), 0);
 		}
 		char szUserName[1024] = "testname";
-		DWORD dwSize = 2;
-		//GetUserNameA(szUserName, &dwSize);
+		DWORD dwSize = 1024;
+		GetUserNameA(szUserName, &dwSize);
 		this->m_parent->OnSymInit(buf, symOptions, szUserName);
 
 		return TRUE;

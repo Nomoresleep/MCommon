@@ -37,6 +37,7 @@ private:
 	MT_TASKFUNC				myFunctionPointer;
 	MT_Job*					myJob;
 	int						myData[12];
+    u16                     myPadding;
 
 	void Execute();
 };

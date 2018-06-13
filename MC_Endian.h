@@ -18,6 +18,8 @@
 #ifndef _MC_ENDIAN_H_
 #define _MC_ENDIAN_H_
 
+#pragma warning(push)
+#pragma warning(disable : 4505)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Endian types
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +65,7 @@ namespace MC_Endian
 	static f64	Swap	(const f64& data)	{ u64 temp=Swap(*(u64*)&data); return *(f64*)&temp; };
 
 	// array swap functions
-	static u8*	Swap	(u8* anArray, const s32 aLength)
+	static u8*	Swap	(u8* anArray, const s32 /*aLength*/)
 	{
 		return anArray;
 	};
@@ -85,7 +87,7 @@ namespace MC_Endian
 			anArray[i]=Swap(anArray[i]);
 		return anArray;
 	};
-	static s8*	Swap	(s8* anArray, const s32 aLength)
+	static s8*	Swap	(s8* anArray, const s32 /*aLength*/)
 	{
 		return anArray;
 	};
@@ -129,6 +131,7 @@ namespace MC_Endian
 	}
 };
 
+#pragma warning(pop)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // _MC_ENDIAN_H_

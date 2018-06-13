@@ -154,8 +154,8 @@ public:
 	bool BeginsWith(const C* aString) const		{ return InternalBeginsWith(GetBuffer(), aString); }
 	bool BeginsWithNoCase(const C* aString) const { return InternalBeginsWithNoCase(GetBuffer(), aString); }
 
-	MC_Str& MakeUpper()							{ if (sizeof(C)>1) Reserve(GetLength()*2); InternalMakeUpper( GetBuffer(), GetBufferSize() ); return *this; }
-	MC_Str& MakeLower()							{ if (sizeof(C)>1) Reserve(GetLength()*2); InternalMakeLower( GetBuffer(), GetBufferSize() ); return *this; }
+	MC_Str& MakeUpper()							{ Reserve(GetLength()*sizeof(C)); InternalMakeUpper( GetBuffer(), GetBufferSize() ); return *this; }
+	MC_Str& MakeLower()							{ Reserve(GetLength()*sizeof(C)); InternalMakeLower( GetBuffer(), GetBufferSize() ); return *this; }
 
 	MC_Str& __cdecl Format(const C* aFormatString, ...);
 
@@ -192,6 +192,7 @@ public:
 	}
 
 protected:
+    template<class C, int S> static bool IsStaticBuffer() { return S > 0; }
 	void SetBuffer( C* aPointer )				{ InternalSetBuffer( *this, aPointer ); }	// Note, sets the pointer only (not allowed on static strings)
 	void SetBufferSize( int aSize )				{ InternalSetBufferSize( *this, aSize ); }
 
@@ -200,23 +201,34 @@ protected:
 	void Dealloc();					// Deallocate string buffer and set length to 0
 	void ZeroMembers();
 
+    template <int S>
+    struct BufferSize
+    {
+        constexpr static int Size = S;
+    };
+
+    template <>
+    struct BufferSize<0>
+    {
+        constexpr static int Size = 1;
+    };
 	// Data
 	union
 	{
 		C*	myDynamicPointer;			// Pointer to dynamically allocated string
 		int* myLength;					// This variable is just here to help the debugger show the string length
-		C myBuffer[ (S > 0) ? S : 1 ];	// Set up buffer size for static string
+		C myBuffer[BufferSize<S>::Size];	// Set up buffer size for static string
 	};
 
 	// --------- Internal helpers ---------
 
 	// Static string functions
-	template<class C, int S>	static void	InternalSetBuffer( MC_Str<C,S>& aStr, C* aPointer )		{ assert( 0 && "not allowed on static strings!" ); }
+	template<class C, int S>	static void	InternalSetBuffer( MC_Str<C,S>& /*aStr*/, C* /*aPointer*/ )		{ assert( 0 && "not allowed on static strings!" ); }
 	template<class C, int S>	static C*	InternalGetBuffer( MC_Str<C,S>& aStr )					{ return aStr.myBuffer; }
 	template<class C, int S>	static const C*	InternalGetBuffer( const MC_Str<C,S>& aStr )		{ return aStr.myBuffer; }
-	template<class C, int S>	static int	InternalGetBufferSize( const MC_Str<C,S>& aStr )		{ return S; }
-	template<class C, int S>	static void	InternalSetBufferSize( MC_Str<C,S>& aStr, int aSize )	{ assert( 0 && "not allowed on static strings!" ); }
-	template<class C, int S>	static void	InternalReserve(MC_Str<C,S>& aStr, int aLength)			{ assert(aLength < S); }
+	template<class C, int S>	static int	InternalGetBufferSize( const MC_Str<C,S>& /*aStr*/ )		{ return S; }
+	template<class C, int S>	static void	InternalSetBufferSize( MC_Str<C,S>& /*aStr*/, int /*aSize*/ )	{ assert( 0 && "not allowed on static strings!" ); }
+	template<class C, int S>	static void	InternalReserve(MC_Str<C,S>& /*aStr*/, int aLength)			{ assert(aLength < S); }
 
 	// Specialization for dynamic string
 	template<class C>			static void	InternalSetBuffer( MC_Str<C,0>& aStr, C* aPointer )		{ aStr.myDynamicPointer = aPointer; }
@@ -313,10 +325,10 @@ typedef MC_Str<wchar_t>	MC_LocString;
 template<class C, int S>
 void MC_Str<C,S>::ZeroMembers()
 {
-	if(S < 1)	// if dynamic
+	if(IsStaticBuffer<C, S>())
+        GetBuffer()[0] = 0;
+    else
 		myDynamicPointer = MC_STRING_NULL;
-	else		// else static
-		GetBuffer()[0]=0;
 }
 
 template<class C, int S>
@@ -561,7 +573,7 @@ int MC_Str<C,S>::ReverseFind(C aChar, int aStartPosition) const
 template<class C, int S>
 void MC_Str<C,S>::ReallocData(int aSize)
 {
-	if( S > 0 )	// If static buffer
+	if(IsStaticBuffer<C, S>())
 	{
 		if( aSize >= S )
 		{
@@ -569,7 +581,7 @@ void MC_Str<C,S>::ReallocData(int aSize)
 			aSize = S - 1;	// safety net
 		}
 	}
-	else		// If dynamic buffer
+	else
 	{
 		if( aSize+1 > GetBufferSize() )	// only allocate more if we have to
 		{
@@ -595,7 +607,7 @@ void MC_Str<C,S>::ReallocData(int aSize)
 template<class C, int S>
 void MC_Str<C,S>::AllocData(int aSize)
 {
-	if( S > 0 )	// If static buffer
+	if(IsStaticBuffer<C, S>())
 	{
 		if( aSize >= S )
 		{
@@ -603,7 +615,7 @@ void MC_Str<C,S>::AllocData(int aSize)
 			aSize = S - 1;	// safety net
 		}
 	}
-	else		// If dynamic buffer
+    else
 	{
 		if( aSize+1 > GetBufferSize() )	// Only allocate more if we have to
 		{
@@ -622,11 +634,11 @@ void MC_Str<C,S>::AllocData(int aSize)
 template<class C, int S>
 void MC_Str<C,S>::Dealloc()
 {
-	if( S > 0 )	// If static buffer
+	if(IsStaticBuffer<C, S>())
 	{
 		GetBuffer()[0] = 0;
 	}
-	else if (MC_STRING_IS_NOT_NULL(myDynamicPointer)) // If dynamic buffer and not empty
+	else if (MC_STRING_IS_NOT_NULL(myDynamicPointer))
 	{
 		C* pOld = myDynamicPointer;
 		pOld -= sizeof(int) / sizeof(C);
@@ -920,7 +932,9 @@ MC_Str<C,S>& __cdecl MC_Str<C,S>::Format(const C* aFormatString, ...)
 	va_list paramList;
 	va_start(paramList, aFormatString);
 
-	if(sizeof(C) == sizeof(TCHAR))
+#pragma warning(push)
+#pragma warning(disable:4127)
+    if(sizeof(C) == sizeof(TCHAR))
 	{
 		int b = _vscprintf((const TCHAR*)aFormatString, paramList);
 		AllocData(b);
@@ -931,7 +945,7 @@ MC_Str<C,S>& __cdecl MC_Str<C,S>::Format(const C* aFormatString, ...)
 #endif
 		assert(b == stringLen);
 	}
-	else
+    else
 	{
 		assert(sizeof(wchar_t) == sizeof(C));
 
@@ -949,7 +963,7 @@ MC_Str<C,S>& __cdecl MC_Str<C,S>::Format(const C* aFormatString, ...)
 #endif
 		assert(b == stringLen);
 	}
-
+#pragma warning(pop)
 	va_end(paramList);
 
 	return *this;

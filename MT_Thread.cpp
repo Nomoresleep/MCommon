@@ -21,13 +21,13 @@
 #include <float.h>
 #include "mc_commandline.h"
 
-static void MT_Thread_thread_starter(void* aThread);
+void MT_Thread_thread_starter(void* aThread);
 
 MT_Thread*	MT_Thread::ourThreads[256] = {NULL};
 volatile unsigned int MT_Thread::ourNumThreads = 0;
 
 MT_Thread::MT_Thread()
-:myThreadHandle(-1)
+:myThreadHandle(0)
 ,myThreadId(0)
 ,myStopRequested(true)
 {
@@ -41,17 +41,17 @@ MT_Thread::Start()
 
 	//fix for hyperthreaded cpus making the main thread run slower
 #if IS_PC_BUILD
-	if(myThreadHandle != -1)
+	if(myThreadHandle != 0)
 	{
 		SYSTEM_INFO sysInfo;
 		GetSystemInfo(&sysInfo);
 		if(!MC_CommandLine::GetInstance()->IsPresent("noaffinitymasking") && sysInfo.dwNumberOfProcessors >= 8)
-			SetThreadAffinityMask((HANDLE)myThreadHandle, ~3);
+			SetThreadAffinityMask((HANDLE)myThreadHandle, ~3ul);
 	}
 #endif
 
 
-	return myThreadHandle != -1;
+	return myThreadHandle != 0;
 }
 
 void
@@ -66,7 +66,7 @@ MT_Thread::StopAndDelete()
 	myStopRequested = true;
 
 	int retryCount = 0;
-	while(myThreadHandle != -1)
+	while(myThreadHandle != 0)
 	{
 		// Yield
 		if(retryCount++ < 100)
@@ -119,7 +119,7 @@ MT_Thread::Resume()
 
 MT_Thread::~MT_Thread()
 {
-	assert(myThreadHandle == -1);
+	assert(myThreadHandle == 0);
 }
 
 void
@@ -139,7 +139,7 @@ MT_Thread_thread_starter(void* aThread)
 
 	#ifdef MC_ENABLE_FLOAT_EXCEPTIONS
 	_clearfp();
-	_controlfp(~(_EM_OVERFLOW | _EM_ZERODIVIDE | _EM_INVALID), MCW_EM);
+	_controlfp((unsigned int)~(_EM_OVERFLOW | _EM_ZERODIVIDE | _EM_INVALID), (unsigned int)MCW_EM);
 	#endif //MC_ENABLE_FLOAT_EXCEPTIONS
 
 	thr = static_cast<MT_Thread*>(aThread);
@@ -159,13 +159,13 @@ MT_Thread_thread_starter(void* aThread)
 			break;
 		}
 	}
-	thr->myThreadHandle = -1;
+	thr->myThreadHandle = 0;
 
 	_endthread();
 }
 
 // SWFM:SWR - allow hardware thread to be changed
-void MT_Thread::ChangeHardwareThread(const u32 aHardwareThread)
+void MT_Thread::ChangeHardwareThread(const u32 /*aHardwareThread*/)
 {
 
 }

@@ -24,7 +24,7 @@
 // The Finish() function blocks until all tasks that were added to the job are done.
 // MT_Job is a light weight class and can be created on the stack on frame by frame
 // basis if desirable.
-class MT_Job
+__declspec(align(8)) class MT_Job
 {
 	friend class MT_Task;
 	friend class MT_Supervisor;
@@ -45,13 +45,9 @@ public:
 	void Finish();
 
 private:
+    volatile long	myNumPendingTasks;
+
 	MT_Supervisor* mySupervisor;
-
-	__declspec(align(64)) struct  
-	{
-		volatile long	myNumPendingTasks;
-	};
-
 };
 
 #endif //MT_JOB_H

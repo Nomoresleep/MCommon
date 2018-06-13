@@ -166,17 +166,11 @@ void MI_Time::Calibrate()
 		for(i=0;i<10;i++)
 		{
 			startTim = MI_Time::GetSystemTime();
-			if(ourTimerMethod == MI_RDTSC)
-				GetExactTime(&start);
-			else if(ourTimerMethod == MI_Time::GetSystemTime())
-				start = MI_Time::GetSystemTime();
+			GetExactTime(&start);
 
 			Sleep(100);
 
-			if(ourTimerMethod == MI_RDTSC)
-				GetExactTime(&end);
-			else if(ourTimerMethod == MI_Time::GetSystemTime())
-				end = MI_Time::GetSystemTime();
+			GetExactTime(&end);
 			endTim = MI_Time::GetSystemTime();
 
 			endTim = (startTim > endTim ? startTim - endTim : endTim - startTim);
@@ -377,9 +371,8 @@ void MI_Time::Update()
 {
 	MT_MutexLock lock(GetTimeMutex());
 
-	MI_TimeUnit iTim, iDeltaTim;
+	MI_TimeUnit iTim = 0, iDeltaTim = 0;
 	double tim;
-	int i;
 
 	EnforceMaxFPS();
 
@@ -391,7 +384,7 @@ void MI_Time::Update()
 
 		int count = 0;
 		unsigned int totalTime = 0;
-		for(i=1; i<TIME_HISTORY_SIZE; i++)
+		for(int i=1; i<TIME_HISTORY_SIZE; i++)
 		{
 			const int idx = (locTimeHistoryWriteIndex + TIME_HISTORY_SIZE - i) % TIME_HISTORY_SIZE;
 			const unsigned int delta = currTime - locTimeHistory[idx];
@@ -455,11 +448,12 @@ void MI_Time::Update()
 		locPrevDeltaTime = iDeltaTim;
 
 		tim = ourInternalElapsedTimes[0];
-		for(i = 1; i < NUM_TIME_AVERAGEFRAMES; i++)
+		for(int i = 1; i < NUM_TIME_AVERAGEFRAMES; i++)
 			tim += ourInternalElapsedTimes[i];
 
-		if(NUM_TIME_AVERAGEFRAMES > 1)
+#if NUM_TIME_AVERAGEFRAMES > 1
 			tim /= NUM_TIME_AVERAGEFRAMES;
+#endif
 	}
 
 	ourRealElapsedTime = tim;

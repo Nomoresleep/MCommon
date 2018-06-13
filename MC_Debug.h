@@ -182,7 +182,7 @@ public:
 	static void SetIceGetMember(const char* aMember);
 
 	static void SetLastOpenedIce(const char* aFile);
-	static void SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, bool aStreamingFlag, int aOpenTimeMillis);
+	static void SetLastOpenedFile(const char* aFile, int aSize, bool aWriteFlag, int aOpenTimeMillis);
 	static void FileLogMessage(const char* aMessage);
 	static bool SetIgnoreFileOpenFlagForThread(bool aFlag);
 

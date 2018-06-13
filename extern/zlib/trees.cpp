@@ -39,6 +39,9 @@
 #  include <ctype.h>
 #endif
 
+#pragma warning(push)
+#pragma warning(disable:4244)
+
 /* ===========================================================================
  * Constants
  */
@@ -1172,3 +1175,5 @@ local void copy_block(deflate_state *s, charf    *buf, unsigned len, int      he
         put_byte(s, *buf++);
     }
 }
+
+#pragma warning(pop)

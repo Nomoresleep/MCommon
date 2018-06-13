@@ -479,7 +479,7 @@ void InitStackWalker()
 	}
 }
 
-void CreateMiniDumpFilename(CHAR* aBuffer, int aBufferSize)
+void CreateMiniDumpFilename(CHAR* aBuffer, int /*aBufferSize*/)
 {
 #if IS_PC_BUILD	// SWFM:MERGE - Minidump currently only on PC
 	MC_StaticString<260> path = MC_SystemPaths::GetUserDocumentsFileName("debug");
@@ -488,7 +488,6 @@ void CreateMiniDumpFilename(CHAR* aBuffer, int aBufferSize)
 
 	if (MC_MEM__Timestamp_Minidump)
 	{
-		DWORD dwBufferSize = aBufferSize;
 		SYSTEMTIME stLocalTime;
 
 		GetLocalTime( &stLocalTime );
@@ -556,7 +555,7 @@ void DoWindowsErrorReporting(struct _EXCEPTION_POINTERS* anExceptionPtr)
 			pfn_REPORTFAULT pfn = (pfn_REPORTFAULT)GetProcAddress( hFaultRepDll, _T("ReportFault") ) ;
 			if ( pfn )
 			{
-				EFaultRepRetVal rc = pfn( anExceptionPtr, 0) ;
+				pfn( anExceptionPtr, 0) ;
 			}
 			FreeLibrary(hFaultRepDll );
 		}
@@ -862,13 +861,13 @@ UserAssertHandler* ourUserAssertHandler = NULL;
 
 bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnoreFlag)
 {
+    // Display visual studio break/continue/ignore box, unless -noboom in which case we output the error and quit
+
+    MC_ERROR("%s(%d): Assert failed (%s)", aFile, aLine, aString);
+
+    if (locBoomFilename[0])
+        MC_WriteBoomFile(MC_Strfmt<1024>("%s(%d): Assert failed (%s)\n", aFile, aLine, aString));
 #if defined(_DEBUG) && !defined(MC_NO_ASSERTS)
-	// Display visual studio break/continue/ignore box, unless -noboom in which case we output the error and quit
-
-	MC_ERROR("%s(%d): Assert failed (%s)", aFile, aLine, aString);
-
-	if(locBoomFilename[0])
-		MC_WriteBoomFile(MC_Strfmt<1024>("%s(%d): Assert failed (%s)\n", aFile, aLine, aString));
 
 	if (ourDisableBoooomBoxFlag)
 	{
@@ -902,16 +901,11 @@ bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnore
 		exit(-666);
 	}
 #else // not _DEBUG
-		MC_ERROR("%s(%d): Assert failed (%s)", aFile, aLine, aString);
-
-		if(locBoomFilename[0])
-			MC_WriteBoomFile(MC_Strfmt<1024>("%s(%d): Assert failed (%s)\n", aFile, aLine, aString));
-
-		if (locSw)
-		{
-			locSw->ShowCallstack(locSwText);
-			MC_ERROR("%.4000s", locSwText.GetBuffer());
-		}
+	if (locSw)
+	{
+		locSw->ShowCallstack(locSwText);
+		MC_ERROR("%.4000s", locSwText.GetBuffer());
+	}
 
 
 	#ifndef MC_NO_FATAL_ASSERTS
@@ -923,6 +917,7 @@ bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnore
 		volatile char	*ASSERTION_FAILED_HERE_IS_YOUR_MINIDUMP = NULL;
 						*ASSERTION_FAILED_HERE_IS_YOUR_MINIDUMP = NULL;
 		// Should not get here!
+        return true;
 	#else
 		// Show callstack even if the assert wasn't fatal
 		if (locSw)
@@ -934,10 +929,7 @@ bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnore
 			ourUserAssertHandler(false);
 		return false;
 	#endif
-
 #endif // not _DEBUG
-
-	return true;
 }
 
 bool MC_EnableDeadlockFinder()
@@ -957,7 +949,7 @@ void MC_MemRegisterAdditionalExceptionHandler(void (*aFunction)())
 // 16 byte alignment
 static const size_t	TEMP_ALIGNMENT_SIZE = 16;
 static const size_t	TEMP_ALIGNMENT_MASK = 15;
-static const size_t INVALID_SIZE = ~0;
+static const size_t INVALID_SIZE = ~(size_t)0;
 #if IS_PC_BUILD		// SWFM:AW - To get the xb360 to compile
 static const size_t	TEMP_BUFFER_SIZE = 64 * 1024;
 #else
@@ -1100,7 +1092,7 @@ void* MC_TempAlloc(size_t aSize)
 #endif // MC_TEMP_MEMORY_HANDLER_ENABLED
 }
 
-void* MC_TempAllocIfOwnerOnStack(void* anOwner, size_t aSize, const char* aFile, int aLine)
+void* MC_TempAllocIfOwnerOnStack(void* anOwner, size_t aSize, const char* /*aFile*/, int /*aLine*/)
 {
 #ifdef MC_TEMP_MEMORY_HANDLER_ENABLED
 	if(!locTempMemEnableFlag)

@@ -380,7 +380,7 @@ void* MT_ThreadingTools::Exchange(void* volatile* aTarget, void* aValue)
 #if _WIN64
 	return (void*)Exchange((long long volatile*)aTarget, (long long)aValue);
 #elif _WIN32
-	return  Exchange((long volatile*)aTarget, (long)aValue);
+	return (void*)Exchange((long volatile*)aTarget, (long)aValue);
 #endif
 }
 

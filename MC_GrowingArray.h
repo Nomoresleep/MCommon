@@ -17,6 +17,7 @@
 #ifndef MC_GROWINGARRAY_HEADER
 #define MC_GROWINGARRAY_HEADER
 
+#define MC_GROWINGARRAY_MINSIZE_CONSTANT 8
 // The growing array class is a growing slot list container. it allocate sup a number of slots and then increases 
 // the number of them when needed. The slots are assigned objects when a programmer adds an object to it. However 
 // that object is not gurantted to be in the same slot over the lifetiem of the list.
@@ -73,7 +74,7 @@ class MC_GrowingArray
 	}
 
 public:
-	MC_GrowingArray(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true);
+	MC_GrowingArray(int aNrOfRecommendedItems, bool aSafemodeFlag = true);
 	MC_GrowingArray();
 	MC_GrowingArray(const MC_GrowingArray<Type>& aArray);
 	~MC_GrowingArray();
@@ -84,8 +85,8 @@ public:
 	// It need to be used when dealing with objects that have pointers that are deleted in destructor.
 	// aNrofRecomendedItems is the base nr of itmes for the first instanciation, anItemIncreassize or how many are 
 	// added everytime the slotlist is full
-	bool Init(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true);
-	bool ReInit(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true);
+	bool Init(int aNrOfRecommendedItems, bool aSafemodeFlag = true);
+	bool ReInit(int aNrOfRecommendedItems, bool aSafemodeFlag = true);
 	bool IsInited();
 
 	// gets a refeerence to the item at the selected slot
@@ -107,10 +108,6 @@ public:
 	template <class Comparer, class Compared>
 	inline int Find2(const Compared& anItem, const unsigned int aLookFromIndex = 0) const
 	{
-		// Call Init() before using the array
-		// MC_ASSERT(myMaxNrOfItems > 0);
-        MC_ASSERT( myItemIncreaseSize > 0 );
-
 		for (int i = (int)aLookFromIndex; i < myUsedNrOfItems; i++)
 			if(Comparer::Equals(myItemList[i], anItem))
 				return i;
@@ -132,9 +129,6 @@ public:
 	template <class Comparer, class Compared>
 	inline int ReverseFind2(const Compared& anItem, const unsigned int aLookFromReverseIndex = 0) const
 	{
-		// Call Init() before using the array
-		//MC_ASSERT(myMaxNrOfItems > 0);
-		MC_ASSERT( myItemIncreaseSize > 0 );
 		if (myUsedNrOfItems == 0)
 			return -1;
 
@@ -317,21 +311,19 @@ public:
 protected:
 	int myUsedNrOfItems;
 	int myMaxNrOfItems;
-	unsigned int myItemIncreaseSize:31;
 	unsigned int mySafemodeFlag:1;			// Used to determine if copy constructor should be used or not for items.
 	Type* myItemList;
 };
 
 
 template <class Type>
-MC_GrowingArray<Type>::MC_GrowingArray(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag = true)
+MC_GrowingArray<Type>::MC_GrowingArray(int aNrOfRecommendedItems, bool aSafemodeFlag = true)
 {
 	myItemList = NULL;
 	myUsedNrOfItems = 0;
 	myMaxNrOfItems = 0;
-	myItemIncreaseSize = 0;
 	mySafemodeFlag = 1;
-	Init(aNrOfRecommendedItems,anItemIncreaseSize,aSafemodeFlag);
+	Init(aNrOfRecommendedItems,aSafemodeFlag);
 }
 
 template <class Type>
@@ -340,7 +332,6 @@ MC_GrowingArray<Type>::MC_GrowingArray()
 	myItemList = NULL;
 	myUsedNrOfItems = 0;
 	myMaxNrOfItems = 0;
-	myItemIncreaseSize = 0;
 	mySafemodeFlag = 1;
 }
 
@@ -425,7 +416,6 @@ void MC_GrowingArray<Type>::Reset()
 	myItemList = 0;
 	myUsedNrOfItems = 0;
 	myMaxNrOfItems = 0;
-	myItemIncreaseSize = 0;
 	mySafemodeFlag = 1;
 }
 
@@ -440,13 +430,12 @@ void MC_GrowingArray<Type>::NonDeletingShutdown()
 }
 
 template <class Type>
-bool MC_GrowingArray<Type>::Init(int aNrOfRecommendedItems,int anItemIncreaseSize, bool aSafemodeFlag)
+bool MC_GrowingArray<Type>::Init(int aNrOfRecommendedItems, bool aSafemodeFlag)
 {	
 	MC_ASSERT(myItemList == NULL); // make sure Init() isn't called multiple times
 
 	mySafemodeFlag = aSafemodeFlag ? 1 : 0;
 	myMaxNrOfItems = aNrOfRecommendedItems;
-	myItemIncreaseSize = anItemIncreaseSize;
 
 	if (aNrOfRecommendedItems > 0)
 	{
@@ -465,7 +454,7 @@ bool MC_GrowingArray<Type>::IsInited()
 }
 
 template <class Type>
-bool MC_GrowingArray<Type>::ReInit(int aNrOfRecommendedItems, int anItemIncreaseSize, bool aSafemodeFlag)
+bool MC_GrowingArray<Type>::ReInit(int aNrOfRecommendedItems, bool aSafemodeFlag)
 {
 	if(myItemList!=NULL)
 	{
@@ -475,8 +464,6 @@ bool MC_GrowingArray<Type>::ReInit(int aNrOfRecommendedItems, int anItemIncrease
 		}
 	}
 	mySafemodeFlag = aSafemodeFlag ? 1 : 0;
-	myItemIncreaseSize = anItemIncreaseSize;
-
 	
 	if(myItemList==NULL)
 	{
@@ -496,12 +483,9 @@ bool MC_GrowingArray<Type>::ReInit(int aNrOfRecommendedItems, int anItemIncrease
 template <class Type>
 bool MC_GrowingArray<Type>::Add(const Type& anItem)
 {
-	// Call Init() before using the array
-	//MC_ASSERT( myMaxNrOfItems > 0);
-    MC_ASSERT( myItemIncreaseSize > 0 );
 
 	if(myUsedNrOfItems==myMaxNrOfItems)
-		if( SetSize( myMaxNrOfItems+myItemIncreaseSize ) < int(myUsedNrOfItems+myItemIncreaseSize) )
+		if( SetSize( MC_Max(myMaxNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)) < int(MC_Max(myUsedNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)) )
 			return false;
 
 	myItemList[myUsedNrOfItems]=anItem;
@@ -536,7 +520,7 @@ bool MC_GrowingArray<Type>::Add(const Type* someItems, unsigned int aNumberOfIte
 	MC_ASSERT(aNumberOfItemsToAdd > 0);
 
 	int newSize = myUsedNrOfItems + aNumberOfItemsToAdd;
-	int growthsize = ((newSize/myItemIncreaseSize)+1)*myItemIncreaseSize;
+    int growthsize = MC_Max(newSize * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT);
 	PreAllocSize(growthsize);
 	if (mySafemodeFlag)
 	{
@@ -554,13 +538,9 @@ bool MC_GrowingArray<Type>::Add(const Type* someItems, unsigned int aNumberOfIte
 template <class Type>
 inline bool MC_GrowingArray<Type>::AddN(const Type& anItem, unsigned int aNumberOfItemsToAdd)
 {
-	// Call Init() before using the array
-	//MC_ASSERT(myMaxNrOfItems > 0);
-	MC_ASSERT( myItemIncreaseSize > 0 );
-
 	// Creates enough space.
 	int newSize = myUsedNrOfItems + aNumberOfItemsToAdd;
-	int growthsize = ((newSize/myItemIncreaseSize)+1)*myItemIncreaseSize;
+    int growthsize = MC_Max(newSize * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT);
 	PreAllocSize(growthsize);
 
 	for(int i = myUsedNrOfItems; i < newSize; ++i)
@@ -573,17 +553,12 @@ template <class Type>
 void MC_GrowingArray<Type>::AddUnique(const Type& anItem)
 {
 	unsigned int i;
-
-	// Call Init() before using the array
-	//MC_ASSERT(myMaxNrOfItems > 0);
-	MC_ASSERT( myItemIncreaseSize > 0 );
-
 	for(i = 0; i < (unsigned int) myUsedNrOfItems; i++)
 		if(myItemList[i] == anItem)
 			return; // already exists
 
 	if(myUsedNrOfItems == myMaxNrOfItems)
-		if(SetSize(myMaxNrOfItems + myItemIncreaseSize) < int(myUsedNrOfItems + myItemIncreaseSize))
+        if (SetSize(MC_Max(myMaxNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)) < int(MC_Max(myUsedNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)))
 			return;
 
 	myItemList[myUsedNrOfItems] = anItem;
@@ -825,17 +800,12 @@ template <class Type>
 bool MC_GrowingArray<Type>::InsertItem(const int anIndex, const Type& anItem)
 {
 	int i;
-
-	// Call Init() before using the array
-	//MC_ASSERT( myMaxNrOfItems > 0);
-	MC_ASSERT( myItemIncreaseSize > 0 );
-
 #ifdef MC_HEAVY_DEBUG_GROWINGARRAY_BOUNDSCHECK
 		MC_ASSERT(anIndex >= 0 && anIndex <= myUsedNrOfItems && "MC_GrowingArray BOUNDS ERROR!");
 #endif
 
 	if(myUsedNrOfItems==myMaxNrOfItems)
-		if( SetSize( myMaxNrOfItems+myItemIncreaseSize ) < int(myUsedNrOfItems+myItemIncreaseSize) )
+        if (SetSize(MC_Max(myMaxNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)) < int(MC_Max(myUsedNrOfItems * 2, MC_GROWINGARRAY_MINSIZE_CONSTANT)))
 			return false;
 
 	// Shift and insert
@@ -888,7 +858,6 @@ MC_GrowingArray<Type>& MC_GrowingArray<Type>::operator=(const MC_GrowingArray<Ty
 	myMaxNrOfItems = aArray.myMaxNrOfItems;
 	myUsedNrOfItems = aArray.myUsedNrOfItems;
 	mySafemodeFlag = aArray.mySafemodeFlag;
-	myItemIncreaseSize = aArray.myItemIncreaseSize;
 
 	if(aArray.myItemList)
 	{
@@ -908,7 +877,6 @@ MC_GrowingArray<Type>::MC_GrowingArray(const MC_GrowingArray<Type>& aArray)
 	myMaxNrOfItems = aArray.myMaxNrOfItems;
 	myUsedNrOfItems = aArray.myUsedNrOfItems;
 	mySafemodeFlag = aArray.mySafemodeFlag;
-	myItemIncreaseSize = aArray.myItemIncreaseSize;
 
 	if(aArray.myItemList)
 	{
@@ -957,7 +925,7 @@ void MC_GrowingArray<Type>::Set_Difference(const MC_GrowingArray<Type>& anArray)
 	if (&anArray == this)
 		return;
 	
-	MC_GrowingArray<Type> tmp(0, myItemIncreaseSize, true);
+	MC_GrowingArray<Type> tmp(0, true);
 	for (int i = 0; i < anArray.Count(); ++i)
 	{
 		if (Find(anArray[i]) < 0) // not found in A, add to tmp

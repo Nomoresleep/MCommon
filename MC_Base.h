@@ -72,6 +72,12 @@
 #endif
 
 // Commonly used functions
+template <typename T>
+MC_FORCEINLINE T&& MC_Move(T& aType)
+{
+    return (T&&)aType;
+}
+
 template<typename T>
 MC_FORCEINLINE void MC_Swap(T& aA, T& aB)
 {

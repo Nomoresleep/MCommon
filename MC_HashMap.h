@@ -146,8 +146,7 @@ public:
 	public:
 		Iterator() { myMap = 0; }
 		Iterator(const Iterator& anOther) : myMap(anOther.myMap), myIndex(anOther.myIndex) {}
-		Iterator( MC_HashBase& aMap ) : myMap( &aMap )	{ for( myIndex=0; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex ) {} }
-		Iterator( MC_HashBase* aMap ) : myMap( aMap )	{ for( myIndex=0; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex ) {} }
+		Iterator( MC_HashBase* aMap, int anIndex ) : myMap( aMap )	{ for( myIndex=anIndex; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex ) {} }
 
 		Iterator& operator=(const Iterator& anOther)
 		{ myMap = anOther.myMap; myIndex = anOther.myIndex; return *this; }
@@ -170,10 +169,15 @@ public:
 		unsigned int	myIndex;
 	};
 
-	Iterator Begin()
-	{
-		return Iterator(*this);
-	}
+    Iterator Begin()
+    {
+        return Iterator(this, 0);
+    }
+
+    Iterator End()
+    {
+        return Iterator(this, myArraySize);
+    }
 
 	MC_HashBase( const int aStartSize)
 	{

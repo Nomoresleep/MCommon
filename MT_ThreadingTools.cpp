@@ -45,51 +45,55 @@ void MC_Yield()
 	MC_THREADPROFILER_LEAVE_WAIT();
 }
 
+#if IS_PC_BUILD
+DWORD locCountSetBits(ULONG_PTR aBitMask)
+{
+    DWORD lShift = sizeof(ULONG_PTR) * 8 - 1;
+    DWORD bitSetCount = 0;
+    ULONG_PTR bitTest = (ULONG_PTR)1 << lShift;
+    DWORD i;
+
+    for (i = 0; i <= lShift; ++i)
+    {
+        bitSetCount += ((aBitMask & bitTest) ? 1 : 0);
+        bitTest /= 2;
+    }
+
+    return bitSetCount;
+}
+#endif
+
 unsigned int MT_ThreadingTools::GetLogicalProcessorCount()
 {
 #if IS_PC_BUILD	// PC specific
-	// Intel ref: http://cache-www.intel.com/cd/00/00/27/66/276611_276611.txt
-	// AMD ref: http://www.amd.com/us-en/assets/content_type/white_papers_and_tech_docs/25481.pdf#search=%22amd%20cpuid%20specification%22
+    DWORD length = 0;
+    bool done = false;
+    while (!done)
+    {
+        DWORD ret = GetLogicalProcessorInformation(nullptr, &length);
 
-	unsigned int maxInputValue = 0;
-
-	// Get standard max input value and vendor ID string ("AuthenticAMD" or "GenuineIntel").
-	__asm		
-	{
-		xor eax, eax
-    	cpuid
-		mov maxInputValue, eax
-	}		
-
-	if(maxInputValue < 1)
-		return 1;
-
-	unsigned int htt;
-	unsigned int logicalProcessorCount;
-
-	__asm
-	{
-		mov eax, 1
-		cpuid
-
-		shr ebx, 16
-		and ebx, 255
-		mov logicalProcessorCount, ebx
-
-		shr edx, 28
-		and edx, 1
-		mov htt, edx
-	}
-
-	// When HTT=0, LogicalProcessorCount is reserved and the processor contains one CPU core and that one CPU core is single-threaded.
-	if(!htt)
-		return 1;
-
-	return logicalProcessorCount;
+        u32 numProcessorInfo = length / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION) + 1;
+        SYSTEM_LOGICAL_PROCESSOR_INFORMATION* buffer = new SYSTEM_LOGICAL_PROCESSOR_INFORMATION[numProcessorInfo];
+        memset(buffer, 0, numProcessorInfo * sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION));
+        ret = GetLogicalProcessorInformation(buffer, &length);
+        if (!ret)
+        {
+            delete[] buffer;
+            return 1;
+        }
+        
+        u32 numLogicalProcessors = 0;
+        for (u32 infoIdx = 0; infoIdx < numProcessorInfo; ++infoIdx)
+        {
+            if(buffer[infoIdx].Relationship == RelationProcessorCore)
+                numLogicalProcessors += locCountSetBits(buffer[infoIdx].ProcessorMask);
+        }
+        return numLogicalProcessors;
+    }
 #else
-	// SWFM:SWR - currently all other platforms default to 1
-	return 1;
+    CT_ASSERT(false);
 #endif
+    return 1;
 }
 
 unsigned int MT_ThreadingTools::GetProcessorAPICID()

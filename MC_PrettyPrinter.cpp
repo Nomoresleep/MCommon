@@ -24,6 +24,7 @@ MC_PrettyPrinter::ToString(const MDB_IPrettyPrintable& anObject)
 #ifdef _DEBUG
 	return anObject.ToString(); 
 #else
+    MC_UNUSED(anObject);
 	return "";
 #endif
 }

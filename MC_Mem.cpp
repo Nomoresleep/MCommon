@@ -901,6 +901,7 @@ bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnore
 		exit(-666);
 	}
 #else // not _DEBUG
+    MC_UNUSED(anIgnoreFlag);
 	if (locSw)
 	{
 		locSw->ShowCallstack(locSwText);
@@ -1329,7 +1330,7 @@ void MC_TestMemory()
 	if(theMemTestFunction)
 		theMemTestFunction();
 
-	MC_ASSERT( _CrtCheckMemory() == TRUE );
+	CT_ASSERT( _CrtCheckMemory() == TRUE );
 }
 
 void MC_SetBoomFilename(const char* aFilename)

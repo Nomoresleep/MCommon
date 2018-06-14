@@ -66,6 +66,7 @@
 	#define MC_FORCEINLINE __forceinline
 	#define MC_THREADLOCAL __declspec(thread)
 	#define MC_RESTRICT __restrict
+    #define MC_UNUSED(x) (void)x
 #else
 	#error Need to define MC_FORCEINLINE, MC_THREADLOCAL and MC_RESTRICT for this platform
 #endif

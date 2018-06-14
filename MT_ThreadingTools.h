@@ -52,7 +52,6 @@ void MC_Yield();
 namespace MT_ThreadingTools
 {
 	unsigned int GetLogicalProcessorCount();
-	unsigned int GetProcessorAPICID();
 
 	void SetCurrentThreadName(const char* aName);
 

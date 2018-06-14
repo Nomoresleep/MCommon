@@ -588,7 +588,7 @@ LONG WINAPI RysExceptionFilter(struct _EXCEPTION_POINTERS* anExceptionPtr)
 	switch(anExceptionPtr->ExceptionRecord->ExceptionCode)
 	{
 	case EXCEPTION_ACCESS_VIOLATION:
-		sprintf(st, "Access violation %s 0x%08x", (anExceptionPtr->ExceptionRecord->ExceptionInformation[0] == 0 ? "reading from" : (anExceptionPtr->ExceptionRecord->ExceptionInformation[0] == 1 ? "writing to" : "UNKNOWN(!) access to")), anExceptionPtr->ExceptionRecord->ExceptionInformation[1]);
+		sprintf(st, "Access violation %s 0x%08zx", (anExceptionPtr->ExceptionRecord->ExceptionInformation[0] == 0 ? "reading from" : (anExceptionPtr->ExceptionRecord->ExceptionInformation[0] == 1 ? "writing to" : "UNKNOWN(!) access to")), anExceptionPtr->ExceptionRecord->ExceptionInformation[1]);
 		break;
 
 	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
@@ -859,6 +859,7 @@ typedef void (UserAssertHandler)(bool assertsAreFatal);
 
 UserAssertHandler* ourUserAssertHandler = NULL;
 
+#ifndef _RELEASE_
 bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnoreFlag)
 {
     // Display visual studio break/continue/ignore box, unless -noboom in which case we output the error and quit
@@ -932,6 +933,7 @@ bool MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnore
 	#endif
 #endif // not _DEBUG
 }
+#endif
 
 bool MC_EnableDeadlockFinder()
 {
@@ -1330,7 +1332,7 @@ void MC_TestMemory()
 	if(theMemTestFunction)
 		theMemTestFunction();
 
-	CT_ASSERT( _CrtCheckMemory() == TRUE );
+	MC_ASSERT( _CrtCheckMemory() == TRUE );
 }
 
 void MC_SetBoomFilename(const char* aFilename)

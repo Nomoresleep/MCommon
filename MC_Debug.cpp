@@ -348,7 +348,7 @@ bool MC_Debug::AddDebugListener(MC_DebugListener* aListener)
 		volatile ListenerHandle& handle = locOurDebugListeners[i];
 		if ((handle.listener == aListener) || (handle.listener == NULL))
 		{
-			MT_ThreadingTools::Exchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
+			MT_ThreadingTools::Exchange((void* volatile*)&handle.listener, aListener);	//handle.listener = aListener;
 			MT_ThreadingTools::Exchange(&handle.active, 1);									//handle.active = 1;
 			return true;
 		}
@@ -358,7 +358,7 @@ bool MC_Debug::AddDebugListener(MC_DebugListener* aListener)
 	long newIndex = MT_ThreadingTools::Increment(&locNumDebugListeners)-1;
 	MC_ASSERT(newIndex < MAXLISTENERS);
 	// Debugmessages can now iterate up until newIndex, but that already has an inactive listener so no problem there. 
-	MT_ThreadingTools::Exchange((volatile long*)&locOurDebugListeners[newIndex].listener, (long)aListener);
+	MT_ThreadingTools::Exchange((void* volatile*)&locOurDebugListeners[newIndex].listener, aListener);
 	MT_ThreadingTools::Exchange(&locOurDebugListeners[newIndex].active, 1);
 #endif
 	return true;
@@ -380,7 +380,7 @@ bool MC_Debug::AddErrorListener(MC_DebugListener* aListener)
 		volatile ListenerHandle& handle = locOurErrorListeners[i];
 		if ((handle.listener == aListener) || (handle.listener == NULL))
 		{
-			MT_ThreadingTools::Exchange((volatile long*)&handle.listener, (long)aListener);	//handle.listener = aListener;
+			MT_ThreadingTools::Exchange((void* volatile*)&handle.listener, aListener);	//handle.listener = aListener;
 			MT_ThreadingTools::Exchange(&handle.active, 1);									//handle.active = 1;
 			return true;
 		}
@@ -389,7 +389,7 @@ bool MC_Debug::AddErrorListener(MC_DebugListener* aListener)
 	// No, add it
 	long newIndex = MT_ThreadingTools::Increment(&locNumErrorListeners)-1;
 	MC_ASSERT(newIndex < MAXLISTENERS);
-	MT_ThreadingTools::Exchange((volatile long*)&locOurErrorListeners[newIndex].listener, (long)aListener);
+	MT_ThreadingTools::Exchange((void* volatile*)&locOurErrorListeners[newIndex].listener, aListener);
 	MT_ThreadingTools::Exchange(&locOurErrorListeners[newIndex].active, 1);
 #endif
 	return true;

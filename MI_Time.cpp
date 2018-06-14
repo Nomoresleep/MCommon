@@ -17,7 +17,7 @@
 
 #if IS_PC_BUILD
 	#include <mmsystem.h>
-	#pragma comment(lib, "winmm.lib")
+	//#pragma comment(lib, "winmm.lib")
 #endif
 
 #include "mi_time.h"

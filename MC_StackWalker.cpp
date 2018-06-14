@@ -37,7 +37,7 @@
 #include "MC_FastAlloc.h"
 
 #if IS_PC_BUILD
-	#pragma comment(lib, "version.lib")  // for "VerQueryValue"
+	//#pragma comment(lib, "version.lib")  // for "VerQueryValue"
 #endif
 
 #include "MC_Debug.h"
@@ -976,7 +976,7 @@ BOOL MC_StackWalker::ShowCallstack(MC_StaticString<8192>& anOutputBuffer, HANDLE
 {
 #if IS_PC_BUILD == 0		// SWFM:AW - To get the xb360 to compile
 	return FALSE;
-#else
+#elif FIX_ME_X64
 	anOutputBuffer = ""; // Clear it!
 	myOutputBuffer = &anOutputBuffer;
 	CONTEXT c;;
@@ -1203,6 +1203,13 @@ cleanup:
 
 	return TRUE;
 #endif		//SWFM:AW
+    MC_UNUSED(anOutputBuffer);
+    MC_UNUSED(hThread);
+    MC_UNUSED(context);
+    MC_UNUSED(readMemoryFunction);
+    MC_UNUSED(pUserData);
+    MC_ASSERT(false);
+    return TRUE;
 }
 
 BOOL MC_StackWalker::PrintCallStack()
@@ -1221,6 +1228,10 @@ BOOL MC_StackWalker::PrintCallStack()
 
 BOOL MC_StackWalker::SaveCallstack(MC_StackTrace* aStackTrace, HANDLE hThread, const CONTEXT *context)
 {
+    MC_UNUSED(aStackTrace);
+    MC_UNUSED(hThread);
+    MC_UNUSED(context);
+#if FIX_ME_X64
 	myOutputBuffer = 0;
 	CONTEXT c;;
 
@@ -1362,7 +1373,8 @@ BOOL MC_StackWalker::SaveCallstack(MC_StackTrace* aStackTrace, HANDLE hThread, c
 
 	if (suspendedThread)
 		ResumeThread(hThread);
-
+#endif
+    MC_ASSERT(false);
 	return TRUE;
 }
 

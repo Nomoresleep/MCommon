@@ -93,8 +93,8 @@ void MT_Task::operator delete(void* aPointer)
 		}
 
 #if IS_PC_BUILD
-		__asm wait
-		__asm wait
+        __nop();
+        __nop();
 #endif
 		// MSV:NW - Is there a nop instruction or something similar on the 360?
 	}

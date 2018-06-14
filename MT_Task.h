@@ -38,7 +38,7 @@ private:
 	MT_Supervisor*			mySupervisor;
 	MT_TASKFUNC				myFunctionPointer;
 	MT_Job*					myJob;
-	int						myData[12];
+    void*                   myData;
 
 	void Execute();
 };

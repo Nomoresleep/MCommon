@@ -369,7 +369,7 @@ bool MC_Misc::IsSingleCore()
 		}
 		else
 		{
-			DWORD procAff, sysAff;
+			DWORD_PTR procAff, sysAff;
 			if(GetProcessAffinityMask(GetCurrentProcess(), &procAff, &sysAff))
 			if(procAff == 1)
 				isSingle = true;

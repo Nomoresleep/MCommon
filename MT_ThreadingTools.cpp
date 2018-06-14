@@ -96,40 +96,6 @@ unsigned int MT_ThreadingTools::GetLogicalProcessorCount()
     return 1;
 }
 
-unsigned int MT_ThreadingTools::GetProcessorAPICID()
-{
-#if IS_PC_BUILD	// PC specific function
-	//  In EBX, bits 31..24 gives the default APIC ID, bits 23..16 gives Logical
-	//  Processor Count, bits 15..8 gives the Cache Flush Chunk size and
-	//  bits 7..0 give away the Brand ID(Only Pentium III and upwards).
-
-	// Initial APIC ID. This field contains the initial value of the processor’s local APIC
-	// physical ID register. This value is composed of the Northbridge NodeID (bits 26–24)
-	// and the CPU number within the node (bits 31–27). Subsequent writes by software to
-	// the local APIC physical ID register do not change the value of the initial APIC ID field.
-
-	unsigned int extraInfo;
-
-	__asm push eax
-	__asm push ebx
-	__asm push ecx
-	__asm push edx
-	__asm mov eax, 1
-	__asm cpuid
-	__asm mov extraInfo, ebx
-	__asm pop edx
-	__asm pop ecx
-	__asm pop ebx
-	__asm pop eax
-
-	return (extraInfo >> 24) & 255;
-#else
-	return 0;
-#endif
-}
-
-
-
 #ifdef THREAD_TOOLS_DEBUG
 
 struct DebugThreadInfo
@@ -357,7 +323,7 @@ void MT_ThreadingTools::SetCurrentThreadName(const char* aName)
 	info.dwFlags = 0;
 
 	__try{
-		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*)&info);
+		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (ULONG_PTR*)&info);
 	}
 	__except (EXCEPTION_CONTINUE_EXECUTION)
 	{

@@ -662,7 +662,7 @@ MC_IniFile::Process()
 				return false;
 			}
 
-			currentSection = MC_String(lineStart, sectionEnd - lineStart).TrimLeft().TrimRight() + '.';
+			currentSection = MC_String(lineStart, MC_SAFECAST(sectionEnd - lineStart)).TrimLeft().TrimRight() + '.';
 			lineStart = PrivLineEnd(lineStart, end);
 			continue;
 		}

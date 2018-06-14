@@ -1062,7 +1062,7 @@ const char* MF_File::ExtractExtension(const char* aPath)
 		return "";
 	}
 
-	len = strlen(aPath);
+	len = MC_SAFECAST(strlen(aPath));
 	endOfString = aPath + len;
 	if (len == 0)
 	{
@@ -1132,7 +1132,7 @@ char* MF_File::RemoveExtensionFromPath(char* aDest, const char* aFullPath)
 		return aDest;
 	}
 
-	len = strlen(aFullPath);
+	len = MC_SAFECAST(strlen(aFullPath));
 	currPos = aFullPath + len;
 	while (len > 0)
 	{
@@ -1182,7 +1182,7 @@ char* MF_File::ExtractDirectory(char* aDirectoryDest, const char* aFullPath)
 		return "";
 	}
 
-	len = strlen(aFullPath);
+	len = MC_SAFECAST(strlen(aFullPath));
 
 	// if path contains extension, then it has a file at the end.
 	// in that case look up slash
@@ -1228,7 +1228,7 @@ char* MF_File::ExtractUpperDirectory(char* aDirectoryDest, const char* aFullPath
 	ExtractDirectory(extractedDir, aFullPath);
 
 	dirPathLen = -1;
-	len = strlen(extractedDir);
+	len = MC_SAFECAST(strlen(extractedDir));
 	for (i = len - 1; i >= 0; i--)
 	{
 		if (extractedDir[i] == '\\' || extractedDir[i] == '/')
@@ -1268,8 +1268,8 @@ bool MF_File::CompareStrings(const char* aString1, const char* aString2)
 		return (aString1 == aString2);
 	}
 
-	s1Length = strlen(aString1);
-	s2Length = strlen(aString2);
+	s1Length = MC_SAFECAST(strlen(aString1));
+	s2Length = MC_SAFECAST(strlen(aString2));
 	if (s1Length != s2Length)
 		return false;
 

@@ -675,8 +675,8 @@ MC_IniFile::Process()
 			break;
 		}
 
-		MC_String key = currentSection + MC_String(lineStart, equals - lineStart).TrimLeft().TrimRight();
-		MC_String value = MC_String(equals + 1, lineEnd - equals).TrimLeft().TrimRight();
+		MC_String key = currentSection + MC_String(lineStart, MC_SAFECAST(equals - lineStart)).TrimLeft().TrimRight();
+		MC_String value = MC_String(equals + 1, MC_SAFECAST(lineEnd - equals)).TrimLeft().TrimRight();
 		myValues.Insert(key, value);
 		lineStart = (lineEnd == end) ? lineEnd : lineEnd + 1;
 	}

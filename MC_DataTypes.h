@@ -56,6 +56,7 @@ typedef f64					float64;
 #define F64_DEGTORAD(ang)	((f64)(ang)*(F64_TWO_PI*(1.0/360.0)))
 #define	F64_RADTODEG(ang)	((f64)(ang)*(360.0/F64_TWO_PI))
 
+
 enum McNoInitType
 {
 	MC_NO_INIT

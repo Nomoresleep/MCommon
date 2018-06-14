@@ -298,6 +298,9 @@ bool MI_Time::GetQPC(MI_TimeUnit* aReturnTime)
 
 void __stdcall MI_Time::GetRDTSC(MI_TimeUnit* aReturnTime)
 {
+#if _WIN64
+	*aReturnTime = __rdtsc();
+#else
 	__asm
 	{
 		push edx
@@ -312,6 +315,7 @@ void __stdcall MI_Time::GetRDTSC(MI_TimeUnit* aReturnTime)
 		pop ecx
 		pop edx
 	}
+#endif
 }
 
 float MI_Time::ConvertTimeToSeconds(const MI_TimeUnit& aTime)

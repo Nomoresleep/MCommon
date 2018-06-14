@@ -62,8 +62,8 @@ void* MT_Task::operator new(size_t /*aSize*/)
 			return p;
 		}
 #if IS_PC_BUILD
-		__asm wait
-		__asm wait
+		__nop();
+		__nop();
 #endif
 		// MSV:NW - Is there a nop instruction or something similar on the 360?
 	}

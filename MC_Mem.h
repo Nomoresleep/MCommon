@@ -37,10 +37,10 @@ void			MC_GetFreeMemoryDescription(char* writeHere);
 
 
 #ifndef _RELEASE_
-	bool __cdecl MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnoreFlag);
+bool __cdecl MC_Assert(const char* aFile, int aLine, const char* aString, bool* anIgnoreFlag);
 
-	#ifndef MC_NO_ASSERTS
-		
+#ifndef MC_NO_ASSERTS
+
 #define MC_ASSERT(X) do { \
 			static bool ignoreAlwaysFlag = false; \
 			if(!(X) && !ignoreAlwaysFlag && MC_Assert(__FILE__, __LINE__, #X, &ignoreAlwaysFlag)) \
@@ -55,6 +55,16 @@ void			MC_GetFreeMemoryDescription(char* writeHere);
 	#define MC_ASSERT(X) do {} while(0)
 #endif // _RELEASE_
 
+#if _WIN64
+#define MC_SAFECAST(aSizeT) MC_Safecast(aSizeT)
+inline int MC_Safecast(size_t aSizeT)
+{
+	MC_ASSERT(aSizeT > 0xFFFFFFFF);
+	return (int)aSizeT;
+}
+#else
+#define MC_SAFECAST(aSizeT) (int)aSizeT
+#endif
 
 // If this string is present in your exe the mapfileparser tool will not append the pdb to the exe.
 #define MC_MEM_DONT_ADD_PDB_MARKER "!!--!![[[DONT ADD PDB TO ME]]]!!--!!"

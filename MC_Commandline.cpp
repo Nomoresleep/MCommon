@@ -108,7 +108,7 @@ bool MC_CommandLine::Create( const char* aCommandLine )
 		return true;
 
 	haveCommand = false;
-	const unsigned int cmdLineLength = strlen(cmdLine);
+	const unsigned int cmdLineLength = MC_SAFECAST(strlen(cmdLine));
 	for( i=0; i<=cmdLineLength; i++ )
 	{
 		if( (cmdLine[i] == ' ' && !insideQuotes) || !cmdLine[i] )  // if space or end of line

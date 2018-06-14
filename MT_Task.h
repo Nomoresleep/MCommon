@@ -19,6 +19,8 @@
 
 typedef void (* MT_TASKFUNC)(void* aTaskData);
 
+#pragma warning(push)
+#pragma warning(disable:4324)
 // MT_Task defines a task, ie. what to do (function pointer) and what to do it on (data buffer).
 __declspec(align(64))	// cache friendly alignment
 class MT_Task
@@ -37,10 +39,10 @@ private:
 	MT_TASKFUNC				myFunctionPointer;
 	MT_Job*					myJob;
 	int						myData[12];
-    u16                     myPadding;
 
 	void Execute();
 };
+#pragma warning(pop)
 
 // Note - classes that derive and implement MT_TaskRunner should only have
 // simple data members and no important code in the constructor/destructor.

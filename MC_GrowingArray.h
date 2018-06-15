@@ -176,6 +176,11 @@ public:
 	inline Type& GetLast() {return(myItemList[myUsedNrOfItems-1]);}
 	inline Type& GetFirst() {return(myItemList[0]);}
 
+    inline Type* begin() { return &myItemList[0]; }
+    inline const Type* begin() const { return &myItemList[0]; }
+    inline Type* end() { return &myItemList[myUsedNrOfItems]; }
+    inline const Type* end() const { return &myItemList[myUsedNrOfItems]; }
+
 	inline const Type& GetLast() const {return(myItemList[myUsedNrOfItems-1]);}
 	inline const Type& GetFirst() const {return(myItemList[0]);}
 

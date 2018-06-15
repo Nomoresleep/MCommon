@@ -90,6 +90,7 @@ void ExampleUsageOfImageManager()
 
 
 #include <string.h>
+#include "MC_Mem.h"
 
 // Hash functions
 void			MC_HashMap_HashData( const void* aData, int aByteCount, int aHashSize, unsigned int* aDest, unsigned int* aSeed=0 );

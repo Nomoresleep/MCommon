@@ -19,10 +19,7 @@
 
 #if IS_PC_BUILD
 	#include "mc_mem.h"
-	#pragma push_macro("assert")
-	#undef assert
 	#include <intrin.h>
-	#pragma pop_macro("assert")
 #endif
 
 #pragma intrinsic(_InterlockedIncrement)

@@ -37,7 +37,7 @@
 #include "MC_FastAlloc.h"
 
 #if IS_PC_BUILD
-	//#pragma comment(lib, "version.lib")  // for "VerQueryValue"
+	#pragma comment(lib, "version.lib")  // for "VerQueryValue"
 #endif
 
 #include "MC_Debug.h"

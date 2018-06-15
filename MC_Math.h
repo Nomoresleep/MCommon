@@ -121,5 +121,11 @@ MC_FORCEINLINE void __fastcall MC_SinCosVec(float angleA, float angleB, float an
 #endif
 }
 
+MC_FORCEINLINE f32 __fastcall MC_Abs(f32 x)
+{
+    *((u32*)&x) &= 0x7fffffff;
+    return x;
+}
+
 #endif//INCGUARD_MC_MATH_H
 

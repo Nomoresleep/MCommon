@@ -21,6 +21,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "MC_ArrayMap.h"
+#include "MC_String.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INIFILE utility class...
@@ -29,47 +30,48 @@
 class MC_IniFile
 {
 public:
-						MC_IniFile(
-							const char*		aFilename);
-						~MC_IniFile();
+	MC_IniFile(const char* aFilename);
+	~MC_IniFile();
 
-	bool				Process();
+	bool Process();
 
-	f32					GetFloat(
-							const char*		aKey);
-	s32					GetInt(
-							const char*		aKey);
-	u32					GetUInt(
-							const char*		aKey);
-	bool				GetBool(
-							const char*		aKey);
-	const char*			GetString(
-							const char*		aKey);
-	bool				HasKey(
-							const char*		aKey);
+	f32	GetFloat(const char* aKey, f32 aFallbackValue = 0.0f) const;
 
+	s32	GetInt(const char* aKey, s32 aFallbackValue = 0) const;
+
+	u32	GetUInt(const char* aKey, u32 aFallbackValue = 0) const;
+
+	bool GetBool(const char* aKey, bool aFallbackValue = false) const;
+
+	const char*	GetString(const char* aKey, const char* aFallbackValue = "") const;
+
+	bool HasKey(const char*	aKey);
+
+	bool SetFloat(const char* aKey, f32 aValue);
+
+	bool SetInt(const char* aKey, s32 aValue);
+
+	bool SetUInt(const char* aKey, u32 aValue);
+
+	bool SetBool(const char* aKey, bool aValue);
+
+	bool SetString(const char* aKey, const char* aValue);
+
+    void WriteToFile() const;
 private:
-	u8*					myFileBuffer;
-	s32					mySize;
+	u8* myFileBuffer;
+	s32	mySize;
+    MC_String myFilename;
 
 	MC_ArrayMap<MC_String, MC_String> myValues;
 
-	static const char*	PrivSkipWhitespace(
-							const char*		aBegin,
-							const char*		aEnd);
+	static const char* PrivSkipWhitespace(const char* aBegin, const char* aEnd);
 
-	static const char*	PrivLineEnd(
-							const char*		aBegin,
-							const char*		aEnd);
+	static const char* PrivLineEnd(const char* aBegin, const char* aEnd);
 
-	static const char*	PrivValueDelimeter(
-							const char*		aBegin,
-							const char*		aEnd);
+	static const char* PrivValueDelimeter(const char* aBegin, const char* aEnd);
 
-	static const char*	PrivSectionNameEnd(
-							const char*		aBegin,
-							const char*		aEnd,
-							bool&			aOutSectionClosed);
+	static const char* PrivSectionNameEnd(const char* aBegin, const char* aEnd, bool& aOutSectionClosed);
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

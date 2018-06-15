@@ -23,6 +23,8 @@
 #include "mi_time.h"
 #include "mt_mutex.h"
 
+#pragma comment(lib, "Winmm.lib")
+
 #define NUM_TIME_AVERAGEFRAMES 3
 
 MI_Time* MI_Time::ourInstance;

@@ -104,14 +104,14 @@ public:
 	ValueT& At(const KeyT& aKey)
 	{
 		int index = FindKey(aKey);
-		MC_ASSERT(index);
+		MC_ASSERT(index >= 0);
 		return myValues[index];
 	}
 
 	const ValueT& At(const KeyT& aKey) const
 	{
 		int index = myKeys.Find(aKey);
-		MC_ASSERT(index);
+		MC_ASSERT(index >= 0);
 		return myValues[index];
 	}
 

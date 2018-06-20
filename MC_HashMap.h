@@ -89,8 +89,7 @@ void ExampleUsageOfImageManager()
 ----------[Example ends]---------- */
 
 
-#include <string.h>
-#include "MC_Mem.h"
+#include "MC_String.h"
 
 // Hash functions
 void			MC_HashMap_HashData( const void* aData, int aByteCount, int aHashSize, unsigned int* aDest, unsigned int* aSeed=0 );
@@ -100,6 +99,7 @@ unsigned int	MC_HashMap_HashString( const void* aData, unsigned int aSeed=0 );
 // Type helpers
 template<class T>	inline unsigned int MC_HashMap_GetHash(const T& anItem)							{ return MC_HashMap_HashData( (const char*)&anItem, sizeof(anItem) ); }
 template<>			inline unsigned int MC_HashMap_GetHash(const char* const &anItem)				{ return MC_HashMap_HashString( anItem ); }
+template<>			inline unsigned int MC_HashMap_GetHash(const MC_String& anItem)					{ return MC_HashMap_HashString( anItem.GetBuffer()); }
 
 template<class T>	inline bool MC_HashMap_Compare(const T& aA, const T& aB)						{ return (aA == aB); }
 template<>			inline bool MC_HashMap_Compare(const char* const &aA, const char* const &aB)	{ return (strcmp( aA, aB ) == 0); }
@@ -147,7 +147,20 @@ public:
 	public:
 		Iterator() { myMap = 0; }
 		Iterator(const Iterator& anOther) : myMap(anOther.myMap), myIndex(anOther.myIndex) {}
-		Iterator( MC_HashBase* aMap, int anIndex ) : myMap( aMap )	{ for( myIndex=anIndex; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex ) {} }
+		Iterator( MC_HashBase& aMap, bool initAtEnd ) : myMap( &aMap )	
+        {
+            if (initAtEnd)
+                myIndex = myMap->myArraySize;
+            else
+                for (myIndex = 0; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex) {}
+        }
+		Iterator( MC_HashBase* aMap, bool initAtEnd ) : myMap( aMap )
+        {
+            if (initAtEnd)
+                myIndex = myMap->myArraySize;
+            else
+                for (myIndex = 0; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; ++myIndex) {}
+        }
 
 		Iterator& operator=(const Iterator& anOther)
 		{ myMap = anOther.myMap; myIndex = anOther.myIndex; return *this; }
@@ -165,27 +178,59 @@ public:
 		void	operator--()						{ for( --myIndex; myIndex<myMap->myArraySize && !myMap->myEntries[myIndex].myValidFlag; --myIndex ) {} }	// prefix
 		void	operator--( int dummy )				{ --*this }			// postfix
 
+        bool operator!=(const Iterator& anotherIterator) const
+        {
+            MC_ASSERT(myMap == anotherIterator.myMap);
+            return myIndex != anotherIterator.myIndex;
+        }
 	private:
 		MC_HashBase*		myMap;
 		unsigned int	myIndex;
 	};
 
-    Iterator Begin()
-    {
-        return Iterator(this, 0);
-    }
+	Iterator Begin()
+	{
+		return Iterator(*this, false);
+	}
 
     Iterator End()
     {
-        return Iterator(this, myArraySize);
+        return Iterator(*this, true);
     }
-
 	MC_HashBase( const int aStartSize)
 	{
 		myArraySize = aStartSize > 3 ? aStartSize : 3;
 		myEntries = new Entry[myArraySize];
 		myNumEntries = 0;
 	}
+
+    MC_HashBase(const MC_HashBase& anotherHashBase)
+        : myArraySize(anotherHashBase.myArraySize)
+        , myNumEntries(anotherHashBase.myNumEntries)
+    {
+        myEntries = new Entry[myArraySize];
+		for (unsigned int idx = 0; idx < myArraySize; idx++)
+			myEntries[idx] = anotherHashBase.myEntries[idx];
+
+#if _DEBUG
+		unsigned int valids = 0;
+		for (unsigned int readIndex = 0; readIndex < myArraySize; ++readIndex)
+		{
+			valids += myEntries[readIndex].myValidFlag ? 1 : 0;
+		}
+		MC_ASSERT(valids == myNumEntries);
+#endif 
+    }
+
+    MC_HashBase(MC_HashBase&& anotherHashBase)
+        : myArraySize(anotherHashBase.myArraySize)
+        , myNumEntries(anotherHashBase.myNumEntries)
+        , myEntries(anotherHashBase.myEntries)
+    {
+        anotherHashBase.myArraySize = 0;
+        anotherHashBase.myNumEntries = 0;
+        anotherHashBase.myEntries = nullptr;
+    }
 
 	~MC_HashBase()
 	{
@@ -370,7 +415,7 @@ private:
 	bool GetIndex( const KEY& aKey, unsigned int& i, unsigned int maxEntries, Entry* pEntries ) const
 	{
 		i = ((DERIVED*)this)->GetHash(aKey) % maxEntries;
-		unsigned int starti = i;
+		int starti = i;
 		
 		while( pEntries[i].myValidFlag )
 		{
